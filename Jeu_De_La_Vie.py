@@ -48,10 +48,37 @@ fenetre1 = Tk()
 intro="Le jeu de la vie : des règles simples, une infinité de résolutions.\n\nLe jeu de la vie c’est 2 règles : Règle de survie, règle de naissance. \n\nAu début vous devrez choisir la taille du tableau puis la remplir comme vous le souhaitez, par la suite, vous verrez le développement des cellules*.\nA savoir que si une cellule* ne survie pas, elle meurt.\n*cellule = case pleine\n\n\nRègle de survie : \nSi une cellule est entourée de plus d’1 cellule et de moins de 4 cellules, elle survie au prochain tour.\n\nRègle de naissance :\nSi une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour d’après."
 
 bouton=Button(fenetre1, text="Compris", command=fenetre1.quit)
-bouton.pack(side=BOTTOM, padx=150, pady=50)
+bouton.pack(side=BOTTOM, padx=150, pady=20)
 bouton.pack()
 
 introduction = Label(fenetre1, text=intro)
 introduction.pack()
 
 fenetre1.mainloop()
+
+#fenêtre 2 : interface graphique du jeu de la vie.
+fenetre2 = Tk()
+
+label = Label(fenetre2, text="Jeu de la vie")
+label.pack()
+
+# canvas
+cv = Canvas(fenetre2, width=longueur_canva, height=largeur_canva, background=couleur)
+#ligne1 = cv.create_line(longueur/2, 0, longueur/2, largeur)
+#ligne2 = cv.create_line(0, largeur/2, longueur, largeur/2)
+rectangle1 = cv.create_rectangle(0, 0, 50, 50, fill="black")
+cv.pack()
+
+# bouton de sortie
+bouton=Button(fenetre2, text="Fermer", command=fenetre2.quit)
+bouton.pack(side=BOTTOM, padx=150, pady=0)
+bouton.pack()
+bouton=Button(fenetre2, text="Retour", command=fenetre2.quit)
+bouton.pack(side=LEFT, padx=150, pady=0)
+bouton.pack()
+bouton=Button(fenetre2, text="Avance", command=fenetre2.quit)
+bouton.pack(side=RIGHT, padx=150, pady=0)
+bouton.pack()
+
+
+fenetre2.mainloop()
