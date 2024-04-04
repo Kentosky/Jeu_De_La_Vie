@@ -80,5 +80,4 @@ bouton=Button(fenetre2, text="Avance", command=fenetre2.quit)
 bouton.pack(side=RIGHT, padx=150, pady=0)
 bouton.pack()
 
-
 fenetre2.mainloop()
