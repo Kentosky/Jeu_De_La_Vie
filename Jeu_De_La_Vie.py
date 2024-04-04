@@ -26,7 +26,7 @@ class Tableau:
     def __init__(self, longueur, largeur):
         self.longueur = longueur
         self.largeur = largeur
-    def creation_tableau(longueur, largeur):
+    def creation_tableau(self,longueur, largeur):
         # creer le quadrillage
         tableau_de_tableaux = []
         for i in range(largeur):
@@ -39,7 +39,11 @@ class Tableau:
         for ligne in tableau_de_tableaux:
             print(ligne)
         return tableau_de_tableaux
-    print("kef,zslkjdngjdnjklvn")
+
+
+
+
+
 
 
 
