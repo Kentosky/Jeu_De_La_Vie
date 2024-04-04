@@ -28,18 +28,18 @@ class Tableau:
         self.largeur = largeur
     def creation_tableau(longueur, largeur):
         # creer le quadrillage
-        matrice = []
+        tableau_de_tableaux = []
         for i in range(largeur):
             ligne = []
             for j in range(longueur):
                 ligne.append(0)
-            matrice.append(ligne)
+            tableau_de_tableaux.append(ligne)
 
         # Afficher le quadrillage
-        for ligne in matrice:
+        for ligne in tableau_de_tableaux:
             print(ligne)
-        return matrice
-
+        return tableau_de_tableaux
+    print("kef,zslkjdngjdnjklvn")
 
 
 
