@@ -5,6 +5,12 @@
 
 from tkinter import *
 
+#dimensions des pixels et du canva
+couleur = 'pink'
+nb_pixels_longueur = 10
+nb_pixels_largeur = 8
+longueur_canva = nb_pixels_longueur * 50
+largeur_canva = nb_pixels_largeur * 50
 
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
 
@@ -12,12 +18,12 @@ class Tableau:
     def __init__(self, longueur, largeur):
         self.longueur = longueur
         self.largeur = largeur
-    def creation_tableau(self):
+    def creation_tableau(longueur, largeur):
         # creer le quadrillage
         tableau_de_tableaux = []
-        for i in range(self.largeur):
+        for i in range(largeur):
             ligne = []
-            for j in range(self.longueur):
+            for j in range(longueur):
                 ligne.append(0)
             tableau_de_tableaux.append(ligne)
 
@@ -25,9 +31,6 @@ class Tableau:
         for ligne in tableau_de_tableaux:
             print(ligne)
         return tableau_de_tableaux
-
-tab1 = Tableau(10, 10)
-print(tab1.creation_tableau())
 
 class Vide:
     def __init__(self, matrice, cox, coy):
@@ -76,7 +79,7 @@ x = 0
 i = 0
 j = 0
 
-tab = [[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1]]
+tab = [[0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1]]
 
 def carre_noir(x, y):
     can1 = Canvas(fenetre2, height=40, width=40, bg="black")
@@ -111,6 +114,7 @@ can1.grid(column=1, row=1)'''
 
 
 # bouton de sortie
+carre_blanc(j, x)
 
 bouton=Button(fenetre2, text="Fermer", command=fenetre2.quit)
 bouton.grid(column=3, row=11)
