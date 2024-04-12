@@ -71,25 +71,57 @@ fenetre1.mainloop()
 #fenêtre 2 : interface graphique du jeu de la vie.
 fenetre2 = Tk()
 
-label = Label(fenetre2, text="Jeu de la vie")
-label.pack()
 
-# canvas
-cv = Canvas(fenetre2, width=longueur_canva, height=largeur_canva, background=couleur)
-#ligne1 = cv.create_line(longueur/2, 0, longueur/2, largeur)
-#ligne2 = cv.create_line(0, largeur/2, longueur, largeur/2)
-rectangle1 = cv.create_rectangle(0, 0, 50, 50, fill="black")
-cv.pack()
+
+# grid
+fenetre2.geometry("400x400")
+x = 0
+i = 0
+j = 0
+
+tab = [[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1]]
+
+def carre_noir(x, y):
+    can1 = Canvas(fenetre2, height=40, width=40, bg="black")
+    can1.grid(column=x, row=y)
+
+
+def carre_blanc(x, y):
+    can1 = Canvas(fenetre2, height=40, width=40, bg="white")
+    can1.grid(column=x, row=y)
+
+
+
+while j <= 6:
+    while i < 6:
+
+        if tab[j][i]== 1:
+            carre_noir(j, x)
+        else:
+            carre_blanc(j, x)
+        x += 1
+        i += 1
+
+    i = 0
+    x = 0
+    y = 0
+    j += 1
+
+#remplacer la couleur d'une case : (penser à changer la grille aussi !!)
+'''can1 = Canvas(fen1, height=40, width=40, bg="white")
+can1.grid(column=1, row=1)'''
+
+
 
 # bouton de sortie
+
 bouton=Button(fenetre2, text="Fermer", command=fenetre2.quit)
-bouton.pack(side=BOTTOM, padx=150, pady=0)
-bouton.pack()
+bouton.grid(column=3, row=11)
+
 bouton=Button(fenetre2, text="Retour", command=fenetre2.quit)
-bouton.pack(side=LEFT, padx=150, pady=0)
-bouton.pack()
+bouton.grid(column=2, row=10)
+
 bouton=Button(fenetre2, text="Avance", command=fenetre2.quit)
-bouton.pack(side=RIGHT, padx=150, pady=0)
-bouton.pack()
+bouton.grid(column=4, row=10)
 
 fenetre2.mainloop()
