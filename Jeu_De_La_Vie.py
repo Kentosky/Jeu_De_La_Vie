@@ -32,12 +32,24 @@ class Tableau:
             print(ligne)
         return tableau_de_tableaux
 
-class naissance:
-    def __init__(self, voisines, case):
-        self.voisines = voisines
-        self.case = case
-    def lookforvide(self, case):
-        return 0
+class Vide:
+    def __init__(self, matrice, cox, coy):
+        self.cox = cox
+        self.coy = coy
+        self.matrice = matrice
+    def lookfornaissance(self, matrice, cox, coy):
+        if self.matrice[self.cox][self.coy] == 0:
+            cmpt = 0
+            for i in range(-1, 2, 1):
+                for j in range(-1, 2, 1):
+                    if self.matrice[cox+i][coy+j] == 1:
+                        cmpt += 1
+            if cmpt == 3:
+                return 1
+            else:
+                return 0
+        else:
+            return 1
 
 
 
