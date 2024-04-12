@@ -26,8 +26,7 @@ class Tableau:
             print(ligne)
         return tableau_de_tableaux
 
-tab1 = Tableau(10, 10)
-print(tab1.creation_tableau())
+
 
 class Vide:
     def __init__(self, matrice, cox, coy):
@@ -75,6 +74,44 @@ class Vide:
         elif matrice[coy][cox] == 1:
             return matrice
 
+class Cellule_vivante:
+    def __init__(self, matrice, coy, cox):
+        self.cox = cox
+        self.coy = coy
+        self.matrice = matrice
+    def survie(self):
+
+        # on gère d'abord le cas où la cellule est collé a un coté du quadrillage
+        left = top = right_or = bottom_or = 0
+        right = len(self.matrice[0])
+        bottom = len(self.matrice)
+
+        if self.cox == left:
+            left += 1
+        if self.cox == right:
+            right_or += 1
+        if self.coy == top:
+            top += 1
+        if self.coy == bottom:
+            bottom_or += 1
+
+        # on gère maintenant la survie de la cellule
+        if matrice[self.coy][self.cox] == 1:
+            cmpt = 0
+            for i in range(top-1, 2-bottom_or):
+                for j in range(left-1, 2-right_or):
+                    if matrice[self.coy + i][self.cox + j] == 1:
+                        cmpt += 1
+            # si la cellule a 3 ou 4 voisines avec elle compris
+            if cmpt == 3 or cmpt == 4:
+                return matrice
+            else:
+                matrice[self.coy][self.cox] = 0
+                return matrice
+        else:
+            print(self.cox, " = cox et coy = ", self.coy, matrice[self.coy][self.cox], "matrice")
+            return 1
+
 
 
 """ ~~~ PARTIE EXECUTIVE ~~~ """
@@ -104,6 +141,9 @@ i = 0
 j = 0
 
 tab = [[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1]]
+tab1 = Tableau(10, 10)
+print(tab1.creation_tableau())
+
 
 def carre_noir(x, y):
     can1 = Canvas(fenetre2, height=40, width=40, bg="black")
