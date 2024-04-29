@@ -78,6 +78,11 @@ class Vide:
         elif self.matrice[self.coy][self.cox] == 1:
             return self.matrice
 
+    def appliquer_modifications(self):
+        for row in self.temp_matrice:
+            self.matrice.append(row[:])
+        return self.matrice
+
 class Cellule_vivante:
     def __init__(self, matrice, coy, cox):
         self.cox = cox

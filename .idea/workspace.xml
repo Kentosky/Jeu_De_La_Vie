@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d02adf9d-42bd-4078-b6b8-849cd410300d" name="Changes" comment="ajout classe Cellule_vivante">
+    <list default="true" id="d02adf9d-42bd-4078-b6b8-849cd410300d" name="Changes" comment="ajout matrice temporaire">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Jeu_De_La_Vie.py" beforeDir="false" afterPath="$PROJECT_DIR$/Jeu_De_La_Vie.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fichier perso.py" beforeDir="false" afterPath="$PROJECT_DIR$/fichier perso.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +72,7 @@
       <workItem from="1712124890736" duration="3875000" />
       <workItem from="1712237508167" duration="407000" />
       <workItem from="1712935951605" duration="83000" />
-      <workItem from="1714371718122" duration="3968000" />
+      <workItem from="1714371718122" duration="5081000" />
     </task>
     <task id="LOCAL-00001" summary="création du fichier originel.">
       <option name="closed" value="true" />
@@ -123,7 +122,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712935798232</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="ajout matrice temporaire">
+      <option name="closed" value="true" />
+      <created>1714375717894</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1714375717894</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -147,7 +154,8 @@
     <MESSAGE value="amélioration du rangement du projet" />
     <MESSAGE value="commit : affichage grille" />
     <MESSAGE value="ajout classe Cellule_vivante" />
-    <option name="LAST_COMMIT_MESSAGE" value="ajout classe Cellule_vivante" />
+    <MESSAGE value="ajout matrice temporaire" />
+    <option name="LAST_COMMIT_MESSAGE" value="ajout matrice temporaire" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_zoom.coverage" NAME="test zoom Coverage Results" MODIFIED="1712237740860" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
