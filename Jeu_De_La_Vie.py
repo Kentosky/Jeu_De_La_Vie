@@ -111,13 +111,15 @@ class Cellule_vivante:
         # on gère maintenant la survie de la cellule
         if self.matrice[self.coy][self.cox] == 1:
             cmpt = 0
+            # on regarde autour de la cellule pour compter le nombres de voisines
             for i in range(top - 1, 2 - bottom_or):
                 for j in range(left - 1, 2 - right_or):
                     if self.matrice[self.coy + i][self.cox + j] == 1:
                         cmpt += 1
-            # si la cellule a 3 ou 4 voisines avec elle compris
+            # si la cellule a 3 ou 4 voisines avec elle compris elle survie, rien ne se passe
             if cmpt == 3 or cmpt == 4:
                 return self.matrice
+            # si la cellule en a plus ou moins elle meurt
             else:
                 self.temp_matrice[self.coy][self.cox] = 0  # Modifier la copie temporaire
                 return self.temp_matrice
