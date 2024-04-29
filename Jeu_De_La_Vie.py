@@ -33,7 +33,11 @@ class Vide:
         self.cox = cox
         self.coy = coy
         self.matrice = matrice
-    def lookfornaissance(self, matrice, cox, coy):
+        # on créé une matrice temporaire pour pouvoir faire tous les déplacements sans risquer un effet domino
+        self.temp_matrice = []
+        for row in matrice:
+            self.temp_matrice.append(row[:])
+    def lookfornaissance(self):
 
         left = 0
         top = 0
@@ -41,46 +45,50 @@ class Vide:
         bottom_OOR = 0
         right_OOR = 0
 
-        right = len(matrice[0])
-        bottom = len(matrice)
+        right = len(self.matrice[0])
+        bottom = len(self.matrice)
 
-        if cox == 0:
+        if self.cox == 0:
             left = 1
 
-        if coy == 0:
+        if self.coy == 0:
             top = 1
 
-        if coy == bottom:
+        if self.coy == bottom:
             bottom_OOR += 1
 
-        if cox == right:
+        if self.cox == right:
             right_OOR += 1
 
-        if matrice[coy][cox] == 0:
+        if self.matrice[self.coy][self.cox] == 0:
 
             for i in range(top - 1, 2 - bottom_OOR, 1):
                 for j in range(left - 1, 2 - right_OOR, 1):
 
-                    if matrice[coy + i][cox + j] == 1:
+                    if self.matrice[self.coy + i][self.cox + j] == 1:
                         cmpt += 1
                         print("oui !")
             if cmpt == 3:
-                matrice[coy][cox] = 1
-                return matrice
+                self.temp_matrice[self.coy][self.cox] = 1  # Modifier la copie temporaire
+                return self.temp_matrice
 
             else:
-                return matrice
+                return self.matrice
 
-        elif matrice[coy][cox] == 1:
-            return matrice
+        elif self.matrice[self.coy][self.cox] == 1:
+            return self.matrice
 
 class Cellule_vivante:
     def __init__(self, matrice, coy, cox):
         self.cox = cox
         self.coy = coy
         self.matrice = matrice
-    def survie(self):
+        # on créé une matrice temporaire pour pouvoir faire tous les déplacements sans risquer un effet domino
+        self.temp_matrice = []
+        for row in matrice:
+            self.temp_matrice.append(row[:])
 
+    def survie(self):
         # on gère d'abord le cas où la cellule est collé a un coté du quadrillage
         left = top = right_or = bottom_or = 0
         right = len(self.matrice[0])
@@ -96,21 +104,26 @@ class Cellule_vivante:
             bottom_or += 1
 
         # on gère maintenant la survie de la cellule
-        if matrice[self.coy][self.cox] == 1:
+        if self.matrice[self.coy][self.cox] == 1:
             cmpt = 0
-            for i in range(top-1, 2-bottom_or):
-                for j in range(left-1, 2-right_or):
-                    if matrice[self.coy + i][self.cox + j] == 1:
+            for i in range(top - 1, 2 - bottom_or):
+                for j in range(left - 1, 2 - right_or):
+                    if self.matrice[self.coy + i][self.cox + j] == 1:
                         cmpt += 1
             # si la cellule a 3 ou 4 voisines avec elle compris
             if cmpt == 3 or cmpt == 4:
-                return matrice
+                return self.matrice
             else:
-                matrice[self.coy][self.cox] = 0
-                return matrice
+                self.temp_matrice[self.coy][self.cox] = 0  # Modifier la copie temporaire
+                return self.temp_matrice
         else:
-            print(self.cox, " = cox et coy = ", self.coy, matrice[self.coy][self.cox], "matrice")
+            print(self.cox, " = cox et coy = ", self.coy, self.matrice[self.coy][self.cox], "matrice")
             return 1
+
+    def appliquer_modifications(self):
+        for row in self.temp_matrice:
+            self.matrice.append(row[:])
+        return self.matrice
 
 
 
