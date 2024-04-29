@@ -129,40 +129,48 @@ introduction.pack()
 
 fenetre1.mainloop()
 
-#fenêtre 2 : interface graphique du jeu de la vie.
+
+#fenêtre 2 : choix des pixels colorés
 fenetre2 = Tk()
 
 
 
 # grid
-fenetre2.geometry("400x400")
+fenetre2.geometry("800x700")
 x = 0
 i = 0
 j = 0
 
-tab = [[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1]]
+#tab = [[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1],[0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1], [0, 1, 0, 1, 1, 1]]
 tab1 = Tableau(10, 10)
+tab = tab1.creation_tableau()
 print(tab1.creation_tableau())
 
+def changer_couleur(bouton, x, y):
+    couleur_actuelle = bouton["bg"]
+    nouvelle_couleur = "white" if couleur_actuelle =="black" else "black"
+    bouton.config(bg=nouvelle_couleur)
+    if nouvelle_couleur == "white" :
+        tab[x][y] = 0
+    else :
+        tab[x][y] = 1
 
-def carre_noir(x, y):
-    can1 = Canvas(fenetre2, height=40, width=40, bg="black")
-    can1.grid(column=x, row=y)
+def bouton_carre_noir(x, y):
+    bouton = Button(fenetre2, height=3, width=6, bg="black", command=lambda ligne=x, colonne = y: changer_couleur(bouton, x, y))
+    bouton.grid(column=x, row=y)
+
+def bouton_carre_blanc(x, y):
+    bouton = Button(fenetre2, height=3, width=6, bg="white", command=lambda ligne=x, colonne = y: changer_couleur(bouton, x, y))
+    bouton.grid(column=x, row=y)
 
 
-def carre_blanc(x, y):
-    can1 = Canvas(fenetre2, height=40, width=40, bg="white")
-    can1.grid(column=x, row=y)
+while j <= len(tab)-1:
+    while i < len(tab[1])-1:
 
-
-
-while j <= 6:
-    while i < 6:
-
-        if tab[j][i]== 1:
-            carre_noir(j, x)
+        if tab[j][i]==1:
+            bouton_carre_noir(j, x)
         else:
-            carre_blanc(j, x)
+            bouton_carre_blanc(j, x)
         x += 1
         i += 1
 
@@ -189,3 +197,61 @@ bouton=Button(fenetre2, text="Avance", command=fenetre2.quit)
 bouton.grid(column=4, row=10)
 
 fenetre2.mainloop()
+
+
+#fenêtre 3 : interface graphique du jeu de la vie.
+fenetre3 = Tk()
+
+
+
+# grid
+fenetre3.geometry("800x700")
+x = 0
+i = 0
+j = 0
+
+
+
+def carre_noir(x, y):
+    can1 = Canvas(fenetre3, height=50, width=50, bg="black")
+    can1.grid(column=x, row=y)
+
+
+def carre_blanc(x, y):
+    can1 = Canvas(fenetre3, height=50, width=50, bg="white")
+    can1.grid(column=x, row=y)
+
+
+while j <= len(tab)-1:
+    while i < len(tab[1])-1:
+
+        if tab[j][i]== 1:
+            carre_noir(j, x)
+        else:
+            carre_blanc(j, x)
+        x += 1
+        i += 1
+
+    i = 0
+    x = 0
+    y = 0
+    j += 1
+
+#remplacer la couleur d'une case : (penser à changer la grille aussi !!)
+'''can1 = Canvas(fen1, height=40, width=40, bg="white")
+can1.grid(column=1, row=1)'''
+
+
+
+# bouton de sortie
+
+bouton=Button(fenetre3, text="Fermer", command=fenetre3.quit)
+bouton.grid(column=3, row=11)
+
+bouton=Button(fenetre3, text="Retour", command=fenetre3.quit)
+bouton.grid(column=2, row=10)
+
+bouton=Button(fenetre3, text="Avance", command=fenetre3.quit)
+bouton.grid(column=4, row=10)
+
+fenetre3.mainloop()
