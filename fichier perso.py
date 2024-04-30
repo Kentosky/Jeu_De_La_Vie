@@ -45,21 +45,29 @@ class Cellule_vivante:
 
         # on gère maintenant la survie de la cellule
         if self.matrice[self.coy][self.cox] == 1:
-            cmpt = 0
+            cmptS = 0
             for i in range(top - 1, 2 - bottom_or):
                 for j in range(left - 1, 2 - right_or):
                     if self.matrice[self.coy + i][self.cox + j] == 1:
-                        cmpt += 1
+                        cmptS += 1
             # si la cellule a 3 ou 4 voisines avec elle compris
-            if cmpt == 3 or cmpt == 4:
+            if cmptS == 3 or cmptS == 4:
                 return self.matrice
             else:
                 self.temp_matrice[self.coy][self.cox] = 0  # Modifier la copie temporaire
                 return self.temp_matrice
         else:
-            print(self.cox, " = cox et coy = ", self.coy, self.matrice[self.coy][self.cox], "matrice")
-            return 1
-
+            cmptN = 0
+            for i in range(top - 1, 2 - bottom_or, 1):
+                for j in range(left - 1, 2 - right_or, 1):
+                    if self.matrice[self.coy + i][self.cox + j] == 1:
+                        cmptN += 1
+                        print("oui !")
+            if cmptN == 3:
+                self.temp_matrice[self.coy][self.cox] = 1  # Modifier la copie temporaire
+                return self.temp_matrice
+            else:
+                return self.matrice
     def appliquer_modifications(self):
         for row in self.temp_matrice:
             self.matrice.append(row[:])
