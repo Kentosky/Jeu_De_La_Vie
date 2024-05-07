@@ -5,39 +5,94 @@
 
 from tkinter import *
 
-# --- La bibliothèque permettant de faire les graphismes --- #
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
 
 class Tableau:
-    """ Classe qui permet de créer une liste de listes qui sera ensuite interprété comme toutes les cases du jeu de la vie. """
-    def __init__(self, longueur, largeur):      # Initialisation
+    def __init__(self, longueur, largeur):
         self.longueur = longueur
         self.largeur = largeur
-    def creation_tableau(self):                 #fonction principale permettant de créer la liste de liste
+    def creation_tableau(self):
         # creer le quadrillage
         tableau_de_tableaux = []
-        for i in range(self.largeur):           #la liste de listes fera une largeur de la variable largeur
+        for i in range(self.largeur):
             ligne = []
-            for j in range(self.longueur):      #la liste de listes fera une longueur de la variable longueur
+            for j in range(self.longueur):
                 ligne.append(0)
             tableau_de_tableaux.append(ligne)
 
         # Afficher le quadrillage
-        for ligne in tableau_de_tableaux:       #ici, on affiche la liste de listes pour la vérification
+        for ligne in tableau_de_tableaux:
             print(ligne)
         return tableau_de_tableaux
 
-class Cellule:
-    def __init__(self, matrice, coy, cox):      # dans cet ordre car on cree les colones avant les lignes
-        self.cox = cox                          # coordonnée x
-        self.coy = coy                          # coordonnée y
-        self.matrice = matrice                  # matrice
+
+
+class Vide:
+    def __init__(self, matrice, cox, coy):
+        self.cox = cox
+        self.coy = coy
+        self.matrice = matrice
+        # on créé une matrice temporaire pour pouvoir faire tous les déplacements sans risquer un effet domino
+        self.temp_matrice = []
+        for row in matrice:
+            self.temp_matrice.append(row[:])
+    def lookfornaissance(self):
+
+        left = 0
+        top = 0
+        cmpt = 0
+        bottom_OOR = 0
+        right_OOR = 0
+
+        right = len(self.matrice[0])
+        bottom = len(self.matrice)
+
+        if self.cox == 0:
+            left = 1
+
+        if self.coy == 0:
+            top = 1
+
+        if self.coy == bottom:
+            bottom_OOR += 1
+
+        if self.cox == right:
+            right_OOR += 1
+
+        if self.matrice[self.coy][self.cox] == 0:
+
+            for i in range(top - 1, 2 - bottom_OOR, 1):
+                for j in range(left - 1, 2 - right_OOR, 1):
+
+                    if self.matrice[self.coy + i][self.cox + j] == 1:
+                        cmpt += 1
+                        print("oui !")
+            if cmpt == 3:
+                self.temp_matrice[self.coy][self.cox] = 1  # Modifier la copie temporaire
+                return self.temp_matrice
+
+            else:
+                return self.matrice
+
+        elif self.matrice[self.coy][self.cox] == 1:
+            return self.matrice
+
+    def appliquer_modifications(self):
+        for row in self.temp_matrice:
+            self.matrice.append(row[:])
+        return self.matrice
+
+class Cellule_vivante:
+    def __init__(self, matrice, coy, cox):
+        self.cox = cox
+        self.coy = coy
+        self.matrice = matrice
         # on créé une matrice temporaire pour pouvoir faire tous les déplacements sans risquer un effet domino
         self.temp_matrice = []
         for row in matrice:
             self.temp_matrice.append(row[:])
 
-    def regle(self):
+    def survie(self):
         # on gère d'abord le cas où la cellule est collé a un coté du quadrillage
         left = top = right_or = bottom_or = 0
         right = len(self.matrice[0])
@@ -53,31 +108,25 @@ class Cellule:
             bottom_or += 1
 
         # on gère maintenant la survie de la cellule
-        if self.matrice[self.coy][self.cox] == 1:                       # 1er cas: la cellule est vivante
-            cmptS = 0                                                   # compteur de voisins
-            for i in range(top - 1, 2 - bottom_or):                     # on regarde autour de la cellule
-                for j in range(left - 1, 2 - right_or):                 #               |
-                    if self.matrice[self.coy + i][self.cox + j] == 1:   # si une voisine est vivante
-                        cmptS += 1                                      # on incrémente le compteur de voisins
-
-            if cmptS == 3 or cmptS == 4:                                # si la cellule a 2 ou 3 voisines (compteur=3 ou 4 car elle se compte elle-même)
-                return self.matrice                                     # rien ne se passe, la cellule reste en vie
+        if self.matrice[self.coy][self.cox] == 1:
+            cmpt = 0
+            # on regarde autour de la cellule pour compter le nombres de voisines
+            for i in range(top - 1, 2 - bottom_or):
+                for j in range(left - 1, 2 - right_or):
+                    if self.matrice[self.coy + i][self.cox + j] == 1:
+                        cmpt += 1
+            # si la cellule a 3 ou 4 voisines avec elle compris elle survie, rien ne se passe
+            if cmpt == 3 or cmpt == 4:
+                return self.matrice
+            # si la cellule en a plus ou moins elle meurt
             else:
-                self.temp_matrice[self.coy][self.cox] = 0               # sinon la cellule meurt, on modifie son état
+                self.temp_matrice[self.coy][self.cox] = 0  # Modifier la copie temporaire
                 return self.temp_matrice
-        else:                                                           # 2eme cas:la cellule est morte
-            cmptN = 0                                                   # compteur de voisins
-            for i in range(top - 1, 2 - bottom_or, 1):                  # on regarde autour de la voisine
-                for j in range(left - 1, 2 - right_or, 1):              #               |
-                    if self.matrice[self.coy + i][self.cox + j] == 1:   # si une voisine est vivante
-                        cmptN += 1                                      # on incrémente le compteur
-            if cmptN == 4:                                              # si la cellule a 3 voisines (compteur=4 car elle se compte elle-même)
-                self.temp_matrice[self.coy][self.cox] = 1               # la cellule meurt, on modifie son état
-                return self.temp_matrice
-            else:
-                return self.matrice                                     # sinon rien ne se passe, la cellule reste morte
+        else:
+            print(self.cox, " = cox et coy = ", self.coy, self.matrice[self.coy][self.cox], "matrice")
+            return 1
 
-    def appliquer_modifications(self): # Cette fonction applique les modifications de la matrice temporaire dans la matrice de base
+    def appliquer_modifications(self):
         for row in self.temp_matrice:
             self.matrice.append(row[:])
         return self.matrice
