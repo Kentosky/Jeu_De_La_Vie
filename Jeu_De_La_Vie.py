@@ -9,8 +9,7 @@ from tkinter import *
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
 
 class Tableau:
-    """ Classe qui permet de créer une liste de listes qui sera ensuite interprété comme toutes les cases du jeu de la vie. """
-    def __init__(self, longueur, largeur):      # Initialisation
+    def __init__(self, longueur, largeur):
         self.longueur = longueur
         self.largeur = largeur
     def creation_tableau(self):                 #fonction principale permettant de créer la liste de liste
