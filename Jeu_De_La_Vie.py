@@ -47,9 +47,7 @@ class Cellule:
         self.coy = coy                          # coordonnée y
         self.matrice = matrice                  # matrice
         # on créé une matrice temporaire pour pouvoir faire tous les déplacements sans risquer un effet domino
-        self.temp_matrice = []
-        for row in matrice:
-            self.temp_matrice.append(row[:])
+        self.temp_matrice = self.matrice
 
     def regle(self):
         # on gère d'abord le cas où la cellule est collé a un coté du quadrillage
@@ -91,9 +89,8 @@ class Cellule:
             else:
                 return self.matrice                                     # sinon rien ne se passe, la cellule reste morte
 
-    def appliquer_modifications(self): # Cette fonction applique les modifications de la matrice temporaire dans la matrice de base
-        for row in self.temp_matrice:
-            self.matrice.append(row[:])
+    def appliquer_modifications(self):
+        self.matrice = self.temp_matrice
         return self.matrice
 
 

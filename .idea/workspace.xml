@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d02adf9d-42bd-4078-b6b8-849cd410300d" name="Changes" comment="fusion des 2 classes et ajout de commentaires">
+    <list default="true" id="d02adf9d-42bd-4078-b6b8-849cd410300d" name="Changes" comment="test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jeu_De_La_Vie.py" beforeDir="false" afterPath="$PROJECT_DIR$/Jeu_De_La_Vie.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fichier perso.py" beforeDir="false" afterPath="$PROJECT_DIR$/fichier perso.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -75,7 +76,7 @@
       <workItem from="1714371718122" duration="5808000" />
       <workItem from="1714399668790" duration="108000" />
       <workItem from="1714484042007" duration="6344000" />
-      <workItem from="1715071062400" duration="299000" />
+      <workItem from="1715071062400" duration="1546000" />
     </task>
     <task id="LOCAL-00001" summary="création du fichier originel.">
       <option name="closed" value="true" />
@@ -157,7 +158,23 @@
       <option name="project" value="LOCAL" />
       <updated>1714487347040</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="test">
+      <option name="closed" value="true" />
+      <created>1715071546979</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1715071546979</updated>
+    </task>
+    <task id="LOCAL-00012" summary="test">
+      <option name="closed" value="true" />
+      <created>1715071636740</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1715071636740</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,13 +202,14 @@
     <MESSAGE value="corrections" />
     <MESSAGE value="ajout de commentaires" />
     <MESSAGE value="fusion des 2 classes et ajout de commentaires" />
-    <option name="LAST_COMMIT_MESSAGE" value="fusion des 2 classes et ajout de commentaires" />
+    <MESSAGE value="test" />
+    <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_zoom.coverage" NAME="test zoom Coverage Results" MODIFIED="1712237740860" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_2.coverage" NAME="test 2 Coverage Results" MODIFIED="1712930637858" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$Jeu_De_La_Vie.coverage" NAME="Jeu_De_La_Vie Coverage Results" MODIFIED="1712242990066" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/fichier_perso_py$fichier_perso.coverage" NAME="fichier perso Coverage Results" MODIFIED="1714489993099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/fichier_perso_py$fichier_perso.coverage" NAME="fichier perso Coverage Results" MODIFIED="1715072382043" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test.coverage" NAME="test Coverage Results" MODIFIED="1712930653973" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$class.coverage" NAME="class Coverage Results" MODIFIED="1712239906826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/fichier_perso_py$Jeu_De_La_Vie.coverage" NAME="Jeu_De_La_Vie Coverage Results" MODIFIED="1714399696362" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
