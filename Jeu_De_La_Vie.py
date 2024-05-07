@@ -4,12 +4,27 @@
 """ ~~~ PARTIE DÉCLARATIVE ~~~ """
 
 from tkinter import *
+import pygame
+
+largeur_ecran = 800
+hauteur_ecran = 600
+taille_cellule = 10
+blanc = (255, 255, 255)
+noir = (0, 0, 0)
+sensibilite_zomm = 0.1
+izoom = 0.1
+zoom_max = 5.0
+zoom_min = 0.1
+couleur_curseur = (150, 150, 150)
+curseur_largeur = 10
+curseur_longueur = 50
 
 # --- La bibliothèque permettant de faire les graphismes --- #
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
 
 class Tableau:
-    def __init__(self, longueur, largeur):
+    """ Classe qui permet de créer une liste de listes qui sera ensuite interprété comme toutes les cases du jeu de la vie. """
+    def __init__(self, longueur, largeur):      # Initialisation
         self.longueur = longueur
         self.largeur = largeur
     def creation_tableau(self):                 #fonction principale permettant de créer la liste de liste
@@ -76,7 +91,6 @@ class Cellule:
             else:
                 return self.matrice                                     # sinon rien ne se passe, la cellule reste morte
 
-# A verifier car ne fonctionne pas
     def appliquer_modifications(self): # Cette fonction applique les modifications de la matrice temporaire dans la matrice de base
         for row in self.temp_matrice:
             self.matrice.append(row[:])
@@ -102,113 +116,85 @@ fenetre1.mainloop()
 
 
 #fenêtre 2 : choix des pixels colorés sous forme de boutons
-fenetre2 = Tk()
 
-# grille
-fenetre2.geometry("800x700")
-x = 0
-i = 0
-j = 0
+tab1=Tableau(100, 100)
+matrice = tab1.creation_tableau()
+def dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y):
+    for y in range(len(matrice)):
+        for x in range(len(matrice[0])):
+            couleur = blanc if matrice[y][x] == 0 else noir
+            rect_cellule = pygame.Rect(x * taille_cellule * facteur_zoom + decalage_x,
+                                        y * taille_cellule * facteur_zoom + decalage_y,
+                                        taille_cellule * facteur_zoom,
+                                        taille_cellule * facteur_zoom)
+            pygame.draw.rect(ecran, couleur, rect_cellule)
 
-#matrice temporaire pour test
-tab1 = Tableau(10, 10)
-tab = tab1.creation_tableau()
-print(tab1.creation_tableau())
+# Fonction pour inverser la couleur d'une cellule de la grille
+def inverser_couleur_pixel(x, y):
+    if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
+        matrice[y][x] = 1 - matrice[y][x]
 
-#quand un bouton est cliqué la couleur change
-def changer_couleur(bouton, x, y):
-    couleur_actuelle = bouton["bg"]
-    nouvelle_couleur = "white" if couleur_actuelle =="black" else "black"
-    bouton.config(bg=nouvelle_couleur)
-    if nouvelle_couleur == "white" :
-        tab[x][y] = 0
-    else :
-        tab[x][y] = 1
+pygame.init()
+ecran = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
+horloge = pygame.time.Clock()
 
-#mise en place des boutons représentant les cellules
-def bouton_carre_noir(x, y):
-    bouton = Button(fenetre2, height=3, width=6, bg="black", command=lambda ligne=x, colonne = y: changer_couleur(bouton, x, y))
-    bouton.grid(column=x, row=y)
 
-def bouton_carre_blanc(x, y):
-    bouton = Button(fenetre2, height=3, width=6, bg="white", command=lambda ligne=x, colonne = y: changer_couleur(bouton, x, y))
-    bouton.grid(column=x, row=y)
+facteur_zoom = 1
+decalage_x = 0
+decalage_y = 0
 
-#affichage de la grille
-while j <= len(tab)-1:
-    while i < len(tab[1])-1:
+curseur_x = largeur_ecran // 2
+curseur_y = hauteur_ecran // 2
+deplacement_curseur_x = 0
+deplacement_curseur_y = 0
 
-        if tab[j][i]==1:
-            bouton_carre_noir(j, x)
-        else:
-            bouton_carre_blanc(j, x)
-        x += 1
-        i += 1
+jeu_en_cours = True
+while jeu_en_cours:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            en_cours = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 4:  # Molette vers le haut
+                facteur_zoom += izoom
+            elif event.button == 5:  # Molette vers le bas
+                facteur_zoom = max(zoom_min, facteur_zoom - izoom)
+            else:
+                x, y = event.pos
+                x = (x - decalage_x) // (taille_cellule * facteur_zoom)
+                y = (y - decalage_y) // (taille_cellule * facteur_zoom)
+                inverser_couleur_pixel(x, y)
+                print(matrice)
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                deplacement_curseur_y = -curseur_largeur // 2
+            elif event.key == pygame.K_DOWN:
+                deplacement_curseur_y = curseur_largeur // 2
+            elif event.key == pygame.K_LEFT:
+                deplacement_curseur_x = -curseur_longueur // 2
+            elif event.key == pygame.K_RIGHT:
+                deplacement_curseur_x = curseur_longueur // 2
+        elif event.type == pygame.KEYUP:
+            if event.key in (pygame.K_UP, pygame.K_DOWN):
+                deplacement_curseur_y = 0
+            elif event.key in (pygame.K_LEFT, pygame.K_RIGHT):
+                deplacement_curseur_x = 0
 
-    i = 0
-    x = 0
-    y = 0
-    j += 1
+    # Mettre à jour les positions des curseurs
+    curseur_x = min(max(curseur_x + deplacement_curseur_x, 0), largeur_ecran - curseur_longueur)
+    curseur_y = min(max(curseur_y + deplacement_curseur_y, 0), hauteur_ecran - curseur_largeur)
 
-# bouton de sortie
-bouton=Button(fenetre2, text="Fermer", command=fenetre2.quit)
-bouton.grid(column=3, row=11)
+    # Calculer le déplacement de l'image en fonction de la position des curseurs
+    decalage_x = curseur_x - largeur_ecran // 2
+    decalage_y = curseur_y - hauteur_ecran // 2
 
-bouton=Button(fenetre2, text="Retour")
-bouton.grid(column=2, row=10)
+    ecran.fill(blanc)
+    dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y)
 
-bouton=Button(fenetre2, text="Avance")
-bouton.grid(column=4, row=10)
+    # Dessiner les curseurs de déplacement
+    pygame.draw.rect(ecran, couleur_curseur, (curseur_x, hauteur_ecran - curseur_largeur, curseur_longueur, curseur_largeur))
+    pygame.draw.rect(ecran, couleur_curseur, (largeur_ecran - curseur_largeur, curseur_y, curseur_largeur, curseur_longueur))
 
-fenetre2.mainloop()
+    pygame.display.flip()
+    horloge.tick(30)
 
-#fenêtre 3 : affichage interface graphique du jeu de la vie.
-'''
-Dans cet affichage la couleur des cellules n'est plus modifiable, 
-à chaque modification de matrice un nouveau caneva sera généré
-'''
-
-fenetre3 = Tk()
-
-# grid
-fenetre3.geometry("800x700")
-x = 0
-i = 0
-j = 0
-
-#génération des cellules noires et blanches
-def carre_noir(x, y):
-    can1 = Canvas(fenetre3, height=50, width=50, bg="black")
-    can1.grid(column=x, row=y)
-
-def carre_blanc(x, y):
-    can1 = Canvas(fenetre3, height=50, width=50, bg="white")
-    can1.grid(column=x, row=y)
-
-#génération de la grille
-while j <= len(tab)-1:
-    while i < len(tab[1])-1:
-
-        if tab[j][i]== 1:
-            carre_noir(j, x)
-        else:
-            carre_blanc(j, x)
-        x += 1
-        i += 1
-
-    i = 0
-    x = 0
-    y = 0
-    j += 1
-
-# bouton de sortie
-bouton=Button(fenetre3, text="Fermer", command=fenetre3.quit)
-bouton.grid(column=3, row=11)
-
-bouton=Button(fenetre3, text="Retour", command=fenetre3.quit)
-bouton.grid(column=2, row=10)
-
-bouton=Button(fenetre3, text="Avance", command=fenetre3.quit)
-bouton.grid(column=4, row=10)
-
-fenetre3.mainloop()
+pygame.quit()
