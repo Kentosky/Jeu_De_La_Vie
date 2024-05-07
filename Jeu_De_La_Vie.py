@@ -77,6 +77,7 @@ class Cellule:
             else:
                 return self.matrice                                     # sinon rien ne se passe, la cellule reste morte
 
+# A verifier car ne fonctionne pas
     def appliquer_modifications(self): # Cette fonction applique les modifications de la matrice temporaire dans la matrice de base
         for row in self.temp_matrice:
             self.matrice.append(row[:])
