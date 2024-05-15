@@ -50,6 +50,15 @@ def croix(matrice, cox, coy):
         matrice[coy+7][cox+i+2] = 1
         matrice[coy+2+i][cox] = 1
         matrice[coy+i+2][cox+7] = 1
+    for j in range(6):
+        matrice[coy + 2][cox + 1 + j] = 1
+        matrice[coy + 5][cox + 1 + j] = 1
+    for k in range(2):
+        matrice[coy + 2][cox + 3 + k] = 0
+        matrice[coy + 5][cox + 3 + k] = 0
+    for l in range(0, 5, 3):
+        matrice[coy + 1][cox + 2 + l] = 1
+        matrice[coy + 6][cox + 2 + l] = 1
 
 tableau_de_tableaux = []
 for i in range(20):

@@ -8,13 +8,17 @@ import pygame
 
 largeur_ecran = 800
 hauteur_ecran = 600
+
 taille_cellule = 10
+
 blanc = (255, 255, 255)
 noir = (0, 0, 0)
+
 sensibilite_zomm = 0.1
 izoom = 0.1
 zoom_max = 5.0
 zoom_min = 0.1
+
 couleur_curseur = (150, 150, 150)
 curseur_largeur = 10
 curseur_longueur = 50
