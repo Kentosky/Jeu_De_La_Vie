@@ -156,19 +156,19 @@ while jeu_en_cours:
         if event.type == pygame.QUIT:
             en_cours = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 4:  # Molette vers le haut
+            if event.button == 4:                                                            # Molette vers le haut
                 facteur_zoom += izoom
-            elif event.button == 5:  # Molette vers le bas
+            elif event.button == 5:                                                          # Molette vers le bas
                 facteur_zoom = max(zoom_min, facteur_zoom - izoom)
             else:
-                x, y = event.pos
+                x, y = event.pos                                                             #mise à jour de la position de la souris
                 x = (x - decalage_x) // (taille_cellule * facteur_zoom)
                 y = (y - decalage_y) // (taille_cellule * facteur_zoom)
-                inverser_couleur_pixel(x, y)
-                print(matrice)
+                inverser_couleur_pixel(x, y)                                                 #utilisation de la fonction inverser_couleur_pixel
+                print(matrice)                                                               #test de la mise à jour de la matrice
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                deplacement_curseur_y = -curseur_largeur // 2
+            if event.key == pygame.K_UP:                                                     #si la flèche vers le haut est cliquée :
+                deplacement_curseur_y = -curseur_largeur // 2                                #déplacement dans l'image selon les -y
             elif event.key == pygame.K_DOWN:
                 deplacement_curseur_y = curseur_largeur // 2
             elif event.key == pygame.K_LEFT:
