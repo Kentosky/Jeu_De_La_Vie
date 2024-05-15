@@ -47,7 +47,9 @@ class Cellule:
         self.coy = coy                          # coordonnée y
         self.matrice = matrice                  # matrice
         # on créé une matrice temporaire pour pouvoir faire tous les déplacements sans risquer un effet domino
-        self.temp_matrice = self.matrice
+        self.temp_matrice = []
+        for row in matrice:
+            self.temp_matrice.append(row[:])
 
     def regle(self):
         # on gère d'abord le cas où la cellule est collé a un coté du quadrillage
@@ -89,10 +91,10 @@ class Cellule:
             else:
                 return self.matrice                                     # sinon rien ne se passe, la cellule reste morte
 
-    def appliquer_modifications(self):
-        self.matrice = self.temp_matrice
+    def appliquer_modifications(self): # Cette fonction applique les modifications de la matrice temporaire dans la matrice de base
+        for row in self.temp_matrice:
+            self.matrice.append(row[:])
         return self.matrice
-
 
 
 """ ~~~ PARTIE EXECUTIVE ~~~ """
@@ -114,8 +116,11 @@ fenetre1.mainloop()
 
 #fenêtre 2 : choix des pixels colorés sous forme de boutons
 
+#utiles pour test ----
 tab1=Tableau(100, 100)
 matrice = tab1.creation_tableau()
+#-------
+
 def dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y):
     for y in range(len(matrice)):
         for x in range(len(matrice[0])):
@@ -133,7 +138,6 @@ def inverser_couleur_pixel(x, y):
 
 pygame.init()
 ecran = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
-horloge = pygame.time.Clock()
 
 
 facteur_zoom = 1
@@ -146,6 +150,7 @@ deplacement_curseur_x = 0
 deplacement_curseur_y = 0
 
 jeu_en_cours = True
+
 while jeu_en_cours:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -176,22 +181,20 @@ while jeu_en_cours:
             elif event.key in (pygame.K_LEFT, pygame.K_RIGHT):
                 deplacement_curseur_x = 0
 
-    # Mettre à jour les positions des curseurs
+    #Mettre à jour les positions des curseurs
     curseur_x = min(max(curseur_x + deplacement_curseur_x, 0), largeur_ecran - curseur_longueur)
     curseur_y = min(max(curseur_y + deplacement_curseur_y, 0), hauteur_ecran - curseur_largeur)
-
-    # Calculer le déplacement de l'image en fonction de la position des curseurs
+    #Calculer le déplacement de l'image en fonction de la position des curseurs
     decalage_x = curseur_x - largeur_ecran // 2
     decalage_y = curseur_y - hauteur_ecran // 2
 
     ecran.fill(blanc)
     dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y)
 
-    # Dessiner les curseurs de déplacement
+    #Dessiner les curseurs de déplacement
     pygame.draw.rect(ecran, couleur_curseur, (curseur_x, hauteur_ecran - curseur_largeur, curseur_longueur, curseur_largeur))
     pygame.draw.rect(ecran, couleur_curseur, (largeur_ecran - curseur_largeur, curseur_y, curseur_largeur, curseur_longueur))
 
     pygame.display.flip()
-    horloge.tick(30)
 
 pygame.quit()
