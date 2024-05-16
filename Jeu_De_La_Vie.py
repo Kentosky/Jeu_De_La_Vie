@@ -261,3 +261,32 @@ while jeu_en_cours:
     pygame.display.flip()
 
 pygame.quit()
+
+############################# MAIN #############################
+
+print("Création du tableau")
+mon_tab = Tableau(10, 8)
+matrice = mon_tab.creation_tableau()
+
+
+matrice[3][3] = 1
+matrice[3][4] = 1
+matrice[3][5] = 1
+
+print("\nTableau modifié avec l'ajout de cellules vivantes :")
+for ligne in matrice:
+    print(ligne)
+
+matrice_temp = [row[:] for row in matrice]
+
+#applications de la fonctions règle qui modifie l'état des cellules
+for y in range(len(matrice)-1):
+    for x in range(len(matrice[y])-1):
+        ma_cell = Cellule(matrice, y, x, matrice_temp)
+        ma_cell.regle()
+
+#copie de la matrice
+matrice = [row[:] for row in matrice_temp]
+print("\nmatrice apres modifications :")
+for row in matrice:
+    print(row)
