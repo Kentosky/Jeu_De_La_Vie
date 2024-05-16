@@ -2,14 +2,18 @@
 # --- Le jeu de la vie re-créé par le groupe de TP avec Cuvelier Line, Villeret Baptiste et Besse Fabien  --- #
 
 """ ~~~ PARTIE DÉCLARATIVE ~~~ """
-
+# --- La bibliothèque permettant de faire les graphismes --- #
 from tkinter import *
 import pygame
 
-largeur_ecran = 800
-hauteur_ecran = 600
+largeur_ecran = 100
+hauteur_ecran_sans_boutons = 100
+hauteur_ecran = hauteur_ecran_sans_boutons + 40
 
-taille_cellule = 10
+taille_cellule = 40
+
+if largeur_ecran // taille_cellule != 0 :
+    largeur_ecran += largeur_ecran%taille_cellule
 
 blanc = (255, 255, 255)
 noir = (0, 0, 0)
@@ -23,7 +27,6 @@ couleur_curseur = (150, 150, 150)
 curseur_largeur = 10
 curseur_longueur = 50
 
-# --- La bibliothèque permettant de faire les graphismes --- #
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
 
 class Tableau:
@@ -99,6 +102,9 @@ class Cellule:
         for row in self.temp_matrice:
             self.matrice.append(row[:])
         return self.matrice
+
+
+""" ~~~ MISE EN PLACE DES BONUS : configurations prédéfinies de matrices afin d'obtenir un résultat en particulier dans le jeu~~~ """
 
 def cligno(matrice, cox, coy):
     for i in range(3):
@@ -183,7 +189,7 @@ fenetre1.mainloop()
 #fenêtre 2 : choix des pixels colorés sous forme de boutons
 
 #utiles pour test ----
-tab1=Tableau(100, 100)
+tab1=Tableau(10, 10)
 matrice = tab1.creation_tableau()
 #-------
 
@@ -205,7 +211,7 @@ def inverser_couleur_pixel(x, y):
 pygame.init()
 ecran = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
 
-
+#_________________________définition des variables_________________________
 facteur_zoom = 1
 decalage_x = 0
 decalage_y = 0
@@ -214,53 +220,92 @@ curseur_x = largeur_ecran // 2
 curseur_y = hauteur_ecran // 2
 deplacement_curseur_x = 0
 deplacement_curseur_y = 0
+#variables des boutons-----------------------------------------------------
+color = (255, 255, 255)
+color_light = (170, 170, 170)
+color_dark = (100, 100, 100)
+smallfont = pygame.font.SysFont('Corbel',35)
+text = smallfont.render('quit' , True , color)
+#fin variables des boutons--------------------------------------------------
+
+
 
 jeu_en_cours = True
 
 while jeu_en_cours:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            en_cours = False
+            jeu_en_cours = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 4:                                                            # Molette vers le haut
+            if event.button == 4:                                                     # Molette vers le haut
                 facteur_zoom += izoom
-            elif event.button == 5:                                                          # Molette vers le bas
+            elif event.button == 5:                                                   # Molette vers le bas
                 facteur_zoom = max(zoom_min, facteur_zoom - izoom)
             else:
-                x, y = event.pos                                                             #mise à jour de la position de la souris
+                x, y = event.pos                                                      #mise à jour de la position de la souris
                 x = (x - decalage_x) // (taille_cellule * facteur_zoom)
                 y = (y - decalage_y) // (taille_cellule * facteur_zoom)
-                inverser_couleur_pixel(x, y)                                                 #utilisation de la fonction inverser_couleur_pixel
-                print(matrice)                                                               #test de la mise à jour de la matrice
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:                                                     #si la flèche vers le haut est cliquée :
-                deplacement_curseur_y = -curseur_largeur // 2                                #déplacement dans l'image selon les -y
-            elif event.key == pygame.K_DOWN:
-                deplacement_curseur_y = curseur_largeur // 2
-            elif event.key == pygame.K_LEFT:
-                deplacement_curseur_x = -curseur_longueur // 2
-            elif event.key == pygame.K_RIGHT:
-                deplacement_curseur_x = curseur_longueur // 2
-        elif event.type == pygame.KEYUP:
+                inverser_couleur_pixel(x, y)                                          #utilisation de la fonction inverser_couleur_pixel
+                print(matrice)                                                        #test de la mise à jour de la matrice
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+                                                                                   # Si on clique la souris sur le bouton quitter cela ferme la fenêtre
+            if largeur_ecran / 2 - 70 <= mouse[0] <= largeur_ecran / 2 + 70 and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
+                pygame.quit()
+            if largeur_ecran / 2 - 170 <= mouse[0] <= largeur_ecran / 2 - 100  and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
+                pass
+
+        elif event.type == pygame.KEYDOWN:                                            #si on appuie sur une touche :
+
+            if event.key == pygame.K_UP:                                              #si la flèche vers le haut est cliquée :
+                deplacement_curseur_y = -curseur_largeur // 2                         #déplacement dans l'image selon les -y
+
+            elif event.key == pygame.K_DOWN:                                          #si la flèche vers le bas est cliquée :
+                deplacement_curseur_y = curseur_largeur // 2                          #déplacement dans l'image selon les y
+
+            elif event.key == pygame.K_LEFT:                                          #si la flèche vers la gauche est cliquée :
+                deplacement_curseur_x = -curseur_longueur // 2                        #déplacement dans l'image selon les -x
+
+            elif event.key == pygame.K_RIGHT:                                         #si la flèche vers la droite est cliquée :
+                deplacement_curseur_x = curseur_longueur // 2                         #déplacement dans l'image selon les x
+
+        elif event.type == pygame.KEYUP:                                              #si on relâche sur une touche :
             if event.key in (pygame.K_UP, pygame.K_DOWN):
-                deplacement_curseur_y = 0
+                deplacement_curseur_y = 0                                             #on arrête tout déplacement en x et y
             elif event.key in (pygame.K_LEFT, pygame.K_RIGHT):
                 deplacement_curseur_x = 0
 
-    #Mettre à jour les positions des curseurs
-    curseur_x = min(max(curseur_x + deplacement_curseur_x, 0), largeur_ecran - curseur_longueur)
+    mouse = pygame.mouse.get_pos()                                                    #La couleur du bouton change si il est survolé par la souris
+    if largeur_ecran / 2 - 70 <= mouse[0] <= largeur_ecran / 2 + 70 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran :
+        pygame.draw.rect(ecran, color_light, [largeur_ecran / 2 -70, hauteur_ecran - 40, 140, 40])
+    else:
+        pygame.draw.rect(ecran, color_dark, [largeur_ecran / 2 -70, hauteur_ecran -40, 140, 40])
+
+    ecran.blit(text, (largeur_ecran / 2 - 25, hauteur_ecran -40 ))
+
+    if largeur_ecran / 2 - 240  <= mouse[0] <= largeur_ecran / 2 - 100 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
+        pygame.draw.rect(ecran, color_light, [largeur_ecran / 2 - 240, hauteur_ecran - 40, 140, 40])
+    else:
+        pygame.draw.rect(ecran, color_dark, [largeur_ecran / 2 - 240, hauteur_ecran - 40, 140, 40])
+
+    ecran.blit(text, (largeur_ecran / 2 - 195, hauteur_ecran - 40))
+    #On écrit le texte sur le boutton
+
+    #rafraichissement de la page
+    pygame.display.update()
+
+    # curseurs de déplacement-----------------------------------------------------
+    curseur_x = min(max(curseur_x + deplacement_curseur_x, 0), largeur_ecran - curseur_longueur) #mise à jour les positions des curseurs
     curseur_y = min(max(curseur_y + deplacement_curseur_y, 0), hauteur_ecran - curseur_largeur)
-    #Calculer le déplacement de l'image en fonction de la position des curseurs
-    decalage_x = curseur_x - largeur_ecran // 2
+
+    decalage_x = curseur_x - largeur_ecran // 2                                       #calcul du déplacement de l'image en fonction de la position des curseurs
     decalage_y = curseur_y - hauteur_ecran // 2
 
     ecran.fill(blanc)
     dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y)
 
-    #Dessiner les curseurs de déplacement
-    pygame.draw.rect(ecran, couleur_curseur, (curseur_x, hauteur_ecran - curseur_largeur, curseur_longueur, curseur_largeur))
+    pygame.draw.rect(ecran, couleur_curseur, (curseur_x, hauteur_ecran - curseur_largeur, curseur_longueur, curseur_largeur)) #Dessin des curseurs de déplacement
     pygame.draw.rect(ecran, couleur_curseur, (largeur_ecran - curseur_largeur, curseur_y, curseur_largeur, curseur_longueur))
-
-    pygame.display.flip()
+    # fin curseurs de déplacement-----------------------------------------------------
 
 pygame.quit()
