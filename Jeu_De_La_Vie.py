@@ -6,7 +6,7 @@
 from tkinter import *
 import pygame
 
-largeur_ecran = 100
+largeur_ecran =100
 hauteur_ecran_sans_boutons = 100
 hauteur_ecran = hauteur_ecran_sans_boutons + 40
 
@@ -231,6 +231,7 @@ jeu_en_cours = True
 
 while jeu_en_cours:
     for event in pygame.event.get():
+        mouse = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
             jeu_en_cours = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -247,9 +248,11 @@ while jeu_en_cours:
 
         if event.type == pygame.MOUSEBUTTONDOWN:
                                                                                    # Si on clique la souris sur le bouton quitter cela ferme la fenêtre
-            if largeur_ecran / 2 - 70 <= mouse[0] <= largeur_ecran / 2 + 70 and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
+            if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
                 pygame.quit()
-            if largeur_ecran / 2 - 170 <= mouse[0] <= largeur_ecran / 2 - 100  and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
+            if 0 <= mouse[0] <= largeur_ecran / 2 - largeur_ecran / 6 and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
+                pass
+            if largeur_ecran / 2 + largeur_ecran / 6 <= mouse[0] <= largeur_ecran and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
                 pass
 
         elif event.type == pygame.KEYDOWN:                                            #si on appuie sur une touche :
@@ -272,20 +275,27 @@ while jeu_en_cours:
             elif event.key in (pygame.K_LEFT, pygame.K_RIGHT):
                 deplacement_curseur_x = 0
 
-    mouse = pygame.mouse.get_pos()                                                    #La couleur du bouton change si il est survolé par la souris
-    if largeur_ecran / 2 - 70 <= mouse[0] <= largeur_ecran / 2 + 70 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran :
-        pygame.draw.rect(ecran, color_light, [largeur_ecran / 2 -70, hauteur_ecran - 40, 140, 40])
+                                                      #La couleur du bouton change si il est survolé par la souris
+    if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran :
+        pygame.draw.rect(ecran, color_light, [largeur_ecran / 2 -largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
     else:
-        pygame.draw.rect(ecran, color_dark, [largeur_ecran / 2 -70, hauteur_ecran -40, 140, 40])
+        pygame.draw.rect(ecran, color_dark, [largeur_ecran / 2 -largeur_ecran / 6, hauteur_ecran -40,  largeur_ecran / 3, 40])
 
-    ecran.blit(text, (largeur_ecran / 2 - 25, hauteur_ecran -40 ))
+    ecran.blit(text, (largeur_ecran / 2 - largeur_ecran / 18, hauteur_ecran -40 ))
 
-    if largeur_ecran / 2 - 240  <= mouse[0] <= largeur_ecran / 2 - 100 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
-        pygame.draw.rect(ecran, color_light, [largeur_ecran / 2 - 240, hauteur_ecran - 40, 140, 40])
+    if 0  <= mouse[0] <= largeur_ecran / 2 - largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
+        pygame.draw.rect(ecran, color_light, [0, hauteur_ecran - 40, largeur_ecran / 3, 40])
     else:
-        pygame.draw.rect(ecran, color_dark, [largeur_ecran / 2 - 240, hauteur_ecran - 40, 140, 40])
+        pygame.draw.rect(ecran, color_dark, [0, hauteur_ecran - 40, largeur_ecran / 3, 40])
 
-    ecran.blit(text, (largeur_ecran / 2 - 195, hauteur_ecran - 40))
+    ecran.blit(text, (largeur_ecran / 12, hauteur_ecran - 40))
+
+    if largeur_ecran / 2 + largeur_ecran / 6  <= mouse[0] <= largeur_ecran and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
+        pygame.draw.rect(ecran, color_light, [largeur_ecran / 2 + largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
+    else:
+        pygame.draw.rect(ecran, color_dark, [largeur_ecran / 2 + largeur_ecran / 6 , hauteur_ecran - 40, largeur_ecran / 3, 40])
+
+    ecran.blit(text, (largeur_ecran / 2 + largeur_ecran / 6 + largeur_ecran / 12, hauteur_ecran - 40))
     #On écrit le texte sur le boutton
 
     #rafraichissement de la page
