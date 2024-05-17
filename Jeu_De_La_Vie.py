@@ -6,14 +6,18 @@
 from tkinter import *
 import pygame
 
-largeur_ecran =100
-hauteur_ecran_sans_boutons = 100
+largeur_ecran =800
+hauteur_ecran_sans_boutons = 500
 hauteur_ecran = hauteur_ecran_sans_boutons + 40
 
-taille_cellule = 40
+taille_cellule = 30
 
 if largeur_ecran // taille_cellule != 0 :
     largeur_ecran += largeur_ecran%taille_cellule
+if hauteur_ecran_sans_boutons // taille_cellule != 0 :
+    hauteur_ecran_sans_boutons += hauteur_ecran_sans_boutons%taille_cellule
+x_matrice = int(largeur_ecran/taille_cellule)
+y_matrice = int(largeur_ecran/taille_cellule)
 
 blanc = (255, 255, 255)
 noir = (0, 0, 0)
@@ -186,7 +190,7 @@ fenetre1.mainloop()
 #fenêtre 2 : choix des pixels colorés sous forme de boutons
 
 #utiles pour test ----
-tab1=Tableau(10, 10)
+tab1=Tableau(x_matrice, y_matrice)
 matrice = tab1.creation_tableau()
 #-------
 
@@ -221,8 +225,10 @@ deplacement_curseur_y = 0
 color = (255, 255, 255)
 color_light = (170, 170, 170)
 color_dark = (100, 100, 100)
-smallfont = pygame.font.SysFont('Corbel',35)
-text = smallfont.render('quit' , True , color)
+smallfont = pygame.font.SysFont('Corbel',20)
+quitter = smallfont.render('quitter' , True , color)
+suivant = smallfont.render('suivant' , True , color)
+precedent = smallfont.render('précédent' , True , color)
 #fin variables des boutons--------------------------------------------------
 
 
@@ -275,28 +281,34 @@ while jeu_en_cours:
             elif event.key in (pygame.K_LEFT, pygame.K_RIGHT):
                 deplacement_curseur_x = 0
 
-                                                      #La couleur du bouton change si il est survolé par la souris
-    if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran :
-        pygame.draw.rect(ecran, color_light, [largeur_ecran / 2 -largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
+                                                  #La couleur du bouton change si il est survolé par la souris
+    # mise en place des boutons--------------------------------------------------
+    # La couleur du bouton change si il est survolé par la souris
+    if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[
+        0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
+        pygame.draw.rect(ecran, color_light,
+                         [largeur_ecran / 2 - largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
     else:
-        pygame.draw.rect(ecran, color_dark, [largeur_ecran / 2 -largeur_ecran / 6, hauteur_ecran -40,  largeur_ecran / 3, 40])
+        pygame.draw.rect(ecran, color_dark,
+                         [largeur_ecran / 2 - largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
 
-    ecran.blit(text, (largeur_ecran / 2 - largeur_ecran / 18, hauteur_ecran -40 ))
-
-    if 0  <= mouse[0] <= largeur_ecran / 2 - largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
+    if 0 <= mouse[0] <= largeur_ecran / 2 - largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
         pygame.draw.rect(ecran, color_light, [0, hauteur_ecran - 40, largeur_ecran / 3, 40])
     else:
         pygame.draw.rect(ecran, color_dark, [0, hauteur_ecran - 40, largeur_ecran / 3, 40])
 
-    ecran.blit(text, (largeur_ecran / 12, hauteur_ecran - 40))
-
-    if largeur_ecran / 2 + largeur_ecran / 6  <= mouse[0] <= largeur_ecran and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
-        pygame.draw.rect(ecran, color_light, [largeur_ecran / 2 + largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
+    if largeur_ecran / 2 + largeur_ecran / 6 <= mouse[0] <= largeur_ecran and hauteur_ecran - 40 <= mouse[
+        1] <= hauteur_ecran:
+        pygame.draw.rect(ecran, color_light,
+                         [largeur_ecran / 2 + largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
     else:
-        pygame.draw.rect(ecran, color_dark, [largeur_ecran / 2 + largeur_ecran / 6 , hauteur_ecran - 40, largeur_ecran / 3, 40])
+        pygame.draw.rect(ecran, color_dark,
+                         [largeur_ecran / 2 + largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
 
-    ecran.blit(text, (largeur_ecran / 2 + largeur_ecran / 6 + largeur_ecran / 12, hauteur_ecran - 40))
-    #On écrit le texte sur le boutton
+    #mise en place du texte des boutons-------------------------------------------
+    ecran.blit(precedent, (largeur_ecran / 20, hauteur_ecran - 40))
+    ecran.blit(quitter, (largeur_ecran / 2 - largeur_ecran / 14, hauteur_ecran - 40))
+    ecran.blit(suivant, (largeur_ecran / 2 + largeur_ecran / 6 + largeur_ecran / 20, hauteur_ecran - 40))
 
     #rafraichissement de la page
     pygame.display.update()
