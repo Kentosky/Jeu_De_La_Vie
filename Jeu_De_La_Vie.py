@@ -165,6 +165,16 @@ def croix(matrice, cox, coy):
         matrice[coy + 1][cox + 2 + l] = 1
         matrice[coy + 6][cox + 2 + l] = 1
 
+def deuxLapins(matrice, cox, coy):
+    matrice[coy + 1][cox] = 1
+    matrice[coy + 1][cox + 2] = 1
+    matrice[coy][cox + 4] = 1
+    matrice[coy][cox + 6] = 1
+    matrice[coy + 1][cox + 5] = 1
+    matrice[coy + 2][cox + 5] = 1
+    matrice[coy + 2][cox + 1] = 1
+    matrice[coy + 3][cox + 1] = 1
+    matrice[coy + 3][cox + 7] = 1
 
 """ ~~~ PARTIE EXECUTIVE ~~~ """
 
