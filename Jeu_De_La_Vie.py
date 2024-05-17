@@ -10,7 +10,7 @@ largeur_ecran =800
 hauteur_ecran_sans_boutons = 500
 hauteur_ecran = hauteur_ecran_sans_boutons + 40
 
-taille_cellule = 30
+taille_cellule = 50
 
 if largeur_ecran // taille_cellule != 0 :
     largeur_ecran += largeur_ecran%taille_cellule
@@ -169,6 +169,16 @@ def croix(matrice, cox, coy):
         matrice[coy + 1][cox + 2 + l] = 1
         matrice[coy + 6][cox + 2 + l] = 1
 
+def deuxLapins(matrice, cox, coy):
+    matrice[coy + 1][cox] = 1
+    matrice[coy + 1][cox + 2] = 1
+    matrice[coy][cox + 4] = 1
+    matrice[coy][cox + 6] = 1
+    matrice[coy + 1][cox + 5] = 1
+    matrice[coy + 2][cox + 5] = 1
+    matrice[coy + 2][cox + 1] = 1
+    matrice[coy + 3][cox + 1] = 1
+    matrice[coy + 3][cox + 7] = 1
 
 """ ~~~ PARTIE EXECUTIVE ~~~ """
 
@@ -284,8 +294,7 @@ while jeu_en_cours:
                                                   #La couleur du bouton change si il est survolé par la souris
     # mise en place des boutons--------------------------------------------------
     # La couleur du bouton change si il est survolé par la souris
-    if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[
-        0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
+    if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
         pygame.draw.rect(ecran, color_light,
                          [largeur_ecran / 2 - largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
     else:
@@ -306,9 +315,9 @@ while jeu_en_cours:
                          [largeur_ecran / 2 + largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
 
     #mise en place du texte des boutons-------------------------------------------
-    ecran.blit(precedent, (largeur_ecran / 20, hauteur_ecran - 40))
-    ecran.blit(quitter, (largeur_ecran / 2 - largeur_ecran / 14, hauteur_ecran - 40))
-    ecran.blit(suivant, (largeur_ecran / 2 + largeur_ecran / 6 + largeur_ecran / 20, hauteur_ecran - 40))
+    ecran.blit(precedent, (largeur_ecran / 20, hauteur_ecran - 30))
+    ecran.blit(quitter, (largeur_ecran / 2 - largeur_ecran / 14, hauteur_ecran - 30))
+    ecran.blit(suivant, (largeur_ecran / 2 + largeur_ecran / 6 + largeur_ecran / 20, hauteur_ecran - 30))
 
     #rafraichissement de la page
     pygame.display.update()
