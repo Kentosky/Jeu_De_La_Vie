@@ -326,11 +326,11 @@ pygame.quit()
 
 ############################# MAIN #############################
 # Paramètres de la fenêtre
-largeur, hauteur = 800, 600
-taille_cellule = 20
+largeur, hauteur = 800, 540
+taille_cellule = 5
 
 # Création de la fenêtre
-ecran = pygame.display.set_mode((largeur-10 , hauteur-10 ))
+ecran = pygame.display.set_mode((largeur, hauteur), pygame.FULLSCREEN)
 pygame.display.set_caption("Jeu de la Vie")
 clock = pygame.time.Clock()
 # Mise à jour de l'état du jeu

@@ -123,6 +123,7 @@ ecran = pygame.display.set_mode((largeur-10 , hauteur-10 ))
 pygame.display.set_caption("Jeu de la Vie")
 
 # Création du tableau et ajout de cellules vivantes
+##### RAJOUTER LIGNE 263 #####
 mon_tab = Tableau(largeur // taille_cellule, hauteur // taille_cellule)
 matrice = mon_tab.tableau_de_tableaux
 matrice[3][3] = 1
