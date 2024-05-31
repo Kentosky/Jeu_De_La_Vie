@@ -218,7 +218,7 @@ matrice_temp = [row[:] for row in matrice]
 #applications de la fonctions règle qui modifie l'état des cellules
 for y in range(len(matrice)-1):
     for x in range(len(matrice[y])-1):
-        ma_cell = Cellule(matrice, y, x, matrice_temp)
+        ma_cell = Cel.Cellule(matrice, y, x, matrice_temp)
         ma_cell.regle()
 
 #copie de la matrice
@@ -226,3 +226,6 @@ matrice = [row[:] for row in matrice_temp]
 print("\nmatrice apres modifications :")
 for row in matrice:
     print(row)
+
+
+

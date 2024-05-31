@@ -1,5 +1,6 @@
 import pygame
 import sys
+import moviepy.editor
 
 # Définition des couleurs
 blanc = (255, 255, 255)
@@ -74,23 +75,7 @@ def dessiner_grille(ecran, matrice, taille_cellule):
             rect_cellule = pygame.Rect(x * taille_cellule, y * taille_cellule, taille_cellule, taille_cellule)
             pygame.draw.rect(ecran, couleur, rect_cellule)
 
-# Initialisation de Pygame
-pygame.init()
 
-# Paramètres de la fenêtre
-largeur, hauteur = 800, 600
-taille_cellule = 20
-
-# Création de la fenêtre
-ecran = pygame.display.set_mode((largeur, hauteur))
-pygame.display.set_caption("Jeu de la Vie")
-
-# Création du tableau et ajout de cellules vivantes
-mon_tab = Tableau(largeur // taille_cellule, hauteur // taille_cellule)
-matrice = mon_tab.tableau_de_tableaux
-
-import pygame
-import sys
 
 # Définition des couleurs
 blanc = (255, 255, 255)
@@ -176,22 +161,31 @@ def deuxLapins(matrice, cox, coy):
     matrice[coy + 3][cox + 1] = 1
     matrice[coy + 3][cox + 7] = 1
 
+
 # Initialisation de Pygame
 pygame.init()
 
 # Paramètres de la fenêtre
 largeur, hauteur = 800, 600
-taille_cellule = 40
+taille_cellule = 15
 
 # Création de la fenêtre
 ecran = pygame.display.set_mode((largeur, hauteur))
+
+ecran2 = pygame.display.set_mode((largeur, hauteur))
+
 pygame.display.set_caption("Jeu de la Vie")
 
 # Création du tableau et ajout de cellules vivantes
 mon_tab = Tableau(largeur // taille_cellule, hauteur // taille_cellule)
 matrice = mon_tab.tableau_de_tableaux
 
+from moviepy.editor import *
 
+pygame.init()
+video = moviepy.editor.VideoFileClip("video.mp4")
+video.preview()
+pygame.quit()
 
 matrice[2][2] = 1
 matrice[3][2] = 1
@@ -208,14 +202,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
-    # Mise à jour de l'état du jeu
-    matrice_temp = [row[:] for row in matrice]
-    for y in range(len(matrice)-1):
-        for x in range(len(matrice[y])-1):
-            ma_cell = Cellule(matrice, y, x, matrice_temp)
-            ma_cell.regle()
-    matrice = [row[:] for row in matrice_temp]
 
     # Dessin de la grille
     dessiner_grille(ecran, matrice, taille_cellule)
