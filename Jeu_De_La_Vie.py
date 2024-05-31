@@ -7,8 +7,8 @@ from tkinter import *
 
 import pygame
 import Structures
-import Cellule
-import Tableau
+import Cellule as Cel
+import Tableau as Tab
 
 largeur_ecran =800
 hauteur_ecran_sans_boutons = 500
@@ -60,7 +60,7 @@ fenetre1.mainloop()
 #fenêtre 2 : choix des pixels colorés sous forme de boutons
 
 #utiles pour test ----
-tab1=Tableau.Tableau(x_matrice, y_matrice)
+tab1=Tab.Tableau(x_matrice, y_matrice)
 matrice = tab1.creation_tableau()
 #-------
 
@@ -201,7 +201,7 @@ pygame.quit()
 ############################# MAIN #############################
 
 print("Création du tableau")
-mon_tab = Tableau.Tableau(10, 8)
+mon_tab = Tab.Tableau(10, 8)
 matrice = mon_tab.creation_tableau()
 
 
