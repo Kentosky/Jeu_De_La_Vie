@@ -60,7 +60,7 @@ fenetre1.mainloop()
 #fenêtre 2 : choix des pixels colorés sous forme de boutons
 
 #utiles pour test ----
-tab1=Tableau(x_matrice, y_matrice)
+tab1=Tableau.Tableau(x_matrice, y_matrice)
 matrice = tab1.creation_tableau()
 #-------
 
@@ -201,7 +201,7 @@ pygame.quit()
 ############################# MAIN #############################
 
 print("Création du tableau")
-mon_tab = Tableau(10, 8)
+mon_tab = Tableau.Tableau(10, 8)
 matrice = mon_tab.creation_tableau()
 
 
