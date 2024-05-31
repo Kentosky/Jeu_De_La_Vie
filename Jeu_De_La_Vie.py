@@ -4,7 +4,11 @@
 """ ~~~ PARTIE DÉCLARATIVE ~~~ """
 # --- La bibliothèque permettant de faire les graphismes --- #
 from tkinter import *
+
 import pygame
+import Structures
+import Cellule
+import Tableau
 
 largeur_ecran =800
 hauteur_ecran_sans_boutons = 500
@@ -32,153 +36,9 @@ curseur_largeur = 10
 curseur_longueur = 50
 
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
-
-class Tableau:
-    """ Classe qui permet de créer une liste de listes qui sera ensuite interprété comme toutes les cases du jeu de la vie. """
-    def __init__(self, longueur, largeur):      # Initialisation
-        self.longueur = longueur
-        self.largeur = largeur
-    def creation_tableau(self):                 #fonction principale permettant de créer la liste de liste
-        # creer le quadrillage
-        tableau_de_tableaux = []
-        for i in range(self.largeur):           #la liste de listes fera une largeur de la variable largeur
-            ligne = []
-            for j in range(self.longueur):      #la liste de listes fera une longueur de la variable longueur
-                ligne.append(0)
-            tableau_de_tableaux.append(ligne)
-
-        # Afficher le quadrillage
-        for ligne in tableau_de_tableaux:       #ici, on affiche la liste de listes pour la vérification
-            print(ligne)
-        return tableau_de_tableaux
-
-class Cellule:
-    def __init__(self, matrice, coy, cox, temp_matrice):      # dans cet ordre car on cree les colones avant les lignes
-        self.cox = cox                          # coordonnée x
-        self.coy = coy                          # coordonnée y
-        self.matrice = matrice                  # matrice
-        # on créé une matrice temporaire pour pouvoir faire tous les déplacements sans risquer un effet domino
-        self.temp_matrice = temp_matrice
-
-    def regle(self):
-        # on gère d'abord le cas où la cellule est collé a un coté du quadrillage
-        left = top = right_or = bottom_or = 0
-        right = len(self.matrice[0])
-        bottom = len(self.matrice)
-
-        if self.cox == left:
-            left += 1
-        if self.cox == right:
-            right_or += 1
-        if self.coy == top:
-            top += 1
-        if self.coy == bottom:
-            bottom_or += 1
-
-        # on gère maintenant la survie de la cellule
-        if self.matrice[self.coy][self.cox] == 1:                       # 1er cas: la cellule est vivante
-            cmptS = 0                                                   # compteur de voisins
-            for i in range(top - 1, 2 - bottom_or):                     # on regarde autour de la cellule
-                for j in range(left - 1, 2 - right_or):                 #               |
-                    if self.matrice[self.coy + i][self.cox + j] == 1:   # si une voisine est vivante
-                        cmptS += 1                                      # on incrémente le compteur de voisins
-
-            if cmptS == 3 or cmptS == 4:                                # si la cellule a 2 ou 3 voisines (compteur=3 ou 4 car elle se compte elle-même)
-                self.temp_matrice[self.coy][self.cox] = 1               # rien ne se passe, la cellule reste en vie
-
-            else:
-                self.temp_matrice[self.coy][self.cox] = 0               # sinon la cellule meurt, on modifie son état
-
-        else:                                                           # 2eme cas:la cellule est morte
-            cmptN = 0                                                   # compteur de voisins
-            for i in range(top - 1, 2 - bottom_or, 1):                  # on regarde autour de la voisine
-                for j in range(left - 1, 2 - right_or, 1):              #               |
-                    if self.matrice[self.coy + i][self.cox + j] == 1:   # si une voisine est vivante
-                        cmptN += 1                                      # on incrémente le compteur
-            if cmptN == 3:                                              # si la cellule a 3 voisines (compteur=4 car elle se compte elle-même)
-                self.temp_matrice[self.coy][self.cox] = 1               # la cellule meurt, on modifie son état
-
-            else:
-                self.temp_matrice[self.coy][self.cox] = 0               # sinon rien ne se passe, la cellule reste morte
-
-        return self.temp_matrice
-
-
-
 """ ~~~ MISE EN PLACE DES BONUS : configurations prédéfinies de matrices afin d'obtenir un résultat en particulier dans le jeu~~~ """
 
-def cligno(matrice, cox, coy):
-    for i in range(3):
-        matrice[coy+i][cox] = 1
-    return matrice
 
-def hamecon(matrice, cox, coy):
-    for i in range(3):
-        matrice[coy+i][cox] = 1
-    matrice[coy][cox-1] = 1
-    matrice[coy+3][cox+1] = 1
-    matrice[coy+3][cox+2] = 1
-    matrice[coy+2][cox+2] = 1
-    return matrice
-def hamecon2(matrice, cox, coy):
-    for i in range(5):
-        matrice[coy-i-1][cox+i] = 1
-    for i in range(6):
-        matrice[coy-i][cox+i] = 1
-    matrice[coy-1][cox+1] = 0
-    matrice[coy-4][cox+4] = 0
-    matrice[coy-3][cox+2] = 0
-    matrice[coy][cox+1] = 1
-    matrice[coy-2][cox+3] = 1
-    matrice[coy-4][cox+5] = 1
-    return matrice
-
-
-def canoe(matrice, cox, coy):
-    for i in range(4):
-        matrice[coy+i+1][cox+i] = 1
-    matrice[coy][cox] = 1
-    matrice[coy][cox+1] = 1
-    matrice[coy+4][cox+4] = 1
-    matrice[coy+3][cox+4] = 1
-
-def penntadeca(matrice, cox, coy):
-    for i in range(10):
-        matrice[coy][cox + i] = 1
-    matrice[coy][cox + 2] = 0
-    matrice[coy][cox + 7] = 0
-    matrice[coy + 1][cox + 2] = 1
-    matrice[coy - 1][cox + 2] = 1
-    matrice[coy + 1][cox + 7] = 1
-    matrice[coy - 1][cox + 7] = 1
-    return matrice
-
-def croix(matrice, cox, coy):
-    for i in range(4):
-        matrice[coy][cox+i+2] = 1
-        matrice[coy+7][cox+i+2] = 1
-        matrice[coy+2+i][cox] = 1
-        matrice[coy+i+2][cox+7] = 1
-    for j in range(6):
-        matrice[coy + 2][cox + 1 + j] = 1
-        matrice[coy + 5][cox + 1 + j] = 1
-    for k in range(2):
-        matrice[coy + 2][cox + 3 + k] = 0
-        matrice[coy + 5][cox + 3 + k] = 0
-    for l in range(0, 5, 3):
-        matrice[coy + 1][cox + 2 + l] = 1
-        matrice[coy + 6][cox + 2 + l] = 1
-
-def deuxLapins(matrice, cox, coy):
-    matrice[coy + 1][cox] = 1
-    matrice[coy + 1][cox + 2] = 1
-    matrice[coy][cox + 4] = 1
-    matrice[coy][cox + 6] = 1
-    matrice[coy + 1][cox + 5] = 1
-    matrice[coy + 2][cox + 5] = 1
-    matrice[coy + 2][cox + 1] = 1
-    matrice[coy + 3][cox + 1] = 1
-    matrice[coy + 3][cox + 7] = 1
 
 """ ~~~ PARTIE EXECUTIVE ~~~ """
 
