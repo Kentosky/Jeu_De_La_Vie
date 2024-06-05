@@ -23,6 +23,7 @@ y_matrice = int(largeur_ecran/taille_cellule)
 
 blanc = (255, 255, 255)
 noir = (0, 0, 0)
+couleur_bordure = (224, 224, 224)
 
 sensibilite_zomm = 0.1
 izoom = 0.1
@@ -340,16 +341,27 @@ taille_cellule = 5
 ecran = pygame.display.set_mode((largeur, hauteur), pygame.FULLSCREEN)
 pygame.display.set_caption("Jeu de la Vie")
 clock = pygame.time.Clock()
+
+# Création d'une surface pour la carte
+MAP_WIDTH, MAP_HEIGHT = 1200, 900
+map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
+
 # Mise à jour de l'état du jeu
 matrice_temp = [row[:] for row in matrice]
-print('matrice temps :      ',matrice_temp)
 
-def dessiner_grille(ecran, matrice, taille_cellule):
+def dessiner_grille(map_surface, matrice, taille_cellule):
     for y in range(len(matrice)):
         for x in range(len(matrice[0])):
             couleur = blanc if matrice[y][x] == 0 else noir
             rect_cellule = pygame.Rect(x * taille_cellule, y * taille_cellule, taille_cellule, taille_cellule)
-            pygame.draw.rect(ecran, couleur, rect_cellule)
+            pygame.draw.rect(map_surface, couleur, rect_cellule)
+            pygame.draw.rect(map_surface, couleur_bordure, rect_cellule,1 )
+
+
+# Position initiale de la caméra centrée
+camera_x = (MAP_WIDTH - largeur) // 2
+camera_y = (MAP_HEIGHT - hauteur) // 2
+camera_speed = 5
 
 running = True
 while running:
@@ -357,6 +369,20 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    # Gestion des touches pour déplacer la caméra
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        camera_x = max(camera_x - camera_speed, 0)
+    if keys[pygame.K_RIGHT]:
+        camera_x = min(camera_x + camera_speed, MAP_WIDTH - largeur)
+    if keys[pygame.K_UP]:
+        camera_y = max(camera_y - camera_speed, 0)
+    if keys[pygame.K_DOWN]:
+        camera_y = min(camera_y + camera_speed, MAP_HEIGHT - hauteur)
+
+    # Dessin de la partie visible de la carte sur la fenêtre
+    ecran.blit(map_surface, (0, 0), (camera_x, camera_y, largeur, hauteur))
+    pygame.display.flip()
 
     for y in range(len(matrice)-1):
         for x in range(len(matrice[y])-1):
@@ -366,7 +392,7 @@ while running:
     matrice = [row[:] for row in matrice_temp]
 
     # Dessin de la grille
-    dessiner_grille(ecran, matrice, taille_cellule)
+    dessiner_grille(map_surface, matrice, taille_cellule)
     pygame.time.delay(1)
     pygame.display.flip()
     clock.tick(10)  # Limite le jeu à 10 images par seconde
