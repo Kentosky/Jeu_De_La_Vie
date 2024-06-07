@@ -7,7 +7,7 @@ from tkinter import *
 
 import pygame
 import Structures
-import Cellule as Cel
+import Cellule as Cell
 import Tableau as Tab
 
 largeur_ecran =800
@@ -64,7 +64,8 @@ tab1=Tab.Tableau(x_matrice, y_matrice)
 matrice = tab1.creation_tableau()
 #-------
 
-def dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y):
+
+def dessiner_grille_1(ecran, matrice, facteur_zoom, decalage_x, decalage_y):
     for y in range(len(matrice)):
         for x in range(len(matrice[0])):
             couleur = blanc if matrice[y][x] == 0 else noir
@@ -96,6 +97,7 @@ color = (255, 255, 255)
 color_light = (170, 170, 170)
 color_dark = (100, 100, 100)
 smallfont = pygame.font.SysFont('Corbel',20)
+confirmer = smallfont.render('confirmer' , True , color)
 quitter = smallfont.render('quitter' , True , color)
 suivant = smallfont.render('suivant' , True , color)
 precedent = smallfont.render('précédent' , True , color)
@@ -123,13 +125,11 @@ while jeu_en_cours:
                 print(matrice)                                                        #test de la mise à jour de la matrice
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-                                                                                   # Si on clique la souris sur le bouton quitter cela ferme la fenêtre
+                                                                                   # Si on clique la souris sur le bouton confirmer cela ferme la fenêtre
             if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
-                pygame.quit()
-            if 0 <= mouse[0] <= largeur_ecran / 2 - largeur_ecran / 6 and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
-                pass
-            if largeur_ecran / 2 + largeur_ecran / 6 <= mouse[0] <= largeur_ecran and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
-                pass
+                jeu_en_cours = False
+                break
+
 
         elif event.type == pygame.KEYDOWN:                                            #si on appuie sur une touche :
 
@@ -161,23 +161,9 @@ while jeu_en_cours:
         pygame.draw.rect(ecran, color_dark,
                          [largeur_ecran / 2 - largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
 
-    if 0 <= mouse[0] <= largeur_ecran / 2 - largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
-        pygame.draw.rect(ecran, color_light, [0, hauteur_ecran - 40, largeur_ecran / 3, 40])
-    else:
-        pygame.draw.rect(ecran, color_dark, [0, hauteur_ecran - 40, largeur_ecran / 3, 40])
-
-    if largeur_ecran / 2 + largeur_ecran / 6 <= mouse[0] <= largeur_ecran and hauteur_ecran - 40 <= mouse[
-        1] <= hauteur_ecran:
-        pygame.draw.rect(ecran, color_light,
-                         [largeur_ecran / 2 + largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
-    else:
-        pygame.draw.rect(ecran, color_dark,
-                         [largeur_ecran / 2 + largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
 
     #mise en place du texte des boutons-------------------------------------------
-    ecran.blit(precedent, (largeur_ecran / 20, hauteur_ecran - 30))
-    ecran.blit(quitter, (largeur_ecran / 2 - largeur_ecran / 14, hauteur_ecran - 30))
-    ecran.blit(suivant, (largeur_ecran / 2 + largeur_ecran / 6 + largeur_ecran / 20, hauteur_ecran - 30))
+    ecran.blit(confirmer, (largeur_ecran / 2 - largeur_ecran / 17, hauteur_ecran - 30))
 
     #rafraichissement de la page
     pygame.display.update()
@@ -190,7 +176,7 @@ while jeu_en_cours:
     decalage_y = curseur_y - hauteur_ecran // 2
 
     ecran.fill(blanc)
-    dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y)
+    dessiner_grille_1(ecran, matrice, facteur_zoom, decalage_x, decalage_y)
 
     pygame.draw.rect(ecran, couleur_curseur, (curseur_x, hauteur_ecran - curseur_largeur, curseur_longueur, curseur_largeur)) #Dessin des curseurs de déplacement
     pygame.draw.rect(ecran, couleur_curseur, (largeur_ecran - curseur_largeur, curseur_y, curseur_largeur, curseur_longueur))
@@ -218,7 +204,7 @@ matrice_temp = [row[:] for row in matrice]
 #applications de la fonctions règle qui modifie l'état des cellules
 for y in range(len(matrice)-1):
     for x in range(len(matrice[y])-1):
-        ma_cell = Cellule(matrice, y, x, matrice_temp)
+        ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
         ma_cell.regle()
 
 #copie de la matrice
