@@ -131,6 +131,10 @@ matrice[3][4] = 1
 matrice[3][5] = 1
 matrice[3][6] = 1
 matrice[3][7] = 1
+
+
+penntadeca(matrice, 10,10)
+penntadeca(matrice, 13,11)
 '''
 matrice[154][152] = 1
 matrice[153][153] = 1

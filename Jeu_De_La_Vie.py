@@ -38,7 +38,20 @@ curseur_longueur = 50
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
 """ ~~~ MISE EN PLACE DES BONUS : configurations prédéfinies de matrices afin d'obtenir un résultat en particulier dans le jeu~~~ """
 
+def dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y):
+    for y in range(len(matrice)):
+        for x in range(len(matrice[0])):
+            couleur = blanc if matrice[y][x] == 0 else noir
+            rect_cellule = pygame.Rect(x * taille_cellule * facteur_zoom + decalage_x,
+                                        y * taille_cellule * facteur_zoom + decalage_y,
+                                        taille_cellule * facteur_zoom,
+                                        taille_cellule * facteur_zoom)
+            pygame.draw.rect(ecran, couleur, rect_cellule)
 
+# Fonction pour inverser la couleur d'une cellule de la grille
+def inverser_couleur_pixel(x, y):
+    if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
+        matrice[y][x] = 1 - matrice[y][x]
 
 """ ~~~ PARTIE EXECUTIVE ~~~ """
 
@@ -63,21 +76,6 @@ fenetre1.mainloop()
 tab1=Tab.Tableau(x_matrice, y_matrice)
 matrice = tab1.creation_tableau()
 #-------
-
-def dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y):
-    for y in range(len(matrice)):
-        for x in range(len(matrice[0])):
-            couleur = blanc if matrice[y][x] == 0 else noir
-            rect_cellule = pygame.Rect(x * taille_cellule * facteur_zoom + decalage_x,
-                                        y * taille_cellule * facteur_zoom + decalage_y,
-                                        taille_cellule * facteur_zoom,
-                                        taille_cellule * facteur_zoom)
-            pygame.draw.rect(ecran, couleur, rect_cellule)
-
-# Fonction pour inverser la couleur d'une cellule de la grille
-def inverser_couleur_pixel(x, y):
-    if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
-        matrice[y][x] = 1 - matrice[y][x]
 
 pygame.init()
 ecran = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
