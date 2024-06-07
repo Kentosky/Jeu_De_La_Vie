@@ -33,7 +33,7 @@ def canoe(matrice, cox, coy):
     matrice[coy+4][cox+4] = 1
     matrice[coy+3][cox+4] = 1
 
-def penntadeca(matrice, cox, coy):
+def pentadeca(matrice, cox, coy):
     for i in range(10):
         matrice[coy][cox + i] = 1
     matrice[coy][cox + 2] = 0
