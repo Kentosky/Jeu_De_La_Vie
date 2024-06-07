@@ -4,17 +4,17 @@
 """ ~~~ PARTIE DÉCLARATIVE ~~~ """
 # --- La bibliothèque permettant de faire les graphismes --- #
 from tkinter import *
-
+import sys
 import pygame
 import Structures
 import Cellule as Cell
 import Tableau as Tab
 
-largeur_ecran = 800
-hauteur_ecran_sans_boutons = 500
+largeur_ecran = 1600
+hauteur_ecran_sans_boutons = 1160
 hauteur_ecran = hauteur_ecran_sans_boutons + 40
 
-taille_cellule = 50
+taille_cellule = 5
 
 if largeur_ecran // taille_cellule != 0 :
     largeur_ecran += largeur_ecran%taille_cellule
@@ -25,9 +25,10 @@ y_matrice = int(largeur_ecran/taille_cellule)
 
 blanc = (255, 255, 255)
 noir = (0, 0, 0)
+couleur_bordure = (224, 224, 224)
 
 sensibilite_zomm = 0.1
-izoom = 0.1
+izoom = 1
 zoom_max = 5.0
 zoom_min = 0.1
 
@@ -74,6 +75,7 @@ def dessiner_grille_1(ecran, matrice, facteur_zoom, decalage_x, decalage_y):
                                         taille_cellule * facteur_zoom,
                                         taille_cellule * facteur_zoom)
             pygame.draw.rect(ecran, couleur, rect_cellule)
+            pygame.draw.rect(ecran, couleur_bordure, rect_cellule, 1)
 
 # Fonction pour inverser la couleur d'une cellule de la grille
 def inverser_couleur_pixel(x, y):
@@ -84,7 +86,7 @@ pygame.init()
 ecran = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
 
 #_________________________définition des variables_________________________
-facteur_zoom = 1
+facteur_zoom = 5
 decalage_x = 0
 decalage_y = 0
 
@@ -121,18 +123,18 @@ while Mise_en_place_jeu:
     for event in pygame.event.get():
         mouse = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
-            Mise_en_place_jeu = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 4:                                                     # Molette vers le haut
+            jeu_en_cours = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
                 facteur_zoom += izoom
-            elif event.button == 5:                                                   # Molette vers le bas
+            elif event.key == pygame.K_m:
                 facteur_zoom = max(zoom_min, facteur_zoom - izoom)
-            else:
-                x, y = event.pos                                                      #mise à jour de la position de la souris
-                x = (x - decalage_x) // (taille_cellule * facteur_zoom)
-                y = (y - decalage_y) // (taille_cellule * facteur_zoom)
-                inverser_couleur_pixel(x, y)                                          #utilisation de la fonction inverser_couleur_pixel
-                print(matrice)                                                        #test de la mise à jour de la matrice
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = event.pos  # mise à jour de la position de la souris
+            x = (x - decalage_x) // (taille_cellule * facteur_zoom)
+            y = (y - decalage_y) // (taille_cellule * facteur_zoom)
+            inverser_couleur_pixel(x, y)  # utilisation de la fonction inverser_couleur_pixel
+            print(matrice)                                                        #test de la mise à jour de la matrice
 
         if event.type == pygame.MOUSEBUTTONDOWN:                                                           # Si on clique la souris sur le bouton confirmer cela ferme la fenêtre
             if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
@@ -193,31 +195,69 @@ while Mise_en_place_jeu:
 
 pygame.quit()
 
-############################# MAIN #############################
+# Paramètres de la fenêtre
+largeur, hauteur = 800, 600
+taille_cellule = 5
 
-print("Création du tableau")
-mon_tab = Tab.Tableau(10, 8)
-matrice = mon_tab.creation_tableau()
+# Création de la fenêtre
+ecran = pygame.display.set_mode((largeur, hauteur), pygame.FULLSCREEN)
+pygame.display.set_caption("Jeu de la Vie")
+clock = pygame.time.Clock()
 
+# Création d'une surface pour la carte
+MAP_WIDTH, MAP_HEIGHT = 1600, 1200
+map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
 
-matrice[3][3] = 1
-matrice[3][4] = 1
-matrice[3][5] = 1
-
-print("\nTableau modifié avec l'ajout de cellules vivantes :")
-for ligne in matrice:
-    print(ligne)
-
+# Mise à jour de l'état du jeu
 matrice_temp = [row[:] for row in matrice]
 
-#applications de la fonctions règle qui modifie l'état des cellules
-for y in range(len(matrice)-1):
-    for x in range(len(matrice[y])-1):
-        ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
-        ma_cell.regle()
 
-#copie de la matrice
-matrice = [row[:] for row in matrice_temp]
-print("\nmatrice apres modifications :")
-for row in matrice:
-    print(row)
+# Position initiale de la caméra centrée
+camera_x = (MAP_WIDTH - largeur) // 2
+camera_y = (MAP_HEIGHT - hauteur) // 2
+camera_speed = 5
+new_ecran = pygame.transform.scale(map_surface, (800, 600))
+
+running = True
+while running:
+    ecran.fill(blanc)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                facteur_zoom += izoom
+            elif event.key == pygame.K_m:
+                facteur_zoom -=  izoom
+
+    # Gestion des touches pour déplacer la caméra
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        camera_x = max(camera_x - camera_speed, 0)
+    if keys[pygame.K_RIGHT]:
+        camera_x = min(camera_x + camera_speed, MAP_WIDTH - largeur)
+    if keys[pygame.K_UP]:
+        camera_y = max(camera_y - camera_speed, 0)
+    if keys[pygame.K_DOWN]:
+        camera_y = min(camera_y + camera_speed, MAP_HEIGHT - hauteur)
+
+    # Dessin de la partie visible de la carte sur la fenêtre
+    ecran.blit(map_surface, (0, 0), (camera_x, camera_y, largeur, hauteur))
+    pygame.display.flip()
+
+
+    for y in range(len(matrice)-1):
+        for x in range(len(matrice[y])-1):
+            ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
+            ma_cell.regle()
+
+    matrice = [row[:] for row in matrice_temp]
+
+    # Dessin de la grille
+    dessiner_grille_1(map_surface, matrice, facteur_zoom, decalage_x, decalage_y)
+    pygame.time.delay(1)
+    pygame.display.flip()
+    clock.tick(10)  # Limite le jeu à 10 images par seconde
+
+pygame.quit()
+sys.exit()
