@@ -11,9 +11,7 @@ largeur_ecran = 1600
 hauteur_ecran_sans_boutons = 1160
 hauteur_ecran = hauteur_ecran_sans_boutons + 40
 
-
 taille_cellule = 5
-
 
 if largeur_ecran // taille_cellule != 0 :
     largeur_ecran += largeur_ecran%taille_cellule
@@ -21,8 +19,6 @@ if hauteur_ecran_sans_boutons // taille_cellule != 0 :
     hauteur_ecran_sans_boutons += hauteur_ecran_sans_boutons%taille_cellule
 x_matrice = int(largeur_ecran/taille_cellule)
 y_matrice = int(hauteur_ecran/taille_cellule)
-
-
 
 blanc = (255, 255, 255)
 noir = (0, 0, 0)
@@ -208,8 +204,7 @@ fenetre1.mainloop()
 #utiles pour test ----
 tab1=Tableau(x_matrice, y_matrice)
 matrice = tab1.creation_tableau()
-
-
+#-------
 
 def dessiner_grille_1(ecran, matrice, facteur_zoom, decalage_x, decalage_y):
     for y in range(len(matrice)):
