@@ -10,7 +10,7 @@ import Structures
 import Cellule as Cell
 import Tableau as Tab
 
-largeur_ecran =800
+largeur_ecran = 800
 hauteur_ecran_sans_boutons = 500
 hauteur_ecran = hauteur_ecran_sans_boutons + 40
 
@@ -92,10 +92,14 @@ curseur_x = largeur_ecran // 2
 curseur_y = hauteur_ecran // 2
 deplacement_curseur_x = 0
 deplacement_curseur_y = 0
+
 #variables des boutons-----------------------------------------------------
+#définition des couleurs :
 color = (255, 255, 255)
 color_light = (170, 170, 170)
 color_dark = (100, 100, 100)
+
+#définition des polices d'écriture et des textes :
 smallfont = pygame.font.SysFont('Corbel',20)
 confirmer = smallfont.render('confirmer' , True , color)
 quitter = smallfont.render('quitter' , True , color)
@@ -105,13 +109,19 @@ precedent = smallfont.render('précédent' , True , color)
 
 
 
-jeu_en_cours = True
+Mise_en_place_jeu = True
 
-while jeu_en_cours:
+while Mise_en_place_jeu:
+    '''
+    Cette boucle va servir à la mise en place du jeu : on génère une matrice vide, donc une grille blanche.
+    Ensuite, l'utilisateur survole et clique sur les cases pour les faire changer de couleur. La matrice se met à jour en même temps.
+    Une fois le bouton "confirmer" cliqué : la boucle s'arrête et la fenêtre se ferme.
+    On passe à la fenêtre suivante.
+    '''
     for event in pygame.event.get():
         mouse = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
-            jeu_en_cours = False
+            Mise_en_place_jeu = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 4:                                                     # Molette vers le haut
                 facteur_zoom += izoom
@@ -124,10 +134,9 @@ while jeu_en_cours:
                 inverser_couleur_pixel(x, y)                                          #utilisation de la fonction inverser_couleur_pixel
                 print(matrice)                                                        #test de la mise à jour de la matrice
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-                                                                                   # Si on clique la souris sur le bouton confirmer cela ferme la fenêtre
+        if event.type == pygame.MOUSEBUTTONDOWN:                                                           # Si on clique la souris sur le bouton confirmer cela ferme la fenêtre
             if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
-                jeu_en_cours = False
+                Mise_en_place_jeu = False
                 break
 
 
@@ -151,7 +160,7 @@ while jeu_en_cours:
             elif event.key in (pygame.K_LEFT, pygame.K_RIGHT):
                 deplacement_curseur_x = 0
 
-                                                  #La couleur du bouton change si il est survolé par la souris
+
     # mise en place des boutons--------------------------------------------------
     # La couleur du bouton change si il est survolé par la souris
     if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
