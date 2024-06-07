@@ -4,17 +4,17 @@
 """ ~~~ PARTIE DÉCLARATIVE ~~~ """
 # --- La bibliothèque permettant de faire les graphismes --- #
 from tkinter import *
-
+import sys
 import pygame
 import Structures
-import Cellule as Cel
+import Cellule as Cell
 import Tableau as Tab
 
-largeur_ecran =800
-hauteur_ecran_sans_boutons = 500
+largeur_ecran = 1600
+hauteur_ecran_sans_boutons = 1160
 hauteur_ecran = hauteur_ecran_sans_boutons + 40
 
-taille_cellule = 50
+taille_cellule = 5
 
 if largeur_ecran // taille_cellule != 0 :
     largeur_ecran += largeur_ecran%taille_cellule
@@ -25,9 +25,10 @@ y_matrice = int(largeur_ecran/taille_cellule)
 
 blanc = (255, 255, 255)
 noir = (0, 0, 0)
+couleur_bordure = (224, 224, 224)
 
 sensibilite_zomm = 0.1
-izoom = 0.1
+izoom = 1
 zoom_max = 5.0
 zoom_min = 0.1
 
@@ -77,11 +78,28 @@ tab1=Tab.Tableau(x_matrice, y_matrice)
 matrice = tab1.creation_tableau()
 #-------
 
+
+def dessiner_grille_1(ecran, matrice, facteur_zoom, decalage_x, decalage_y):
+    for y in range(len(matrice)):
+        for x in range(len(matrice[0])):
+            couleur = blanc if matrice[y][x] == 0 else noir
+            rect_cellule = pygame.Rect(x * taille_cellule * facteur_zoom + decalage_x,
+                                        y * taille_cellule * facteur_zoom + decalage_y,
+                                        taille_cellule * facteur_zoom,
+                                        taille_cellule * facteur_zoom)
+            pygame.draw.rect(ecran, couleur, rect_cellule)
+            pygame.draw.rect(ecran, couleur_bordure, rect_cellule, 1)
+
+# Fonction pour inverser la couleur d'une cellule de la grille
+def inverser_couleur_pixel(x, y):
+    if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
+        matrice[y][x] = 1 - matrice[y][x]
+
 pygame.init()
 ecran = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
 
 #_________________________définition des variables_________________________
-facteur_zoom = 1
+facteur_zoom = 5
 decalage_x = 0
 decalage_y = 0
 
@@ -89,11 +107,16 @@ curseur_x = largeur_ecran // 2
 curseur_y = hauteur_ecran // 2
 deplacement_curseur_x = 0
 deplacement_curseur_y = 0
+
 #variables des boutons-----------------------------------------------------
+#définition des couleurs :
 color = (255, 255, 255)
 color_light = (170, 170, 170)
 color_dark = (100, 100, 100)
+
+#définition des polices d'écriture et des textes :
 smallfont = pygame.font.SysFont('Corbel',20)
+confirmer = smallfont.render('confirmer' , True , color)
 quitter = smallfont.render('quitter' , True , color)
 suivant = smallfont.render('suivant' , True , color)
 precedent = smallfont.render('précédent' , True , color)
@@ -101,33 +124,36 @@ precedent = smallfont.render('précédent' , True , color)
 
 
 
-jeu_en_cours = True
+Mise_en_place_jeu = True
 
-while jeu_en_cours:
+while Mise_en_place_jeu:
+    '''
+    Cette boucle va servir à la mise en place du jeu : on génère une matrice vide, donc une grille blanche.
+    Ensuite, l'utilisateur survole et clique sur les cases pour les faire changer de couleur. La matrice se met à jour en même temps.
+    Une fois le bouton "confirmer" cliqué : la boucle s'arrête et la fenêtre se ferme.
+    On passe à la fenêtre suivante.
+    '''
     for event in pygame.event.get():
         mouse = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
             jeu_en_cours = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 4:                                                     # Molette vers le haut
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
                 facteur_zoom += izoom
-            elif event.button == 5:                                                   # Molette vers le bas
+            elif event.key == pygame.K_m:
                 facteur_zoom = max(zoom_min, facteur_zoom - izoom)
-            else:
-                x, y = event.pos                                                      #mise à jour de la position de la souris
-                x = (x - decalage_x) // (taille_cellule * facteur_zoom)
-                y = (y - decalage_y) // (taille_cellule * facteur_zoom)
-                inverser_couleur_pixel(x, y)                                          #utilisation de la fonction inverser_couleur_pixel
-                print(matrice)                                                        #test de la mise à jour de la matrice
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = event.pos  # mise à jour de la position de la souris
+            x = (x - decalage_x) // (taille_cellule * facteur_zoom)
+            y = (y - decalage_y) // (taille_cellule * facteur_zoom)
+            inverser_couleur_pixel(x, y)  # utilisation de la fonction inverser_couleur_pixel
+            print(matrice)                                                        #test de la mise à jour de la matrice
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-                                                                                   # Si on clique la souris sur le bouton quitter cela ferme la fenêtre
+        if event.type == pygame.MOUSEBUTTONDOWN:                                                           # Si on clique la souris sur le bouton confirmer cela ferme la fenêtre
             if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
-                pygame.quit()
-            if 0 <= mouse[0] <= largeur_ecran / 2 - largeur_ecran / 6 and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
-                pass
-            if largeur_ecran / 2 + largeur_ecran / 6 <= mouse[0] <= largeur_ecran and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
-                pass
+                Mise_en_place_jeu = False
+                break
+
 
         elif event.type == pygame.KEYDOWN:                                            #si on appuie sur une touche :
 
@@ -149,7 +175,7 @@ while jeu_en_cours:
             elif event.key in (pygame.K_LEFT, pygame.K_RIGHT):
                 deplacement_curseur_x = 0
 
-                                                  #La couleur du bouton change si il est survolé par la souris
+
     # mise en place des boutons--------------------------------------------------
     # La couleur du bouton change si il est survolé par la souris
     if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
@@ -159,23 +185,9 @@ while jeu_en_cours:
         pygame.draw.rect(ecran, color_dark,
                          [largeur_ecran / 2 - largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
 
-    if 0 <= mouse[0] <= largeur_ecran / 2 - largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
-        pygame.draw.rect(ecran, color_light, [0, hauteur_ecran - 40, largeur_ecran / 3, 40])
-    else:
-        pygame.draw.rect(ecran, color_dark, [0, hauteur_ecran - 40, largeur_ecran / 3, 40])
-
-    if largeur_ecran / 2 + largeur_ecran / 6 <= mouse[0] <= largeur_ecran and hauteur_ecran - 40 <= mouse[
-        1] <= hauteur_ecran:
-        pygame.draw.rect(ecran, color_light,
-                         [largeur_ecran / 2 + largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
-    else:
-        pygame.draw.rect(ecran, color_dark,
-                         [largeur_ecran / 2 + largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
 
     #mise en place du texte des boutons-------------------------------------------
-    ecran.blit(precedent, (largeur_ecran / 20, hauteur_ecran - 30))
-    ecran.blit(quitter, (largeur_ecran / 2 - largeur_ecran / 14, hauteur_ecran - 30))
-    ecran.blit(suivant, (largeur_ecran / 2 + largeur_ecran / 6 + largeur_ecran / 20, hauteur_ecran - 30))
+    ecran.blit(confirmer, (largeur_ecran / 2 - largeur_ecran / 17, hauteur_ecran - 30))
 
     #rafraichissement de la page
     pygame.display.update()
@@ -188,7 +200,7 @@ while jeu_en_cours:
     decalage_y = curseur_y - hauteur_ecran // 2
 
     ecran.fill(blanc)
-    dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y)
+    dessiner_grille_1(ecran, matrice, facteur_zoom, decalage_x, decalage_y)
 
     pygame.draw.rect(ecran, couleur_curseur, (curseur_x, hauteur_ecran - curseur_largeur, curseur_longueur, curseur_largeur)) #Dessin des curseurs de déplacement
     pygame.draw.rect(ecran, couleur_curseur, (largeur_ecran - curseur_largeur, curseur_y, curseur_largeur, curseur_longueur))
@@ -196,23 +208,61 @@ while jeu_en_cours:
 
 pygame.quit()
 
-############################# MAIN #############################
+# Paramètres de la fenêtre
+largeur, hauteur = 800, 600
+taille_cellule = 5
 
-print("Création du tableau")
-mon_tab = Tab.Tableau(10, 8)
-matrice = mon_tab.creation_tableau()
+# Création de la fenêtre
+ecran = pygame.display.set_mode((largeur, hauteur), pygame.FULLSCREEN)
+pygame.display.set_caption("Jeu de la Vie")
+clock = pygame.time.Clock()
 
+# Création d'une surface pour la carte
+MAP_WIDTH, MAP_HEIGHT = 1600, 1200
+map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
 
-matrice[3][3] = 1
-matrice[3][4] = 1
-matrice[3][5] = 1
-
-print("\nTableau modifié avec l'ajout de cellules vivantes :")
-for ligne in matrice:
-    print(ligne)
-
+# Mise à jour de l'état du jeu
 matrice_temp = [row[:] for row in matrice]
 
+
+# Position initiale de la caméra centrée
+camera_x = (MAP_WIDTH - largeur) // 2
+camera_y = (MAP_HEIGHT - hauteur) // 2
+camera_speed = 5
+new_ecran = pygame.transform.scale(map_surface, (800, 600))
+
+running = True
+while running:
+    ecran.fill(blanc)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                facteur_zoom += izoom
+            elif event.key == pygame.K_m:
+                facteur_zoom -=  izoom
+
+    # Gestion des touches pour déplacer la caméra
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        camera_x = max(camera_x - camera_speed, 0)
+    if keys[pygame.K_RIGHT]:
+        camera_x = min(camera_x + camera_speed, MAP_WIDTH - largeur)
+    if keys[pygame.K_UP]:
+        camera_y = max(camera_y - camera_speed, 0)
+    if keys[pygame.K_DOWN]:
+        camera_y = min(camera_y + camera_speed, MAP_HEIGHT - hauteur)
+
+    # Dessin de la partie visible de la carte sur la fenêtre
+    ecran.blit(map_surface, (0, 0), (camera_x, camera_y, largeur, hauteur))
+    pygame.display.flip()
+
+
+    for y in range(len(matrice)-1):
+        for x in range(len(matrice[y])-1):
+            ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
+            ma_cell.regle()
 #applications de la fonctions règle qui modifie l'état des cellules
 for y in range(len(matrice)-1):
     for x in range(len(matrice[y])-1):
@@ -227,3 +277,14 @@ for row in matrice:
 
 
 
+
+    matrice = [row[:] for row in matrice_temp]
+
+    # Dessin de la grille
+    dessiner_grille_1(map_surface, matrice, facteur_zoom, decalage_x, decalage_y)
+    pygame.time.delay(1)
+    pygame.display.flip()
+    clock.tick(10)  # Limite le jeu à 10 images par seconde
+
+pygame.quit()
+sys.exit()
