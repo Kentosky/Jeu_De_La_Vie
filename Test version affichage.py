@@ -208,7 +208,7 @@ matrice = tab1.creation_tableau()
 
 matrice_zoom = []
 for i in range(len(matrice)):
-    for y in range(len(matrice[0])):
+    for j in range(len(matrice[0])):
         if i > len(matrice)*1//6 and j > len(matrice[0])*1//6 :
             matrice_zoom[i-len(matrice)*1/6] = matrice[i][j]
 #-------
