@@ -263,25 +263,14 @@ while running:
     pygame.display.flip()
 
 
+
+    #applications de la fonctions règle qui modifie l'état des cellules
     for y in range(len(matrice)-1):
         for x in range(len(matrice[y])-1):
             ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
             ma_cell.regle()
-#applications de la fonctions règle qui modifie l'état des cellules
-for y in range(len(matrice)-1):
-    for x in range(len(matrice[y])-1):
-        ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
-        ma_cell.regle()
 
-#copie de la matrice
-matrice = [row[:] for row in matrice_temp]
-print("\nmatrice apres modifications :")
-for row in matrice:
-    print(row)
-
-
-
-
+    #copie de la matrice
     matrice = [row[:] for row in matrice_temp]
 
     # Dessin de la grille
