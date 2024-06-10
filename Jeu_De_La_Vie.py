@@ -10,8 +10,8 @@ import Structures
 import Cellule as Cell
 import Tableau as Tab
 
-largeur_ecran = 1600
-hauteur_ecran_sans_boutons = 1160
+largeur_ecran = 800
+hauteur_ecran_sans_boutons = 460
 hauteur_ecran = hauteur_ecran_sans_boutons + 40
 
 taille_cellule = 5
@@ -96,7 +96,7 @@ def inverser_couleur_pixel(x, y):
         matrice[y][x] = 1 - matrice[y][x]
 
 pygame.init()
-ecran = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
+ecran = pygame.display.set_mode((largeur_ecran+200, hauteur_ecran))
 
 #_________________________définition des variables_________________________
 facteur_zoom = 5
@@ -133,6 +133,10 @@ while Mise_en_place_jeu:
     Une fois le bouton "confirmer" cliqué : la boucle s'arrête et la fenêtre se ferme.
     On passe à la fenêtre suivante.
     '''
+    pygame.draw.rect(ecran, (170, 170, 170), [largeur_ecran, 0, 200, hauteur_ecran])
+
+
+
     for event in pygame.event.get():
         mouse = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
@@ -213,7 +217,7 @@ largeur, hauteur = 800, 600
 taille_cellule = 5
 
 # Création de la fenêtre
-ecran = pygame.display.set_mode((largeur, hauteur), pygame.FULLSCREEN)
+ecran = pygame.display.set_mode((largeur, hauteur))
 pygame.display.set_caption("Jeu de la Vie")
 clock = pygame.time.Clock()
 
