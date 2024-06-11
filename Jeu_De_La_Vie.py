@@ -33,7 +33,6 @@ facteur_zoom = 5
 COLOR_LIGHT = (170, 170, 170)
 COLOR_DARK = (100, 100, 100)
 
-sensibilite_zomm = 0.1
 izoom = 1
 zoom_max = 10
 zoom_min = 1
@@ -198,20 +197,7 @@ def main():
     sys.exit()
 
 # Appeler la fonction principale
-def dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y):
-    for y in range(len(matrice)):
-        for x in range(len(matrice[0])):
-            couleur = blanc if matrice[y][x] == 0 else noir
-            rect_cellule = pygame.Rect(x * taille_cellule * facteur_zoom + decalage_x,
-                                        y * taille_cellule * facteur_zoom + decalage_y,
-                                        taille_cellule * facteur_zoom,
-                                        taille_cellule * facteur_zoom)
-            pygame.draw.rect(ecran, couleur, rect_cellule)
 
-# Fonction pour inverser la couleur d'une cellule de la grille
-def inverser_couleur_pixel(x, y):
-    if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
-        matrice[y][x] = 1 - matrice[y][x]
 
 """ ~~~ PARTIE EXECUTIVE ~~~ """
 
@@ -261,7 +247,7 @@ cligno_img = pygame.image.load('cligno.png').convert_alpha()
 cligno_img = pygame.transform.scale(cligno_img, (100, 100))  # Redimensionner si nécessaire
 
 cligno = Button(
-    ecran,
+    ecran_edition,
     largeur_ecran + 50,
     50,
     100,
@@ -276,7 +262,7 @@ hamecon_img = pygame.image.load('hamecon.png').convert_alpha()
 hamecon_img = pygame.transform.scale(hamecon_img, (100, 100))  # Redimensionner si nécessaire
 
 hamecon = Button(
-    ecran,
+    ecran_edition,
     largeur_ecran + 250,
     50,
     100,
@@ -291,7 +277,7 @@ hamecon2_img = pygame.image.load('hamecon2.png').convert_alpha()
 hamecon2_img = pygame.transform.scale(hamecon2_img, (100, 100))  # Redimensionner si nécessaire
 
 hamecon2 = Button(
-    ecran,
+    ecran_edition,
     largeur_ecran + 50,
     200,
     100,
@@ -306,7 +292,7 @@ canoe_img = pygame.image.load('canoe.png').convert_alpha()
 canoe_img = pygame.transform.scale(canoe_img, (100, 100))  # Redimensionner si nécessaire
 
 canoe = Button(
-    ecran,
+    ecran_edition,
     largeur_ecran + 250,
     200,
     100,
@@ -321,7 +307,7 @@ pentadeca_img = pygame.image.load('pentadeca.png').convert_alpha()
 pentadeca_img = pygame.transform.scale(pentadeca_img, (100, 100))  # Redimensionner si nécessaire
 
 pentadeca = Button(
-    ecran,
+    ecran_edition,
     largeur_ecran + 50,
     350,
     100,
@@ -337,7 +323,7 @@ croix_img = pygame.transform.scale(croix_img, (100, 100))  # Redimensionner si n
 
 
 croix = Button(
-    ecran,
+    ecran_edition,
     largeur_ecran + 250,
     350,
     100,
@@ -352,7 +338,7 @@ deuxLapins_img = pygame.image.load('deux_lapins.png').convert_alpha()
 deuxLapins_img = pygame.transform.scale(deuxLapins_img, (100, 100))  # Redimensionner si nécessaire
 
 deuxLapins = Button(
-    ecran,
+    ecran_edition,
     largeur_ecran + 50,
     500,
     100,
@@ -388,8 +374,8 @@ while Mise_en_place_jeu:
     On passe à la fenêtre suivante.
     '''
 
-    pygame.draw.rect(ecran, (170, 170, 170), [largeur_ecran, 0, 400, hauteur_ecran])
-    pygame.draw.rect(ecran, (170, 170, 170), [0, hauteur_ecran-40, largeur_ecran, 40])
+    pygame.draw.rect(ecran_edition, (170, 170, 170), [largeur_ecran, 0, 400, hauteur_ecran])
+    pygame.draw.rect(ecran_edition, (170, 170, 170), [0, hauteur_ecran-40, largeur_ecran, 40])
     cligno.draw()
     hamecon.draw()
     hamecon2.draw()
