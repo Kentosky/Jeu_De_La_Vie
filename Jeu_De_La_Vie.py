@@ -26,10 +26,10 @@ blanc = (255, 255, 255)
 noir = (0, 0, 0)
 couleur_bordure = (224, 224, 224)
 
-sensibilite_zomm = 0.1
+facteur_zoom = 5
 izoom = 1
-zoom_max = 5.0
-zoom_min = 0.1
+zoom_max = 10
+zoom_min = 1
 
 couleur_curseur = (150, 150, 150)
 curseur_largeur = 10
@@ -42,7 +42,7 @@ map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
 # Position initiale de la caméra centrée
 camera_x = (MAP_WIDTH - largeur_ecran) // 2
 camera_y = (MAP_HEIGHT - hauteur_ecran) // 2
-camera_speed = 5
+camera_speed = 20
 
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
 """ ~~~ MISE EN PLACE DES BONUS : configurations prédéfinies de matrices afin d'obtenir un résultat en particulier dans le jeu~~~ """
@@ -93,15 +93,6 @@ def inverser_couleur_pixel(x, y):
 pygame.init()
 ecran_edition = pygame.display.set_mode((largeur_ecran+200, hauteur_ecran))
 
-#_________________________définition des variables_________________________
-facteur_zoom = 5
-
-
-curseur_x = largeur_ecran // 2
-curseur_y = hauteur_ecran // 2
-
-
-
 
 #définition des polices d'écriture et des textes :
 smallfont = pygame.font.SysFont('Corbel',20)
@@ -128,13 +119,13 @@ while Mise_en_place_jeu:
             jeu_en_cours = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
-                facteur_zoom += izoom
+                facteur_zoom = min(zoom_max, facteur_zoom + izoom)
             elif event.key == pygame.K_m:
                 facteur_zoom = max(zoom_min, facteur_zoom - izoom)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos  # mise à jour de la position de la souris
-            x = x // (taille_cellule * facteur_zoom)
-            y = y // (taille_cellule * facteur_zoom)
+            x = (x + camera_x) // (taille_cellule * facteur_zoom)
+            y = (y + camera_y) // (taille_cellule * facteur_zoom)
             inverser_couleur_pixel(x, y)  # utilisation de la fonction inverser_couleur_pixel
             print(matrice)  # test de la mise à jour de la matrice
 
@@ -158,7 +149,7 @@ while Mise_en_place_jeu:
     # Dessin de la partie visible de la carte sur la fenêtre
     ecran_edition.blit(map_surface, (0, 0), (camera_x, camera_y, largeur_ecran, hauteur_ecran))
     # Dessiner le quadrillage
-    dessiner_grille(ecran_edition, matrice, facteur_zoom)
+    dessiner_grille(map_surface, matrice, facteur_zoom)
     # Dessiner le rectangle gris par-dessus le quadrillage
     pygame.draw.rect(ecran_edition, (170, 170, 170), [largeur_ecran, 0, 200, hauteur_ecran])
 
@@ -198,9 +189,9 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
-                facteur_zoom += izoom
+                facteur_zoom = min(zoom_max, facteur_zoom + izoom)
             elif event.key == pygame.K_m:
-                facteur_zoom -=  izoom
+                facteur_zoom = max(zoom_min, facteur_zoom - izoom)
 
     # Gestion des touches pour déplacer la caméra
     keys = pygame.key.get_pressed()
