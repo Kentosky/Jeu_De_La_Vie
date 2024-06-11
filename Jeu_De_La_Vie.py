@@ -9,6 +9,9 @@ import pygame
 import Structures
 import Cellule as Cell
 import Tableau as Tab
+from moviepy.editor import VideoFileClip
+import pygame_widgets
+from pygame_widgets.button import Button
 
 largeur_ecran = 800
 hauteur_ecran = 600
@@ -49,10 +52,24 @@ camera_x = (MAP_WIDTH - largeur_ecran) // 2
 camera_y = (MAP_HEIGHT - hauteur_ecran) // 2
 camera_speed = 5
 
-""" ~~~ PARTIE FONCTIONNELLE ~~~ """
-""" ~~~ MISE EN PLACE DES BONUS : configurations prédéfinies de matrices afin d'obtenir un résultat en particulier dans le jeu~~~ """
+# Initialisation de Pygame
+pygame.init()
 
-""" ~~~ PARTIE MENU D'INTRO ~~~ """
+# Charger la vidéo
+video = VideoFileClip("video.mp4")
+
+# Définir la taille de l'écran selon la taille de la vidéo
+screen_width, screen_height = video.size
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Video with Buttons")
+
+
+# Définir la police
+font = pygame.font.Font('C:/Users/Besse/PycharmProjects/Jeu_De_La_Vie/Tiny5/Tiny5-regular.ttf', size = 20)
+
+""" ~~~ PARTIE FONCTIONNELLE ~~~ """
+
+""" ~~~  PARTIE MENU D'INTRO  ~~~ """
 
 def show_menu():
     global state, play, quitter, reg
