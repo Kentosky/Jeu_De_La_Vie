@@ -6,13 +6,12 @@
 from tkinter import *
 import sys
 import pygame
-from pygame_widgets.button import Button
 import Structures
 import Cellule as Cell
 import Tableau as Tab
 
 largeur_ecran = 800
-hauteur_ecran_sans_boutons = 600
+hauteur_ecran_sans_boutons = 460
 hauteur_ecran = hauteur_ecran_sans_boutons + 40
 
 taille_cellule = 5
@@ -58,6 +57,19 @@ def inverser_couleur_pixel(x, y):
 """ ~~~ PARTIE EXECUTIVE ~~~ """
 
 #fenetre 1 : explications des règles du jeu.
+fenetre1 = Tk()
+intro="Le jeu de la vie : des règles simples, une infinité de résolutions.\n\nLe jeu de la vie c’est 2 règles : Règle de survie, règle de naissance. \n\nAu début vous devrez choisir la taille du tableau puis la remplir comme vous le souhaitez, par la suite, vous verrez le développement des cellules*.\nA savoir que si une cellule* ne survie pas, elle meurt.\n*cellule = case pleine\n\n\nRègle de survie : \nSi une cellule est entourée de plus d’1 cellule et de moins de 4 cellules, elle survie au prochain tour.\n\nRègle de naissance :\nSi une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour d’après."
+
+#création d'un bouton pour passer à la fenêtre suivante
+bouton=Button(fenetre1, text="Compris", command=fenetre1.quit)
+bouton.pack(side=BOTTOM, padx=150, pady=20)
+bouton.pack()
+
+introduction = Label(fenetre1, text=intro)
+introduction.pack()
+
+fenetre1.mainloop()
+
 
 #fenêtre 2 : choix des pixels colorés sous forme de boutons
 
@@ -84,7 +96,7 @@ def inverser_couleur_pixel(x, y):
         matrice[y][x] = 1 - matrice[y][x]
 
 pygame.init()
-ecran = pygame.display.set_mode((largeur_ecran+400, hauteur_ecran))
+ecran = pygame.display.set_mode((largeur_ecran+200, hauteur_ecran))
 
 #_________________________définition des variables_________________________
 facteur_zoom = 5
@@ -97,112 +109,6 @@ deplacement_curseur_x = 0
 deplacement_curseur_y = 0
 
 #variables des boutons-----------------------------------------------------
-
-cligno_img = pygame.image.load('cligno.png').convert_alpha()
-cligno_img = pygame.transform.scale(cligno_img, (100, 100))  # Redimensionner si nécessaire
-
-cligno = Button(
-    ecran,
-    largeur_ecran + 50,
-    50,
-    100,
-    100,
-    margin=20,
-    image=cligno_img,
-    onClick=lambda: print('Click')
-)
-
-
-hamecon_img = pygame.image.load('hamecon.png').convert_alpha()
-hamecon_img = pygame.transform.scale(hamecon_img, (100, 100))  # Redimensionner si nécessaire
-
-hamecon = Button(
-    ecran,
-    largeur_ecran + 250,
-    50,
-    100,
-    100,
-    margin=20,
-    image=hamecon_img ,
-    onClick=lambda: print('Click')
-)
-
-
-hamecon2_img = pygame.image.load('hamecon2.png').convert_alpha()
-hamecon2_img = pygame.transform.scale(hamecon2_img, (100, 100))  # Redimensionner si nécessaire
-
-hamecon2 = Button(
-    ecran,
-    largeur_ecran + 50,
-    200,
-    100,
-    100,
-    margin=20,
-    image=hamecon2_img,
-    onClick=lambda: print('Click')
-)
-
-
-canoe_img = pygame.image.load('canoe.png').convert_alpha()
-canoe_img = pygame.transform.scale(canoe_img, (100, 100))  # Redimensionner si nécessaire
-
-canoe = Button(
-    ecran,
-    largeur_ecran + 250,
-    200,
-    100,
-    100,
-    margin=20,
-    image=canoe_img,
-    onClick=lambda: print('Click')
-)
-
-
-pentadeca_img = pygame.image.load('pentadeca.png').convert_alpha()
-pentadeca_img = pygame.transform.scale(pentadeca_img, (100, 100))  # Redimensionner si nécessaire
-
-pentadeca = Button(
-    ecran,
-    largeur_ecran + 50,
-    350,
-    100,
-    100,
-    margin=20,
-    image=pentadeca_img,
-    onClick=lambda: print('Click')
-)
-
-
-croix_img = pygame.image.load('croix.png').convert_alpha()
-croix_img = pygame.transform.scale(croix_img, (100, 100))  # Redimensionner si nécessaire
-
-
-croix = Button(
-    ecran,
-    largeur_ecran + 250,
-    350,
-    100,
-    100,
-    margin=20,
-    image=croix_img,
-    onClick=lambda: print('Click')
-)
-
-
-deuxLapins_img = pygame.image.load('deux_lapins.png').convert_alpha()
-deuxLapins_img = pygame.transform.scale(deuxLapins_img, (100, 100))  # Redimensionner si nécessaire
-
-deuxLapins = Button(
-    ecran,
-    largeur_ecran + 50,
-    500,
-    100,
-    100,
-    margin=20,
-    image=deuxLapins_img,
-    onClick=lambda: print('Click')
-)
-
 #définition des couleurs :
 color = (255, 255, 255)
 color_light = (170, 170, 170)
@@ -227,20 +133,7 @@ while Mise_en_place_jeu:
     Une fois le bouton "confirmer" cliqué : la boucle s'arrête et la fenêtre se ferme.
     On passe à la fenêtre suivante.
     '''
-    pygame.draw.rect(ecran, couleur_bordure, [largeur_ecran, 0, 400, hauteur_ecran])
-    pygame.draw.rect(ecran, couleur_bordure, [0, hauteur_ecran-40, largeur_ecran, 40])
-
-    cligno.draw()
-    hamecon.draw()
-    hamecon2.draw()
-    canoe.draw()
-    pentadeca.draw()
-    croix.draw()
-    deuxLapins.draw()
-
-
-
-
+    pygame.draw.rect(ecran, (170, 170, 170), [largeur_ecran, 0, 200, hauteur_ecran])
 
 
 
@@ -258,9 +151,7 @@ while Mise_en_place_jeu:
             x = (x - decalage_x) // (taille_cellule * facteur_zoom)
             y = (y - decalage_y) // (taille_cellule * facteur_zoom)
             inverser_couleur_pixel(x, y)  # utilisation de la fonction inverser_couleur_pixel
-            print(matrice)
-
-
+            print(matrice)                                                        #test de la mise à jour de la matrice
 
         if event.type == pygame.MOUSEBUTTONDOWN:                                                           # Si on clique la souris sur le bouton confirmer cela ferme la fenêtre
             if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran -40 <= mouse[1] <= hauteur_ecran :
