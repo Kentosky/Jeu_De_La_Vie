@@ -10,6 +10,9 @@ from pygame_widgets.button import Button
 import Structures
 import Cellule as Cell
 import Tableau as Tab
+from moviepy.editor import VideoFileClip
+import pygame_widgets
+from pygame_widgets.button import Button
 
 largeur_ecran = 800
 hauteur_ecran_sans_boutons = 600
@@ -25,8 +28,13 @@ x_matrice = int(largeur_ecran/taille_cellule)
 y_matrice = int(largeur_ecran/taille_cellule)
 
 blanc = (255, 255, 255)
+BLANC = blanc
 noir = (0, 0, 0)
+NOIR = noir
 couleur_bordure = (224, 224, 224)
+
+COLOR_LIGHT = (170, 170, 170)
+COLOR_DARK = (100, 100, 100)
 
 sensibilite_zomm = 0.1
 izoom = 1
@@ -37,9 +45,162 @@ couleur_curseur = (150, 150, 150)
 curseur_largeur = 10
 curseur_longueur = 50
 
-""" ~~~ PARTIE FONCTIONNELLE ~~~ """
-""" ~~~ MISE EN PLACE DES BONUS : configurations prédéfinies de matrices afin d'obtenir un résultat en particulier dans le jeu~~~ """
+# Création d'une surface pour la carte
+MAP_WIDTH, MAP_HEIGHT = 1600, 1200
+map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
 
+# Position initiale de la caméra centrée
+camera_x = (MAP_WIDTH - largeur_ecran) // 2
+camera_y = (MAP_HEIGHT - hauteur_ecran) // 2
+camera_speed = 5
+
+# Initialisation de Pygame
+pygame.init()
+
+# Charger la vidéo
+video = VideoFileClip("video.mp4")
+
+# Définir la taille de l'écran selon la taille de la vidéo
+screen_width, screen_height = video.size
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Video with Buttons")
+
+
+# Définir la police
+font = pygame.font.Font('C:/Users/Besse/PycharmProjects/Jeu_De_La_Vie/Tiny5/Tiny5-regular.ttf', size = 20)
+
+""" ~~~ PARTIE FONCTIONNELLE ~~~ """
+
+""" ~~~  PARTIE MENU D'INTRO  ~~~ """
+
+def show_menu():
+    global state, play, quitter, reg
+    state = "menu"
+    play = Button(
+        screen,  # Surface to place button on
+        screen_width / 2 - 150,  # X-coordinate of top left corner
+        screen_height / 2 - 250,  # Y-coordinate of top left corner
+        300,  # Width
+        100,  # Height
+
+        # Optional Parameters
+        text='JOUER',  # Text to display
+        fontSize=69,  # Size of font
+        margin=20,  # Minimum distance between text/image and edge of button
+        inactiveColour=(0, 100, 60),  # Colour of button when not being interacted with
+        hoverColour=(50, 150, 112),  # Colour of button when being hovered over
+        pressedColour=(0, 200, 20),  # Colour of button when being clicked
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=lambda: pygame.quit()  # Function to call when clicked on
+    )
+
+    quitter = Button(
+        screen,  # Surface to place button on
+        screen_width / 2 - 150,  # X-coordinate of top left corner
+        screen_height / 2 + 150,  # Y-coordinate of top left corner
+        300,  # Width
+        100,  # Height
+
+        # Optional Parameters
+        text='QUITTER',  # Text to display
+        fontSize=69,  # Size of font
+        margin=20,  # Minimum distance between text/image and edge of button
+        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
+        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
+        pressedColour=(0, 200, 20),  # Colour of button when being clicked
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=lambda: quit()  # Function to call when clicked on
+    )
+
+    reg = Button(
+        screen,  # Surface to place button on
+        screen_width / 2 - 150,  # X-coordinate of top left corner
+        screen_height / 2 - 50,  # Y-coordinate of top left corner
+        300,  # Width
+        100,  # Height
+
+        # Optional Parameters
+        text='RÈGLES',  # Text to display
+        fontSize=69,  # Size of font
+        margin=20,  # Minimum distance between text/image and edge of button
+        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
+        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
+        pressedColour=(0, 200, 20),  # Colour of button when being clicked
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=show_rules  # Function to call when clicked on
+    )
+
+def show_rules():
+    global state, back_to_menu
+    state = "rules"
+    back_to_menu = Button(
+        screen,  # Surface to place button on
+        screen_width - 170,  # X-coordinate of top left corner
+        screen_height - 70,  # Y-coordinate of top left corner
+        150,  # Width
+        50,  # Height
+
+        # Optional Parameters
+        text='MENU',  # Text to display
+        fontSize=30,  # Size of font
+        margin=20,  # Minimum distance between text/image and edge of button
+        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
+        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
+        pressedColour=(0, 200, 20),  # Colour of button when being clicked
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=show_menu  # Function to call when clicked on
+    )
+
+def main():
+    global state
+    show_menu()  # Afficher le menu principal
+    state = "menu"
+
+    running = True
+    video_start_time = pygame.time.get_ticks()
+    while running:  # Boucle principale
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            pygame_widgets.update(event)  # Gestion des événements Pygame et des widgets
+
+        # Calculer le temps écoulé depuis le début de la vidéo
+        elapsed_time = (pygame.time.get_ticks() - video_start_time) / 1000
+
+        # Obtenir l'image actuelle de la vidéo
+        frame = video.get_frame(elapsed_time)
+
+        # Convertir l'image en surface Pygame
+        frame_surface = pygame.surfarray.make_surface(frame.swapaxes(0, 1))
+
+        # Afficher l'image
+        screen.blit(frame_surface, (0, 0))
+
+        if state == "menu":
+            play.draw()
+            quitter.draw()
+            reg.draw()
+        elif state == "rules":
+            # Afficher le texte des règles
+            rules_text = [
+                "Le jeu de la vie : des règles simples, une infinité de résolutions.","","Le jeu de la vie c’est 2 règles : Règle de survie, règle de naissance. ","","Au début vous devrez choisir la taille du tableau puis la remplir comme vous le souhaitez, ","par la suite, vous verrez le développement des cellules*.","A savoir que si une cellule* ne survie pas, elle meurt.","*cellule = case pleine","","","Règle de survie : ","Si une cellule est entourée de plus d’1 cellule et de moins de 4 cellules, elle survie au prochain tour.","","Règle de naissance :","Si une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour d’après."
+            ]
+            y_offset = 8
+            for line in rules_text:
+                text_surface = font.render(line, True, NOIR)
+                screen.blit(text_surface, (50, y_offset))
+                y_offset += 40
+
+            # Dessiner le bouton pour revenir au menu
+            back_to_menu.draw()
+
+        # Mettre à jour l'affichage
+        pygame.display.update()
+
+    pygame.quit()
+    sys.exit()
+
+# Appeler la fonction principale
 def dessiner_grille(ecran, matrice, facteur_zoom, decalage_x, decalage_y):
     for y in range(len(matrice)):
         for x in range(len(matrice[0])):
@@ -59,6 +220,7 @@ def inverser_couleur_pixel(x, y):
 
 #fenetre 1 : explications des règles du jeu.
 
+main()
 
 #fenêtre 2 : choix des pixels colorés sous forme de boutons
 
