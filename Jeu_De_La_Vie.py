@@ -56,13 +56,11 @@ camera_speed = 5
 # Initialisation de Pygame
 pygame.init()
 
-# Charger la vidéo
-video = VideoFileClip("video.mp4")
-
 # Définir la taille de l'écran selon la taille de la vidéo
-screen_width, screen_height = video.size
+screen_width, screen_height = 1100, 800
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Video with Buttons")
+video = VideoFileClip("video.mp4").resize((1600,800))
+pygame.display.set_caption("Video du menu")
 
 
 # Définir la police
@@ -172,8 +170,13 @@ def main():
         # Convertir l'image en surface Pygame
         frame_surface = pygame.surfarray.make_surface(frame.swapaxes(0, 1))
 
+        # Calculer les coordonnées pour centrer la vidéo
+        video_width, video_height = frame_surface.get_size()
+        x = (screen_width - video_width) // 2 - 80
+        y = (screen_height - video_height) // 2
+
         # Afficher l'image
-        screen.blit(frame_surface, (0, 0))
+        screen.blit(frame_surface, (x, y))
 
         if state == "menu":
             play.draw()
