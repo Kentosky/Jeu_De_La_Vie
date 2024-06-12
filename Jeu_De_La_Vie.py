@@ -52,7 +52,7 @@ pygame.display.set_caption("Video du menu")
 
 
 # Définir la police
-font = pygame.font.Font('C:/Users/Besse/PycharmProjects/Jeu_De_La_Vie/Tiny5/Tiny5-regular.ttf', size = 25)
+font = pygame.font.Font('Tiny5-regular.ttf', size = 25)
 
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
 
@@ -339,5 +339,3 @@ def dessiner_grille(ecran, matrice, facteur_zoom):
 def inverser_couleur_pixel(x, y):
     if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
         matrice[y][x] = 1 - matrice[y][x]
-
-
