@@ -1,12 +1,11 @@
+
 # -*- coding: utf-8 -*-
 # --- Le jeu de la vie re-créé par le groupe de TP avec Cuvelier Line, Villeret Baptiste et Besse Fabien  --- #
-
 """ ~~~ PARTIE DÉCLARATIVE ~~~ """
 # --- La bibliothèque permettant de faire les graphismes --- #
 from tkinter import *
 import sys
 import pygame
-from pygame_widgets.button import Button
 import Structures
 import Cellule as Cell
 import Tableau as Tab
@@ -16,23 +15,17 @@ from pygame_widgets.button import Button
 
 largeur_ecran = 800
 hauteur_ecran = 600
-
 taille_cellule = 5
-
-
 x_matrice = int(largeur_ecran/taille_cellule)
 y_matrice = int(largeur_ecran/taille_cellule)
-
+#définition des couleurs :
+color_light = (170, 170, 170)
+color_dark = (100, 100, 100)
 blanc = (255, 255, 255)
-BLANC = blanc
 noir = (0, 0, 0)
-NOIR = noir
 couleur_bordure = (224, 224, 224)
 
 facteur_zoom = 5
-COLOR_LIGHT = (170, 170, 170)
-COLOR_DARK = (100, 100, 100)
-
 izoom = 1
 zoom_max = 10
 zoom_min = 1
@@ -40,11 +33,9 @@ zoom_min = 1
 couleur_curseur = (150, 150, 150)
 curseur_largeur = 10
 curseur_longueur = 50
-
 # Création d'une surface pour la carte
 MAP_WIDTH, MAP_HEIGHT = 1600, 1200
 map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
-
 # Position initiale de la caméra centrée
 camera_x = (MAP_WIDTH - largeur_ecran) // 2
 camera_y = (MAP_HEIGHT - hauteur_ecran) // 2
@@ -203,19 +194,15 @@ def main():
 
 
 """ ~~~ PARTIE EXECUTIVE ~~~ """
-
 #fenetre 1 : explications des règles du jeu.
 
 main()
 
 #fenêtre 2 : choix des pixels colorés sous forme de boutons
-
 #utiles pour test ----
 tab1=Tab.Tableau(x_matrice, y_matrice)
 matrice = tab1.creation_tableau()
 #-------
-
-
 def dessiner_grille(ecran, matrice, facteur_zoom):
     for y in range(len(matrice)):
         for x in range(len(matrice[0])):
@@ -231,131 +218,11 @@ def dessiner_grille(ecran, matrice, facteur_zoom):
 def inverser_couleur_pixel(x, y):
     if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
         matrice[y][x] = 1 - matrice[y][x]
-
 pygame.init()
 ecran_edition = pygame.display.set_mode((largeur_ecran+200, hauteur_ecran))
 
-#_________________________définition des variables_________________________
-facteur_zoom = 5
-decalage_x = 0
-decalage_y = 0
-
-curseur_x = largeur_ecran // 2
-curseur_y = hauteur_ecran // 2
-deplacement_curseur_x = 0
-deplacement_curseur_y = 0
-
-#variables des boutons-----------------------------------------------------
-cligno_img = pygame.image.load('cligno.png').convert_alpha()
-cligno_img = pygame.transform.scale(cligno_img, (100, 100))  # Redimensionner si nécessaire
-
-cligno = Button(
-    ecran_edition,
-    largeur_ecran + 50,
-    50,
-    100,
-    100,
-    margin=20,
-    image=cligno_img,
-    onClick=lambda: print('Click')
-)
 
 
-hamecon_img = pygame.image.load('hamecon.png').convert_alpha()
-hamecon_img = pygame.transform.scale(hamecon_img, (100, 100))  # Redimensionner si nécessaire
-
-hamecon = Button(
-    ecran_edition,
-    largeur_ecran + 250,
-    50,
-    100,
-    100,
-    margin=20,
-    image=hamecon_img,
-    onClick=lambda: print('Click')
-)
-
-
-hamecon2_img = pygame.image.load('hamecon2.png').convert_alpha()
-hamecon2_img = pygame.transform.scale(hamecon2_img, (100, 100))  # Redimensionner si nécessaire
-
-hamecon2 = Button(
-    ecran_edition,
-    largeur_ecran + 50,
-    200,
-    100,
-    100,
-    margin=20,
-    image=hamecon2_img,
-    onClick=lambda: print('Click')
-)
-
-
-canoe_img = pygame.image.load('canoe.png').convert_alpha()
-canoe_img = pygame.transform.scale(canoe_img, (100, 100))  # Redimensionner si nécessaire
-
-canoe = Button(
-    ecran_edition,
-    largeur_ecran + 250,
-    200,
-    100,
-    100,
-    margin=20,
-    image=canoe_img,
-    onClick=lambda: print('Click')
-)
-
-
-pentadeca_img = pygame.image.load('pentadeca.png').convert_alpha()
-pentadeca_img = pygame.transform.scale(pentadeca_img, (100, 100))  # Redimensionner si nécessaire
-
-pentadeca = Button(
-    ecran_edition,
-    largeur_ecran + 50,
-    350,
-    100,
-    100,
-    margin=20,
-    image=pentadeca_img,
-    onClick=lambda: print('Click')
-)
-
-
-croix_img = pygame.image.load('croix.png').convert_alpha()
-croix_img = pygame.transform.scale(croix_img, (100, 100))  # Redimensionner si nécessaire
-
-
-croix = Button(
-    ecran_edition,
-    largeur_ecran + 250,
-    350,
-    100,
-    100,
-    margin=20,
-    image=croix_img,
-    onClick=lambda: print('Click')
-)
-
-
-deuxLapins_img = pygame.image.load('deux_lapins.png').convert_alpha()
-deuxLapins_img = pygame.transform.scale(deuxLapins_img, (100, 100))  # Redimensionner si nécessaire
-
-deuxLapins = Button(
-    ecran_edition,
-    largeur_ecran + 50,
-    500,
-    100,
-    100,
-    margin=20,
-    image=deuxLapins_img,
-    onClick=lambda: print('Click')
-)
-#____________________________________________________________________________
-
-#définition des couleurs :
-color = (255, 255, 255)
-color_light = (170, 170, 170)
-color_dark = (100, 100, 100)
 
 #définition des polices d'écriture et des textes :
 smallfont = pygame.font.SysFont('Corbel',20)
@@ -364,11 +231,7 @@ quitter = smallfont.render('quitter' , True , blanc)
 suivant = smallfont.render('suivant' , True , blanc)
 precedent = smallfont.render('précédent' , True , blanc)
 #fin variables des boutons--------------------------------------------------
-
-
-
 Mise_en_place_jeu = True
-
 while Mise_en_place_jeu:
     '''
     Cette boucle va servir à la mise en place du jeu : on génère une matrice vide, donc une grille blanche.
@@ -376,18 +239,6 @@ while Mise_en_place_jeu:
     Une fois le bouton "confirmer" cliqué : la boucle s'arrête et la fenêtre se ferme.
     On passe à la fenêtre suivante.
     '''
-
-    pygame.draw.rect(ecran_edition, (170, 170, 170), [largeur_ecran, 0, 400, hauteur_ecran])
-    pygame.draw.rect(ecran_edition, (170, 170, 170), [0, hauteur_ecran-40, largeur_ecran, 40])
-    cligno.draw()
-    hamecon.draw()
-    hamecon2.draw()
-    canoe.draw()
-    pentadeca.draw()
-    croix.draw()
-    deuxLapins.draw()
-
-
     for event in pygame.event.get():
         mouse = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
@@ -407,7 +258,6 @@ while Mise_en_place_jeu:
             if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
                 Mise_en_place_jeu = False
                 break
-
     # Gestion des touches pour déplacer la caméra
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
@@ -418,7 +268,6 @@ while Mise_en_place_jeu:
         camera_y = max(camera_y - camera_speed, 0)
     if keys[pygame.K_DOWN]:
         camera_y = min(camera_y + camera_speed, MAP_HEIGHT - hauteur_ecran)
-
     # Efface l'écran avant de dessiner les nouveaux éléments
     ecran_edition.fill(blanc)
     # Dessin de la partie visible de la carte sur la fenêtre
@@ -435,27 +284,18 @@ while Mise_en_place_jeu:
     else:
         pygame.draw.rect(ecran_edition, color_dark,
                          [largeur_ecran / 2 - largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
-
     # Mise en place du texte des boutons
     ecran_edition.blit(confirmer, (largeur_ecran / 2 - largeur_ecran / 17, hauteur_ecran - 30))
-
     # Rafraîchissement de la page
     pygame.display.flip()
-
-
 pygame.quit()
 pygame.init()
-
-
 # Création de la fenêtre
 ecran_jeu = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
 pygame.display.set_caption("Jeu de la Vie")
 clock = pygame.time.Clock()
-
 # Mise à jour de l'état du jeu
 matrice_temp = [row[:] for row in matrice]
-
-
 running = True
 while running:
     ecran_jeu.fill(blanc)
@@ -478,27 +318,20 @@ while running:
         camera_y = max(camera_y - camera_speed, 0)
     if keys[pygame.K_DOWN]:
         camera_y = min(camera_y + camera_speed, MAP_HEIGHT - hauteur_ecran)
-
     # Dessin de la partie visible de la carte sur la fenêtre
     ecran_jeu.blit(map_surface, (0, 0), (camera_x, camera_y, largeur_ecran, hauteur_ecran))
     pygame.display.flip()
-
-
-
     #applications de la fonctions règle qui modifie l'état des cellules
     for y in range(len(matrice)-1):
         for x in range(len(matrice[y])-1):
             ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
             ma_cell.regle()
-
     #copie de la matrice
     matrice = [row[:] for row in matrice_temp]
-
     # Dessin de la grille
     dessiner_grille(map_surface, matrice, facteur_zoom)
     pygame.time.delay(1)
     pygame.display.flip()
     clock.tick(10)  # Limite le jeu à 10 images par seconde
-
 pygame.quit()
 sys.exit()
