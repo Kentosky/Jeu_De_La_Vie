@@ -1,38 +1,27 @@
+
 # -*- coding: utf-8 -*-
 # --- Le jeu de la vie re-créé par le groupe de TP avec Cuvelier Line, Villeret Baptiste et Besse Fabien  --- #
-
 """ ~~~ PARTIE DÉCLARATIVE ~~~ """
 # --- La bibliothèque permettant de faire les graphismes --- #
 from tkinter import *
 import sys
 import pygame
-from pygame_widgets.button import Button
 import Structures
 import Cellule as Cell
 import Tableau as Tab
-from moviepy.editor import VideoFileClip
-import pygame_widgets
-from pygame_widgets.button import Button
-
 largeur_ecran = 800
 hauteur_ecran = 600
-
 taille_cellule = 5
-
-
 x_matrice = int(largeur_ecran/taille_cellule)
 y_matrice = int(largeur_ecran/taille_cellule)
-
+#définition des couleurs :
+color_light = (170, 170, 170)
+color_dark = (100, 100, 100)
 blanc = (255, 255, 255)
-BLANC = blanc
 noir = (0, 0, 0)
-NOIR = noir
 couleur_bordure = (224, 224, 224)
 
 facteur_zoom = 5
-COLOR_LIGHT = (170, 170, 170)
-COLOR_DARK = (100, 100, 100)
-
 izoom = 1
 zoom_max = 10
 zoom_min = 1
@@ -40,179 +29,32 @@ zoom_min = 1
 couleur_curseur = (150, 150, 150)
 curseur_largeur = 10
 curseur_longueur = 50
-
 # Création d'une surface pour la carte
 MAP_WIDTH, MAP_HEIGHT = 1600, 1200
 map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
-
 # Position initiale de la caméra centrée
 camera_x = (MAP_WIDTH - largeur_ecran) // 2
 camera_y = (MAP_HEIGHT - hauteur_ecran) // 2
 camera_speed = 20
 
-# Initialisation de Pygame
-pygame.init()
-
-# Charger la vidéo
-video = VideoFileClip("video.mp4")
-
-# Définir la taille de l'écran selon la taille de la vidéo
-screen_width, screen_height = video.size
-screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Video with Buttons")
-
-
-# Définir la police
-font = pygame.font.Font('C:/Users/Besse/PycharmProjects/Jeu_De_La_Vie/Tiny5/Tiny5-regular.ttf', size = 20)
-
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
-
-""" ~~~  PARTIE MENU D'INTRO  ~~~ """
-
-def show_menu():
-    global state, play, quitter, reg
-    state = "menu"
-    play = Button(
-        screen,  # Surface to place button on
-        screen_width / 2 - 150,  # X-coordinate of top left corner
-        screen_height / 2 - 250,  # Y-coordinate of top left corner
-        300,  # Width
-        100,  # Height
-
-        # Optional Parameters
-        text='JOUER',  # Text to display
-        fontSize=69,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(0, 100, 60),  # Colour of button when not being interacted with
-        hoverColour=(50, 150, 112),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=lambda: pygame.quit()  # Function to call when clicked on
-    )
-
-    quitter = Button(
-        screen,  # Surface to place button on
-        screen_width / 2 - 150,  # X-coordinate of top left corner
-        screen_height / 2 + 150,  # Y-coordinate of top left corner
-        300,  # Width
-        100,  # Height
-
-        # Optional Parameters
-        text='QUITTER',  # Text to display
-        fontSize=69,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
-        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=lambda: quit()  # Function to call when clicked on
-    )
-
-    reg = Button(
-        screen,  # Surface to place button on
-        screen_width / 2 - 150,  # X-coordinate of top left corner
-        screen_height / 2 - 50,  # Y-coordinate of top left corner
-        300,  # Width
-        100,  # Height
-
-        # Optional Parameters
-        text='RÈGLES',  # Text to display
-        fontSize=69,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
-        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=show_rules  # Function to call when clicked on
-    )
-
-def show_rules():
-    global state, back_to_menu
-    state = "rules"
-    back_to_menu = Button(
-        screen,  # Surface to place button on
-        screen_width - 170,  # X-coordinate of top left corner
-        screen_height - 70,  # Y-coordinate of top left corner
-        150,  # Width
-        50,  # Height
-
-        # Optional Parameters
-        text='MENU',  # Text to display
-        fontSize=30,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
-        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=show_menu  # Function to call when clicked on
-    )
-
-def main():
-    global state
-    show_menu()  # Afficher le menu principal
-    state = "menu"
-
-    running = True
-    video_start_time = pygame.time.get_ticks()
-    while running:  # Boucle principale
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            pygame_widgets.update(event)  # Gestion des événements Pygame et des widgets
-
-        # Calculer le temps écoulé depuis le début de la vidéo
-        elapsed_time = (pygame.time.get_ticks() - video_start_time) / 1000
-
-        # Obtenir l'image actuelle de la vidéo
-        frame = video.get_frame(elapsed_time)
-
-        # Convertir l'image en surface Pygame
-        frame_surface = pygame.surfarray.make_surface(frame.swapaxes(0, 1))
-
-        # Afficher l'image
-        screen.blit(frame_surface, (0, 0))
-
-        if state == "menu":
-            play.draw()
-            quitter.draw()
-            reg.draw()
-        elif state == "rules":
-            # Afficher le texte des règles
-            rules_text = [
-                "Le jeu de la vie : des règles simples, une infinité de résolutions.","","Le jeu de la vie c’est 2 règles : Règle de survie, règle de naissance. ","","Au début vous devrez choisir la taille du tableau puis la remplir comme vous le souhaitez, ","par la suite, vous verrez le développement des cellules*.","A savoir que si une cellule* ne survie pas, elle meurt.","*cellule = case pleine","","","Règle de survie : ","Si une cellule est entourée de plus d’1 cellule et de moins de 4 cellules, elle survie au prochain tour.","","Règle de naissance :","Si une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour d’après."
-            ]
-            y_offset = 8
-            for line in rules_text:
-                text_surface = font.render(line, True, NOIR)
-                screen.blit(text_surface, (50, y_offset))
-                y_offset += 40
-
-            # Dessiner le bouton pour revenir au menu
-            back_to_menu.draw()
-
-        # Mettre à jour l'affichage
-        pygame.display.update()
-
-    pygame.quit()
-    sys.exit()
-
-# Appeler la fonction principale
-
-
+""" ~~~ MISE EN PLACE DES BONUS : configurations prédéfinies de matrices afin d'obtenir un résultat en particulier dans le jeu~~~ """
 """ ~~~ PARTIE EXECUTIVE ~~~ """
-
 #fenetre 1 : explications des règles du jeu.
-
-main()
-
+fenetre1 = Tk()
+intro="Le jeu de la vie : des règles simples, une infinité de résolutions.\n\nLe jeu de la vie c’est 2 règles : Règle de survie, règle de naissance. \n\nAu début vous devrez choisir la taille du tableau puis la remplir comme vous le souhaitez, par la suite, vous verrez le développement des cellules*.\nA savoir que si une cellule* ne survie pas, elle meurt.\n*cellule = case pleine\n\n\nRègle de survie : \nSi une cellule est entourée de plus d’1 cellule et de moins de 4 cellules, elle survie au prochain tour.\n\nRègle de naissance :\nSi une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour d’après."
+#création d'un bouton pour passer à la fenêtre suivante
+bouton=Button(fenetre1, text="Compris", command=fenetre1.quit)
+bouton.pack(side=BOTTOM, padx=150, pady=20)
+bouton.pack()
+introduction = Label(fenetre1, text=intro)
+introduction.pack()
+fenetre1.mainloop()
 #fenêtre 2 : choix des pixels colorés sous forme de boutons
-
 #utiles pour test ----
 tab1=Tab.Tableau(x_matrice, y_matrice)
 matrice = tab1.creation_tableau()
 #-------
-
-
 def dessiner_grille(ecran, matrice, facteur_zoom):
     for y in range(len(matrice)):
         for x in range(len(matrice[0])):
@@ -223,136 +65,15 @@ def dessiner_grille(ecran, matrice, facteur_zoom):
                                         taille_cellule * facteur_zoom)
             pygame.draw.rect(ecran, couleur, rect_cellule)
             pygame.draw.rect(ecran, couleur_bordure, rect_cellule, 1)
-
 # Fonction pour inverser la couleur d'une cellule de la grille
 def inverser_couleur_pixel(x, y):
     if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
         matrice[y][x] = 1 - matrice[y][x]
-
 pygame.init()
 ecran_edition = pygame.display.set_mode((largeur_ecran+200, hauteur_ecran))
 
-#_________________________définition des variables_________________________
-facteur_zoom = 5
-decalage_x = 0
-decalage_y = 0
-
-curseur_x = largeur_ecran // 2
-curseur_y = hauteur_ecran // 2
-deplacement_curseur_x = 0
-deplacement_curseur_y = 0
-
-#variables des boutons-----------------------------------------------------
-cligno_img = pygame.image.load('cligno.png').convert_alpha()
-cligno_img = pygame.transform.scale(cligno_img, (100, 100))  # Redimensionner si nécessaire
-
-cligno = Button(
-    ecran_edition,
-    largeur_ecran + 50,
-    50,
-    100,
-    100,
-    margin=20,
-    image=cligno_img,
-    onClick=lambda: print('Click')
-)
 
 
-hamecon_img = pygame.image.load('hamecon.png').convert_alpha()
-hamecon_img = pygame.transform.scale(hamecon_img, (100, 100))  # Redimensionner si nécessaire
-
-hamecon = Button(
-    ecran_edition,
-    largeur_ecran + 250,
-    50,
-    100,
-    100,
-    margin=20,
-    image=hamecon_img,
-    onClick=lambda: print('Click')
-)
-
-
-hamecon2_img = pygame.image.load('hamecon2.png').convert_alpha()
-hamecon2_img = pygame.transform.scale(hamecon2_img, (100, 100))  # Redimensionner si nécessaire
-
-hamecon2 = Button(
-    ecran_edition,
-    largeur_ecran + 50,
-    200,
-    100,
-    100,
-    margin=20,
-    image=hamecon2_img,
-    onClick=lambda: print('Click')
-)
-
-
-canoe_img = pygame.image.load('canoe.png').convert_alpha()
-canoe_img = pygame.transform.scale(canoe_img, (100, 100))  # Redimensionner si nécessaire
-
-canoe = Button(
-    ecran_edition,
-    largeur_ecran + 250,
-    200,
-    100,
-    100,
-    margin=20,
-    image=canoe_img,
-    onClick=lambda: print('Click')
-)
-
-
-pentadeca_img = pygame.image.load('pentadeca.png').convert_alpha()
-pentadeca_img = pygame.transform.scale(pentadeca_img, (100, 100))  # Redimensionner si nécessaire
-
-pentadeca = Button(
-    ecran_edition,
-    largeur_ecran + 50,
-    350,
-    100,
-    100,
-    margin=20,
-    image=pentadeca_img,
-    onClick=lambda: print('Click')
-)
-
-
-croix_img = pygame.image.load('croix.png').convert_alpha()
-croix_img = pygame.transform.scale(croix_img, (100, 100))  # Redimensionner si nécessaire
-
-
-croix = Button(
-    ecran_edition,
-    largeur_ecran + 250,
-    350,
-    100,
-    100,
-    margin=20,
-    image=croix_img,
-    onClick=lambda: print('Click')
-)
-
-
-deuxLapins_img = pygame.image.load('deux_lapins.png').convert_alpha()
-deuxLapins_img = pygame.transform.scale(deuxLapins_img, (100, 100))  # Redimensionner si nécessaire
-
-deuxLapins = Button(
-    ecran_edition,
-    largeur_ecran + 50,
-    500,
-    100,
-    100,
-    margin=20,
-    image=deuxLapins_img,
-    onClick=lambda: print('Click')
-)
-#____________________________________________________________________________
-
-#définition des couleurs :
-color = (255, 255, 255)
-color_light = (170, 170, 170)
-color_dark = (100, 100, 100)
 
 #définition des polices d'écriture et des textes :
 smallfont = pygame.font.SysFont('Corbel',20)
@@ -361,11 +82,7 @@ quitter = smallfont.render('quitter' , True , blanc)
 suivant = smallfont.render('suivant' , True , blanc)
 precedent = smallfont.render('précédent' , True , blanc)
 #fin variables des boutons--------------------------------------------------
-
-
-
 Mise_en_place_jeu = True
-
 while Mise_en_place_jeu:
     '''
     Cette boucle va servir à la mise en place du jeu : on génère une matrice vide, donc une grille blanche.
@@ -373,18 +90,6 @@ while Mise_en_place_jeu:
     Une fois le bouton "confirmer" cliqué : la boucle s'arrête et la fenêtre se ferme.
     On passe à la fenêtre suivante.
     '''
-
-    pygame.draw.rect(ecran_edition, (170, 170, 170), [largeur_ecran, 0, 400, hauteur_ecran])
-    pygame.draw.rect(ecran_edition, (170, 170, 170), [0, hauteur_ecran-40, largeur_ecran, 40])
-    cligno.draw()
-    hamecon.draw()
-    hamecon2.draw()
-    canoe.draw()
-    pentadeca.draw()
-    croix.draw()
-    deuxLapins.draw()
-
-
     for event in pygame.event.get():
         mouse = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
@@ -404,7 +109,6 @@ while Mise_en_place_jeu:
             if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
                 Mise_en_place_jeu = False
                 break
-
     # Gestion des touches pour déplacer la caméra
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
@@ -415,7 +119,6 @@ while Mise_en_place_jeu:
         camera_y = max(camera_y - camera_speed, 0)
     if keys[pygame.K_DOWN]:
         camera_y = min(camera_y + camera_speed, MAP_HEIGHT - hauteur_ecran)
-
     # Efface l'écran avant de dessiner les nouveaux éléments
     ecran_edition.fill(blanc)
     # Dessin de la partie visible de la carte sur la fenêtre
@@ -432,27 +135,18 @@ while Mise_en_place_jeu:
     else:
         pygame.draw.rect(ecran_edition, color_dark,
                          [largeur_ecran / 2 - largeur_ecran / 6, hauteur_ecran - 40, largeur_ecran / 3, 40])
-
     # Mise en place du texte des boutons
     ecran_edition.blit(confirmer, (largeur_ecran / 2 - largeur_ecran / 17, hauteur_ecran - 30))
-
     # Rafraîchissement de la page
     pygame.display.flip()
-
-
 pygame.quit()
 pygame.init()
-
-
 # Création de la fenêtre
 ecran_jeu = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
 pygame.display.set_caption("Jeu de la Vie")
 clock = pygame.time.Clock()
-
 # Mise à jour de l'état du jeu
 matrice_temp = [row[:] for row in matrice]
-
-
 running = True
 while running:
     ecran_jeu.fill(blanc)
@@ -475,27 +169,20 @@ while running:
         camera_y = max(camera_y - camera_speed, 0)
     if keys[pygame.K_DOWN]:
         camera_y = min(camera_y + camera_speed, MAP_HEIGHT - hauteur_ecran)
-
     # Dessin de la partie visible de la carte sur la fenêtre
     ecran_jeu.blit(map_surface, (0, 0), (camera_x, camera_y, largeur_ecran, hauteur_ecran))
     pygame.display.flip()
-
-
-
     #applications de la fonctions règle qui modifie l'état des cellules
     for y in range(len(matrice)-1):
         for x in range(len(matrice[y])-1):
             ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
             ma_cell.regle()
-
     #copie de la matrice
     matrice = [row[:] for row in matrice_temp]
-
     # Dessin de la grille
     dessiner_grille(map_surface, matrice, facteur_zoom)
     pygame.time.delay(1)
     pygame.display.flip()
     clock.tick(10)  # Limite le jeu à 10 images par seconde
-
 pygame.quit()
 sys.exit()
