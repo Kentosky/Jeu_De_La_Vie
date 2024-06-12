@@ -61,7 +61,7 @@ pygame.display.set_caption("Video du menu")
 
 
 # Définir la police
-font = pygame.font.Font('C:/Users/Besse/PycharmProjects/Jeu_De_La_Vie/Tiny5/Tiny5-regular.ttf', size = 20)
+font = pygame.font.Font('C:/Users/Besse/PycharmProjects/Jeu_De_La_Vie/Tiny5/Tiny5-regular.ttf', size = 25)
 
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
 
@@ -72,7 +72,7 @@ def show_menu():
     state = "menu"
     play = Button(
         screen,  # Surface to place button on
-        screen_width / 2 - 150,  # X-coordinate of top left corner
+        screen_width / 2 - 150,   # X-coordinate of top left corner
         screen_height / 2 - 250,  # Y-coordinate of top left corner
         300,  # Width
         100,  # Height
@@ -85,7 +85,7 @@ def show_menu():
         hoverColour=(50, 150, 112),  # Colour of button when being hovered over
         pressedColour=(0, 200, 20),  # Colour of button when being clicked
         radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=lambda: pygame.quit()  # Function to call when clicked on
+        onClick=lambda: pygame.quit()
     )
 
     quitter = Button(
@@ -182,13 +182,13 @@ def main():
         elif state == "rules":
             # Afficher le texte des règles
             rules_text = [
-                "Le jeu de la vie : des règles simples, une infinité de résolutions.","","Le jeu de la vie c’est 2 règles : Règle de survie, règle de naissance. ","","Au début vous devrez choisir la taille du tableau puis la remplir comme vous le souhaitez, ","par la suite, vous verrez le développement des cellules*.","A savoir que si une cellule* ne survie pas, elle meurt.","*cellule = case pleine","","","Règle de survie : ","Si une cellule est entourée de plus d’1 cellule et de moins de 4 cellules, elle survie au prochain tour.","","Règle de naissance :","Si une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour d’après."
+                "Le jeu de la vie : des règles simples, une infinité de résolutions.","","Le jeu de la vie c’est 2 règles : Règle de survie, règle de naissance. ","","Au début vous devrez choisir la taille du tableau puis la remplir comme vous le souhaitez, ","par la suite, vous verrez le développement des cellules*.","A savoir que si une cellule* ne survie pas, elle meurt.","*cellule = case pleine","","","Règle de survie : ","Si une cellule est entourée de plus d’1 cellule et de moins de 4 cellules, elle survie au prochain ","tour.","","Règle de naissance :","Si une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour d’après."
             ]
             y_offset = 8
             for line in rules_text:
                 text_surface = font.render(line, True, NOIR)
-                screen.blit(text_surface, (50, y_offset))
-                y_offset += 40
+                screen.blit(text_surface, (70, y_offset))
+                y_offset += 45
 
             # Dessiner le bouton pour revenir au menu
             back_to_menu.draw()
