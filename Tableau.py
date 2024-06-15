@@ -13,6 +13,5 @@ class Tableau:
             tableau_de_tableaux.append(ligne)
 
         # Afficher le quadrillage
-        for ligne in tableau_de_tableaux:       #ici, on affiche la liste de listes pour la vérification
-            print(ligne)
+
         return tableau_de_tableaux

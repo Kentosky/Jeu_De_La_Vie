@@ -54,13 +54,31 @@ pygame.display.set_caption("Video du menu")
 # Définir la police
 font = pygame.font.Font('Tiny5-regular.ttf', size = 25)
 
+tab1=Tab.Tableau(x_matrice, y_matrice)
+matrice = tab1.creation_tableau()
+
 """ ~~~ PARTIE FONCTIONNELLE ~~~ """
 
 """ ~~~  PARTIE MENU D'INTRO  ~~~ """
 
+def dessiner_grille(ecran, matrice, facteur_zoom):
+    for y in range(len(matrice)):
+        for x in range(len(matrice[0])):
+            couleur = blanc if matrice[y][x] == 0 else noir
+            rect_cellule = pygame.Rect(x * taille_cellule * facteur_zoom,
+                                        y * taille_cellule * facteur_zoom,
+                                        taille_cellule * facteur_zoom,
+                                        taille_cellule * facteur_zoom)
+            pygame.draw.rect(ecran, couleur, rect_cellule)
+            pygame.draw.rect(ecran, couleur_bordure, rect_cellule, 1)
+
+# Fonction pour inverser la couleur d'une cellule de la grille
+def inverser_couleur_pixel(x, y):
+    if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
+        matrice[y][x] = 1 - matrice[y][x]
+
 def edition():
-    global matrice
-    pygame.quit()
+    global matrice,camera_x,camera_y,facteur_zoom
     pygame.init()
     ecran_edition = pygame.display.set_mode((largeur_ecran+200, hauteur_ecran))
 
@@ -94,7 +112,6 @@ def edition():
                 x = (x + camera_x) // (taille_cellule * facteur_zoom)
                 y = (y + camera_y) // (taille_cellule * facteur_zoom)
                 inverser_couleur_pixel(x, y)  # utilisation de la fonction inverser_couleur_pixel
-                print(matrice)  # test de la mise à jour de la matrice
 
                 if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
                     Mise_en_place_jeu = False
@@ -195,7 +212,7 @@ def show_menu():
         hoverColour=(50, 150, 112),  # Colour of button when being hovered over
         pressedColour=(0, 200, 20),  # Colour of button when being clicked
         radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=lambda:edition
+        onClick=edition
     )
 
     quitter = Button(
@@ -312,30 +329,6 @@ def main():
     sys.exit()
 
 # Appeler la fonction principale
+if __name__ == "__main__":
+    main()
 
-
-""" ~~~ PARTIE EXECUTIVE ~~~ """
-#fenetre 1 : explications des règles du jeu.
-
-main()
-
-#fenêtre 2 : choix des pixels colorés sous forme de boutons
-#utiles pour test ----
-tab1=Tab.Tableau(x_matrice, y_matrice)
-matrice = tab1.creation_tableau()
-#-------
-def dessiner_grille(ecran, matrice, facteur_zoom):
-    for y in range(len(matrice)):
-        for x in range(len(matrice[0])):
-            couleur = blanc if matrice[y][x] == 0 else noir
-            rect_cellule = pygame.Rect(x * taille_cellule * facteur_zoom,
-                                        y * taille_cellule * facteur_zoom,
-                                        taille_cellule * facteur_zoom,
-                                        taille_cellule * facteur_zoom)
-            pygame.draw.rect(ecran, couleur, rect_cellule)
-            pygame.draw.rect(ecran, couleur_bordure, rect_cellule, 1)
-
-# Fonction pour inverser la couleur d'une cellule de la grille
-def inverser_couleur_pixel(x, y):
-    if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
-        matrice[y][x] = 1 - matrice[y][x]
