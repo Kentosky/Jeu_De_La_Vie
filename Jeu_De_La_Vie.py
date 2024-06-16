@@ -77,6 +77,26 @@ def inverser_couleur_pixel(x, y):
     if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
         matrice[y][x] = 1 - matrice[y][x]
 
+def zoom(event, facteur_zoom, izoom, zoom_min, zoom_max):
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_p:
+            facteur_zoom = min(zoom_max, facteur_zoom + izoom)
+        elif event.key == pygame.K_m:
+            facteur_zoom = max(zoom_min, facteur_zoom - izoom)
+    return facteur_zoom
+
+def deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, map_width, map_height):
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        camera_x = max(camera_x - camera_speed, 0)
+    if keys[pygame.K_RIGHT]:
+        camera_x = min(camera_x + camera_speed, map_width - screen_width)
+    if keys[pygame.K_UP]:
+        camera_y = max(camera_y - camera_speed, 0)
+    if keys[pygame.K_DOWN]:
+        camera_y = min(camera_y + camera_speed, map_height - screen_height)
+    return camera_x, camera_y
+
 def edition():
     global matrice,camera_x,camera_y,facteur_zoom
     pygame.init()
@@ -101,12 +121,7 @@ def edition():
         for event in pygame.event.get():
             mouse = pygame.mouse.get_pos()
             if event.type == pygame.QUIT:
-                jeu_en_cours = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    facteur_zoom = min(zoom_max, facteur_zoom + izoom)
-                elif event.key == pygame.K_m:
-                    facteur_zoom = max(zoom_min, facteur_zoom - izoom)
+                Mise_en_place_jeu = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = event.pos  # mise à jour de la position de la souris
                 x = (x + camera_x) // (taille_cellule * facteur_zoom)
@@ -116,16 +131,9 @@ def edition():
                 if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
                     Mise_en_place_jeu = False
                     break
+            facteur_zoom = zoom(event, facteur_zoom, izoom, zoom_min, zoom_max)
         # Gestion des touches pour déplacer la caméra
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            camera_x = max(camera_x - camera_speed, 0)
-        if keys[pygame.K_RIGHT]:
-            camera_x = min(camera_x + camera_speed, MAP_WIDTH - largeur_ecran)
-        if keys[pygame.K_UP]:
-            camera_y = max(camera_y - camera_speed, 0)
-        if keys[pygame.K_DOWN]:
-            camera_y = min(camera_y + camera_speed, MAP_HEIGHT - hauteur_ecran)
+        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, largeur_ecran, hauteur_ecran, MAP_WIDTH,MAP_HEIGHT)
         # Efface l'écran avant de dessiner les nouveaux éléments
         ecran_edition.fill(blanc)
         # Dessin de la partie visible de la carte sur la fenêtre
@@ -160,22 +168,11 @@ def edition():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    facteur_zoom = min(zoom_max, facteur_zoom + izoom)
-                elif event.key == pygame.K_m:
-                    facteur_zoom = max(zoom_min, facteur_zoom - izoom)
+            facteur_zoom = zoom(event, facteur_zoom, izoom, zoom_min, zoom_max)
 
         # Gestion des touches pour déplacer la caméra
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            camera_x = max(camera_x - camera_speed, 0)
-        if keys[pygame.K_RIGHT]:
-            camera_x = min(camera_x + camera_speed, MAP_WIDTH - largeur_ecran)
-        if keys[pygame.K_UP]:
-            camera_y = max(camera_y - camera_speed, 0)
-        if keys[pygame.K_DOWN]:
-            camera_y = min(camera_y + camera_speed, MAP_HEIGHT - hauteur_ecran)
+        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, largeur_ecran, hauteur_ecran, MAP_WIDTH,MAP_HEIGHT)
+
         # Dessin de la partie visible de la carte sur la fenêtre
         ecran_jeu.blit(map_surface, (0, 0), (camera_x, camera_y, largeur_ecran, hauteur_ecran))
         pygame.display.flip()
