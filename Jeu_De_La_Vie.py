@@ -320,13 +320,13 @@ def main():
         elif state == "rules":
             # Afficher le texte des règles
             rules_text = [
-                "  "," "," "," Le jeu de la vie : des règles simples, une infinité de résolutions.","","Le jeu de la vie c’est 2 règles : Règle de survie, règle de naissance. ","","Au début vous devrez choisir la taille du tableau puis la remplir comme vous le souhaitez, ","par la suite, vous verrez le développement des cellules*.","A savoir que si une cellule* ne survie pas, elle meurt.","*cellule = case pleine","","","Règle de survie : ","Si une cellule est entourée de plus d’1 cellule et de moins de 4 cellules, elle survit au"," prochain tour.","","Règle de naissance :","Si une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour"," d’après."
+                "  "," "," "," Le jeu de la vie : des règles simples, une infinité de résolutions.","","Le jeu de la vie c’est 2 règles : Règle de survie, règle de naissance. ","","Au début vous devrez choisir la taille du tableau puis la remplir comme vous le souhaitez, ","par la suite, vous verrez le développement des cellules*.","A savoir que si une cellule* ne survit pas, elle meurt.","*cellule = case pleine","","Règle de survie : ","Si une cellule est entourée de plus d’1 cellule et de moins de 4 cellules, elle survit au"," prochain tour.","","Règle de naissance :","Si une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour"," d’après."
             ]
             y_offset = 8
             for line in rules_text:
                 text_surface = font.render(line, True, noir)
                 screen.blit(text_surface, (70, y_offset))
-                y_offset += 45
+                y_offset += 40
 
             # Dessiner le bouton pour revenir au menu
             back_to_menu.draw()
