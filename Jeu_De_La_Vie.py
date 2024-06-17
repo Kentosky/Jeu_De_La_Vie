@@ -3,6 +3,9 @@
 # --- Le jeu de la vie re-créé par le groupe de TP avec Cuvelier Line, Villeret Baptiste et Besse Fabien  --- #
 """ ~~~ PARTIE DÉCLARATIVE ~~~ """
 # --- La bibliothèque permettant de faire les graphismes --- #
+
+# In resize.py line 37 : change "ANTIALIAS" by "LANCZOS"
+
 from tkinter import *
 import sys
 import pygame
@@ -328,4 +331,3 @@ def main():
 # Appeler la fonction principale
 if __name__ == "__main__":
     main()
-
