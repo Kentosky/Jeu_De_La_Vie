@@ -60,7 +60,7 @@ def croix(matrice, cox, coy):
         matrice[coy + 1][cox + 2 + l] = 1
         matrice[coy + 6][cox + 2 + l] = 1
 
-def deuxLapins(matrice, cox, coy):
+def  deuxLapins(matrice, cox, coy):
     matrice[coy + 1][cox] = 1
     matrice[coy + 1][cox + 2] = 1
     matrice[coy][cox + 4] = 1

@@ -56,6 +56,7 @@ pygame.display.set_caption("Video du menu")
 
 # Définir la police
 font = pygame.font.Font('Tiny5-regular.ttf', size = 25)
+font_titre = pygame.font.Font('Tiny5-regular.ttf', size = 70)
 
 tab1=Tab.Tableau(x_matrice, y_matrice)
 matrice = tab1.creation_tableau()
@@ -280,6 +281,7 @@ rect_surface.fill(rect_color)
 def main():
     global state
     show_menu()  # Afficher le menu principal
+
     state = "menu"
     running = True
     video_start_time = pygame.time.get_ticks()
@@ -306,6 +308,10 @@ def main():
         # Afficher l'image
         screen.blit(frame_surface, (x, y))
         screen.blit(rect_surface, (0, 0))
+
+        titre = "Le Jeu de la Vie"
+        titre_police = font_titre.render(titre, True, noir)
+        screen.blit(titre_police, (340, 30))
 
         if state == "menu":
             play.draw()
