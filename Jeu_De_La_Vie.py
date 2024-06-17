@@ -160,6 +160,9 @@ def edition():
         pygame.display.flip()
     pygame.quit()
     pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load("son_jdv2.mp3")
+    pygame.mixer.music.play(10, 0.0)
     # Création de la fenêtre
     ecran_jeu = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
     pygame.display.set_caption("Jeu de la Vie")
@@ -337,6 +340,9 @@ def main():
     pygame.quit()
     sys.exit()
 
+pygame.mixer.init()
+pygame.mixer.music.load("son_jdv.mp3")
+pygame.mixer.music.play(10, 0.0)
 # Appeler la fonction principale
 if __name__ == "__main__":
     main()
