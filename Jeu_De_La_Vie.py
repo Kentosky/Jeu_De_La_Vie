@@ -272,20 +272,22 @@ def show_rules():
         onClick=show_menu  # Function to call when clicked on
     )
 
+rect_color = (255, 255, 255, 180)  # Blanc avec 50% de transparence
+rect_width, rect_height = 980, 860
+rect_surface = pygame.Surface((screen_width,screen_height), pygame.SRCALPHA)
+rect_surface.fill(rect_color)
+
 def main():
     global state
     show_menu()  # Afficher le menu principal
     state = "menu"
-
     running = True
     video_start_time = pygame.time.get_ticks()
     while running:  # Boucle principale
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             pygame_widgets.update(event)  # Gestion des événements Pygame et des widgets
-
 
         # Calculer le temps écoulé depuis le début de la vidéo
         elapsed_time = (pygame.time.get_ticks() - video_start_time) / 1000
@@ -303,6 +305,7 @@ def main():
 
         # Afficher l'image
         screen.blit(frame_surface, (x, y))
+        screen.blit(rect_surface, (0, 0))
 
         if state == "menu":
             play.draw()
@@ -311,7 +314,7 @@ def main():
         elif state == "rules":
             # Afficher le texte des règles
             rules_text = [
-                "Le jeu de la vie : des règles simples, une infinité de résolutions.","","Le jeu de la vie c’est 2 règles : Règle de survie, règle de naissance. ","","Au début vous devrez choisir la taille du tableau puis la remplir comme vous le souhaitez, ","par la suite, vous verrez le développement des cellules*.","A savoir que si une cellule* ne survie pas, elle meurt.","*cellule = case pleine","","","Règle de survie : ","Si une cellule est entourée de plus d’1 cellule et de moins de 4 cellules, elle survie au prochain ","tour.","","Règle de naissance :","Si une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour d’après."
+                "Le jeu de la vie : des règles simples, une infinité de résolutions.","","Le jeu de la vie c’est 2 règles : Règle de survie, règle de naissance. ","","Au début vous devrez choisir la taille du tableau puis la remplir comme vous le souhaitez, ","par la suite, vous verrez le développement des cellules*.","A savoir que si une cellule* ne survie pas, elle meurt.","*cellule = case pleine","","","Règle de survie : ","Si une cellule est entourée de plus d’1 cellule et de moins de 4 cellules, elle survit au"," prochain tour.","","Règle de naissance :","Si une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour"," d’après."
             ]
             y_offset = 8
             for line in rules_text:
