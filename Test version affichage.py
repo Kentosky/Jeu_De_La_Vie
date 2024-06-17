@@ -8,15 +8,9 @@ import pygame
 import sys
 
 largeur_ecran = 1600
-hauteur_ecran_sans_boutons = 1160
-hauteur_ecran = hauteur_ecran_sans_boutons + 40
+hauteur_ecran = 1800
 
 taille_cellule = 5
-
-if largeur_ecran // taille_cellule != 0 :
-    largeur_ecran += largeur_ecran%taille_cellule
-if hauteur_ecran_sans_boutons // taille_cellule != 0 :
-    hauteur_ecran_sans_boutons += hauteur_ecran_sans_boutons%taille_cellule
 x_matrice = int(largeur_ecran/taille_cellule)
 y_matrice = int(hauteur_ecran/taille_cellule)
 
@@ -25,10 +19,9 @@ blanc = (255, 255, 255)
 noir = (0, 0, 0)
 couleur_bordure = (224, 224, 224)
 
-sensibilite_zomm = 0.1
 izoom = 1
-zoom_max = 5.0
-zoom_min = 0.1
+zoom_max = 10.0
+zoom_min = 1
 
 couleur_curseur = (150, 150, 150)
 curseur_largeur = 10

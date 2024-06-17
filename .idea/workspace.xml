@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d02adf9d-42bd-4078-b6b8-849cd410300d" name="Changes" comment="Merging du code de Baptiste et de Fabien, il contient le nouveau menu ainsi que le jeu fonctionnel. Il y a des bugs pour lier les 2." />
+    <list default="true" id="d02adf9d-42bd-4078-b6b8-849cd410300d" name="Changes" comment="enorme probleme lors du regroupement de fichiers, on recommence">
+      <change afterPath="$PROJECT_DIR$/test Baptiste.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jeu_De_La_Vie.py" beforeDir="false" afterPath="$PROJECT_DIR$/Jeu_De_La_Vie.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test version affichage.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test version affichage.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,6 +24,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -39,6 +47,7 @@
     &quot;Python.class.executor&quot;: &quot;Run&quot;,
     &quot;Python.fichier perso.executor&quot;: &quot;Run&quot;,
     &quot;Python.test 2.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test Baptiste.executor&quot;: &quot;Run&quot;,
     &quot;Python.test chatgpt.executor&quot;: &quot;Run&quot;,
     &quot;Python.test video.executor&quot;: &quot;Run&quot;,
     &quot;Python.test.executor&quot;: &quot;Run&quot;,
@@ -62,7 +71,7 @@
     ]
   }
 }</component>
-  <component name="RunManager" selected="Python.fichier perso">
+  <component name="RunManager">
     <configuration name="Test version affichage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Jeu_De_La_Vie" />
       <option name="ENV_FILES" value="" />
@@ -157,6 +166,8 @@
       <workItem from="1718093937860" duration="3840000" />
       <workItem from="1718094160991" duration="1845000" />
       <workItem from="1718199471592" duration="2313000" />
+      <workItem from="1718202017512" duration="3582000" />
+      <workItem from="1718443048325" duration="1717000" />
     </task>
     <task id="LOCAL-00001" summary="création du fichier originel.">
       <option name="closed" value="true" />
@@ -376,24 +387,25 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_2.coverage" NAME="test 2 Coverage Results" MODIFIED="1712930637858" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_zoom.coverage" NAME="test zoom Coverage Results" MODIFIED="1712237740860" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$Test_version_affichage.coverage" NAME="Test version affichage Coverage Results" MODIFIED="1717764983723" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$testDuJeuDeLaVie.coverage" NAME="testDuJeuDeLaVie Coverage Results" MODIFIED="1717588242003" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_damier.coverage" NAME="test damier Coverage Results" MODIFIED="1712242460443" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$Jeu_De_La_Vie.coverage" NAME="Jeu_De_La_Vie Coverage Results" MODIFIED="1718201790185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_video.coverage" NAME="test video Coverage Results" MODIFIED="1718200049093" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/OneDrive/Documents/COUR ESIREM 2A/proj prog" />
-    <SUITE FILE_PATH="coverage/fichier_perso_py$Test_version_affichage.coverage" NAME="Test version affichage Coverage Results" MODIFIED="1717763031852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$Inter_graphique.coverage" NAME="Inter graphique Coverage Results" MODIFIED="1712244255715" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/fichier_perso_py$test.coverage" NAME="test Coverage Results" MODIFIED="1717162046918" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_2_damier.coverage" NAME="test 2 damier Coverage Results" MODIFIED="1712241587813" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$class.coverage" NAME="class Coverage Results" MODIFIED="1712239906826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$version_auto.coverage" NAME="version auto Coverage Results" MODIFIED="1717685842541" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/fichier_perso_py$fichier_perso.coverage" NAME="fichier perso Coverage Results" MODIFIED="1714489993099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/fichier_perso_py$version_auto.coverage" NAME="version auto Coverage Results" MODIFIED="1717157075398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$Jeu_De_La_Vie.coverage" NAME="Jeu_De_La_Vie Coverage Results" MODIFIED="1712242990066" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/fichier_perso_py$fichier_perso.coverage" NAME="fichier perso Coverage Results" MODIFIED="1718201645872" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/fichier_perso_py$version_auto.coverage" NAME="version auto Coverage Results" MODIFIED="1718012491824" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/fichier_perso_py$Structures.coverage" NAME="Structures Coverage Results" MODIFIED="1717156587893" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$version_auto.coverage" NAME="version auto Coverage Results" MODIFIED="1717685842541" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$class.coverage" NAME="class Coverage Results" MODIFIED="1712239906826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_video.coverage" NAME="test video Coverage Results" MODIFIED="1718096009175" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../../../COUR ESIREM 2A/proj prog" />
+    <SUITE FILE_PATH="coverage/fichier_perso_py$test_Baptiste.coverage" NAME="test Baptiste Coverage Results" MODIFIED="1718443245989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$fichier_perso.coverage" NAME="fichier perso Coverage Results" MODIFIED="1712244639736" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_damier.coverage" NAME="test damier Coverage Results" MODIFIED="1712242460443" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/fichier_perso_py$test_chatgpt.coverage" NAME="test chatgpt Coverage Results" MODIFIED="1717156575162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_zoom.coverage" NAME="test zoom Coverage Results" MODIFIED="1712237740860" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/fichier_perso_py$test.coverage" NAME="test Coverage Results" MODIFIED="1717162046918" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$Test_version_affichage.coverage" NAME="Test version affichage Coverage Results" MODIFIED="1718027194943" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test.coverage" NAME="test Coverage Results" MODIFIED="1712930653973" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/fichier_perso_py$Jeu_De_La_Vie.coverage" NAME="Jeu_De_La_Vie Coverage Results" MODIFIED="1714399696362" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$fichier_perso.coverage" NAME="fichier perso Coverage Results" MODIFIED="1718199476056" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/fichier_perso_py$Test_version_affichage.coverage" NAME="Test version affichage Coverage Results" MODIFIED="1718026685851" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/fichier_perso_py$Jeu_De_La_Vie.coverage" NAME="Jeu_De_La_Vie Coverage Results" MODIFIED="1718444757748" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$test_2_damier.coverage" NAME="test 2 damier Coverage Results" MODIFIED="1712241587813" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$testDuJeuDeLaVie.coverage" NAME="testDuJeuDeLaVie Coverage Results" MODIFIED="1715781551154" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jeu_De_La_Vie$Inter_graphique.coverage" NAME="Inter graphique Coverage Results" MODIFIED="1712244255715" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
