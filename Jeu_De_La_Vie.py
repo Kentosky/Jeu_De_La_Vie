@@ -488,8 +488,6 @@ def edition():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu_2.draw()
                 x, y = event.pos
-                print("pos = ", x, y)
-                print(screen_width)
                 if (screen_width-275 <= x <= screen_width-175) and (50 <= y <= 150) :
                     if event.button == 1 :
                         if not drawing:
@@ -507,7 +505,6 @@ def edition():
 
                 elif (screen_width-275 <= x <= screen_width-175) and (200 <= y <= 300) :
                     if event.button == 1 :
-                        print("cligno")
                         if not drawing:
                             # Premier clic pour préparer le placement du rectangle
                             drawing_cligno = True
