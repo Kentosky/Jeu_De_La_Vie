@@ -1,8 +1,5 @@
 # --- Le jeu de la vie re-créé par le groupe de TP avec Cuvelier Line, Villeret Baptiste et Besse Fabien  --- #
 
-
-
-
 from tkinter import *
 import sys
 import pygame
@@ -447,13 +444,13 @@ def main():
     show_menu()  # Afficher le menu principal
 
     state = "menu"
-    running = True
-    video_start_time = pygame.time.get_ticks()
-    while running:  # Boucle principale
+    running = True          # On initialise le jeu à True
+    video_start_time = pygame.time.get_ticks()      # Démarrage de la vidéo du menu
+    while running:                                  # Boucle principale
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:           # Condition d'arrêt
                 running = False
-            pygame_widgets.update(event)  # Gestion des événements Pygame et des widgets
+            pygame_widgets.update(event)            # Gestion des événements Pygame et des widgets
 
         # Calculer le temps écoulé depuis le début de la vidéo
         elapsed_time = (pygame.time.get_ticks() - video_start_time) / 1000
@@ -477,11 +474,11 @@ def main():
         titre_police = font_titre.render(titre, True, noir)
         screen.blit(titre_police, (340, 30))
 
-        if state == "menu":
+        if state == "menu":         # Condition pour revenir au menu
             play.draw()
             quitter.draw()
             reg.draw()
-        elif state == "rules":
+        elif state == "rules":      # Ou aller aux règles
             # Afficher le texte des règles
             rules_text = [
                 "  ", " ", " ", " Le jeu de la vie : des règles simples, une infinité de résolutions.", "",
@@ -495,6 +492,7 @@ def main():
                 "Si une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour", " d’après."
             ]
             y_offset = 8
+            # Afficher le texte sur le canva
             for line in rules_text:
                 text_surface = font.render(line, True, noir)
                 screen.blit(text_surface, (70, y_offset))
@@ -511,10 +509,14 @@ def main():
     pygame.quit()
     sys.exit()
 
+""" ~~~ PARTIE EXECUTIVE : ~~~ """
 
-pygame.mixer.init()
-pygame.mixer.music.load("son_jdv.mp3")
-pygame.mixer.music.play(10, 0.0)
-# Appeler la fonction principale
+# Nous commençons ici le main, avec l'appel du main, le reste se fait dans le main (il n'y a pas grand chose ici du coup).
+
+pygame.mixer.init()                             # Initialisation du mixer pour la musique in game
+pygame.mixer.music.load("son_jdv.mp3")          # Load du son trop cool
+pygame.mixer.music.play(10, 0.0)     # Lancement de la musique (elle se répetera 10 fois
+
+# Appeler la fonction principale main
 if __name__ == "__main__":
     main()
