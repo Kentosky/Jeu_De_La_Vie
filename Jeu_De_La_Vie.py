@@ -13,18 +13,21 @@ from pygame_widgets.button import Button
 pygame.init()
 
 # Définir la taille de l'écran selon la taille de la vidéo
-screen_width, screen_height = 1100, 800
-screen = pygame.display.set_mode((screen_width, screen_height))
+largeur_ecran, hauteur_ecran = 1100, 800
+ecran = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
 # In resize.py line 37 : change "ANTIALIAS" by "LANCZOS"
 video = VideoFileClip("video.mp4").resize((1600,800))
 pygame.display.set_caption("Video du menu")
+couleur_rect = (255, 255, 255, 180)  # Blanc avec 50% de transparence
+rect_surface = pygame.Surface((largeur_ecran,hauteur_ecran), pygame.SRCALPHA)
+rect_surface.fill(couleur_rect)
 
 # Création de notre tableau a partir de la classe Tableau
 taille_cellule = 5
-x_matrice = int(screen_width/taille_cellule)
-y_matrice = int(screen_width/taille_cellule)
-tab1=Tab.Tableau(x_matrice, y_matrice)
-matrice = tab1.creation_tableau()
+x_matrice = int(largeur_ecran/taille_cellule)
+y_matrice = int(largeur_ecran/taille_cellule)
+tableau=Tab.Tableau(x_matrice, y_matrice)
+matrice = tableau.creation_tableau()
 
 #définition des couleurs que nous utiliserons :
 blanc = (255, 255, 255)
@@ -35,13 +38,13 @@ couleur_bordure = (224, 224, 224)
 facteur_zoom = 5
 
 # Création d'une surface pour la carte
-MAP_WIDTH, MAP_HEIGHT = 3200, 2400
-map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
+largeur_map, hauteur_map = 3200, 2400
+surface_map = pygame.Surface((largeur_map, hauteur_map))
 
 # Position initiale de la caméra centrée
-camera_x = (MAP_WIDTH - screen_width) // 2
-camera_y = (MAP_HEIGHT - screen_height) // 2
-camera_speed = 20 # vitesse de déplacement de la camera
+camera_x = (largeur_map - largeur_ecran) // 2
+camera_y = (hauteur_map - hauteur_ecran) // 2
+vitesse_camera = 20 # vitesse de déplacement de la camera
 
 # Définition la police
 font = pygame.font.Font('Tiny5-regular.ttf', size = 25)
@@ -88,20 +91,20 @@ def zoom(event, facteur_zoom):
 Cette fonction permet de se déplacer dans le tableau 
 lorsque l'on est dans la partie édition ou dans le jeu
 """
-def deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, map_width, map_height):
+def deplacement(camera_x, camera_y, vitesse_camera, largeur_ecran, hauteur_ecran, largeur_map, hauteur_map):
     keys = pygame.key.get_pressed()
     # deplacement selon la flèche gauche
     if keys[pygame.K_LEFT]:
-        camera_x = max(camera_x - camera_speed, 0)
+        camera_x = max(camera_x - vitesse_camera, 0)
     # deplacement selon la flèche droite
     if keys[pygame.K_RIGHT]:
-        camera_x = min(camera_x + camera_speed, map_width - screen_width)
+        camera_x = min(camera_x + vitesse_camera, largeur_map - largeur_ecran)
     # deplacement selon la flèche haute
     if keys[pygame.K_UP]:
-        camera_y = max(camera_y - camera_speed, 0)
+        camera_y = max(camera_y - vitesse_camera, 0)
     # deplacement selon la flèche basse
     if keys[pygame.K_DOWN]:
-        camera_y = min(camera_y + camera_speed, map_height - screen_height)
+        camera_y = min(camera_y + vitesse_camera, hauteur_map - hauteur_ecran)
     return camera_x, camera_y
 
 """
@@ -121,9 +124,9 @@ def jeu():
 
     # Implémentation d'un bouton quitter :
     quitter_2 = Button(
-        screen,  # Surface to place button on
-        screen_width - 120,  # X-coordinate of top left corner
-        screen_height - 60,  # Y-coordinate of top left corner
+        ecran,  # Surface to place button on
+        largeur_ecran - 120,  # X-coordinate of top left corner
+        hauteur_ecran - 60,  # Y-coordinate of top left corner
         100,  # Width
         40,  # Height
         # Optional Parameters
@@ -136,10 +139,10 @@ def jeu():
         radius=40,  # Radius of border corners (leave empty for not curved)
         onClick=lambda: pygame.quit() or sys.exit()  # Function to call when clicked on
     )
-    menu_2= Button(
-        screen,  # Surface to place button on
-        screen_width - 230,  # X-coordinate of top left corner
-        screen_height - 60,  # Y-coordinate of top left corner
+    retour_menu_3= Button(
+        ecran,  # Surface to place button on
+        largeur_ecran - 230,  # X-coordinate of top left corner
+        hauteur_ecran - 60,  # Y-coordinate of top left corner
         100,  # Width
         40,  # Height
         # Optional Parameters
@@ -157,7 +160,7 @@ def jeu():
     matrice_temp = [row[:] for row in matrice]
     running = True
     while running:
-        screen.fill((255, 255, 255))
+        ecran.fill((255, 255, 255))
 
         # Gestion des événements
         events = pygame.event.get()
@@ -168,12 +171,12 @@ def jeu():
             facteur_zoom = zoom(event, facteur_zoom)
         #bouton quitter
         quitter_2.listen(events)
-        menu_2.listen(events)
+        retour_menu_3.listen(events)
 
         # Gestion du déplacement avec appel de la fonction
-        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,MAP_HEIGHT)
+        camera_x, camera_y = deplacement(camera_x, camera_y, vitesse_camera, largeur_ecran, hauteur_ecran, largeur_map,hauteur_map)
         # Dessin de la partie visible de la carte sur la fenêtre
-        screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
+        ecran.blit(surface_map, (0, 0), (camera_x, camera_y, largeur_ecran, hauteur_ecran))
 
         # Applications de la fonction règle qui modifie l'état des cellules
         for y in range(len(matrice) - 1):
@@ -185,10 +188,10 @@ def jeu():
         # Copie de la matrice
         matrice = [row[:] for row in matrice_temp]
         # Dessin de la grille
-        dessiner_grille(map_surface, matrice, facteur_zoom)
+        dessiner_grille(surface_map, matrice, facteur_zoom)
         # Dessin du bouton quitter
         quitter_2.draw()
-        menu_2.draw()
+        retour_menu_3.draw()
 
         # Mise à jour de la fenetre
         pygame.display.flip()
@@ -202,13 +205,13 @@ Cette fonction est la fonction de menu:
 Celle-ci affiche 3 boutons (Jouer, Règles et Quitter)
 """
 def show_menu():
-    global state, play, quitter, reg
+    global state, jouer, quitter, regle
     state = "menu"
     # Création du bouton Jouer
-    play = Button(
-        screen,  # ecran choisi
-        screen_width // 2 - 150,   # coordonnes x bouton
-        screen_height // 2 - 250,  # coordonnes y bouton
+    jouer = Button(
+        ecran,  # ecran choisi
+        largeur_ecran // 2 - 150,   # coordonnes x bouton
+        hauteur_ecran // 2 - 250,  # coordonnes y bouton
         300,  # largeur
         100,  # hauteur
 
@@ -225,9 +228,9 @@ def show_menu():
 
     # Création du bouton Quitter
     quitter = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width // 2 - 150,  # Coordonnée x du coin supérieur gauche
-        screen_height // 2 + 150,  # Coordonnée y du coin supérieur gauche
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran // 2 - 150,  # Coordonnée x du coin supérieur gauche
+        hauteur_ecran // 2 + 150,  # Coordonnée y du coin supérieur gauche
         300,  # Largeur
         100,  # Hauteur
 
@@ -243,10 +246,10 @@ def show_menu():
     )
 
     # Création du bouton Règles
-    reg = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width // 2 - 150,  # Coordonnée x du coin supérieur gauche
-        screen_height // 2 - 50,  # Coordonnée y du coin supérieur gauche
+    regle = Button(
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran // 2 - 150,  # Coordonnée x du coin supérieur gauche
+        hauteur_ecran // 2 - 50,  # Coordonnée y du coin supérieur gauche
         300,  # Largeur
         100,  # Hauteur
 
@@ -266,13 +269,13 @@ Cette fonction est la fonction de règles:
 Celle-ci affiche les règles du jeu pour le joueur 
 """
 def show_rules():
-    global state, back_to_menu
+    global state, retour_menu
     state = "rules"
     # Création du bouton Retour au Menu
-    back_to_menu = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width - 170,  # Coordonnée x du coin supérieur gauche
-        screen_height - 70,  # Coordonnée y du coin supérieur gauche
+    retour_menu = Button(
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 170,  # Coordonnée x du coin supérieur gauche
+        hauteur_ecran - 70,  # Coordonnée y du coin supérieur gauche
         150,  # Largeur
         50,  # Hauteur
 
@@ -287,13 +290,7 @@ def show_rules():
         onClick=show_menu  # Fonction à appeler lors du clic
     )
 
-
-rect_color = (255, 255, 255, 180)  # Blanc avec 50% de transparence
-rect_width, rect_height = 980, 860
-rect_surface = pygame.Surface((screen_width,screen_height), pygame.SRCALPHA)
-rect_surface.fill(rect_color)
-
-def rst():
+def reinitialise():
     global matrice
     for i in range(len(matrice)):  # la liste de listes fera une largeur de la variable largeur
         for j in range(len(matrice[0])):  # la liste de listes fera une longueur de la variable longueur
@@ -307,16 +304,16 @@ de découvrir comment fonctionne les cellules entre elles dans le jeu.
 Il peut se déplacer, zoomer et dézoomer afin d'avoir une surface de dessin plus grande
 """
 def edition():
-    global state, matrice, camera_x, camera_y, facteur_zoom, back_to_menu
+    global state, matrice, camera_x, camera_y, facteur_zoom, retour_menu
     state = "edition"
     pygame.init()
 
     # Variables pour les boutons
     # Création du bouton Retour au Menu 2
-    back_to_menu_2 = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width - 465,  # Coordonnée x du coin supérieur gauche
-        screen_height - 90,  # Coordonnée y du coin supérieur gauche
+    retour_menu_2 = Button(
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 465,  # Coordonnée x du coin supérieur gauche
+        hauteur_ecran - 90,  # Coordonnée y du coin supérieur gauche
         150,  # Largeur
         50,  # Hauteur
 
@@ -333,9 +330,9 @@ def edition():
 
     # Création du bouton Commencer le Jeu
     jeuB = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width - 650,  # Coordonnée x du coin supérieur gauche
-        screen_height - 90,  # Coordonnée y du coin supérieur gauche
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 650,  # Coordonnée x du coin supérieur gauche
+        hauteur_ecran - 90,  # Coordonnée y du coin supérieur gauche
         175,  # Largeur
         50,  # Hauteur
 
@@ -351,9 +348,9 @@ def edition():
     )
 
     reini = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width - 860,  # Coordonnée x du coin supérieur gauche
-        screen_height - 90,  # Coordonnée y du coin supérieur gauche
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 860,  # Coordonnée x du coin supérieur gauche
+        hauteur_ecran - 90,  # Coordonnée y du coin supérieur gauche
         200,  # Largeur
         50,  # Hauteur
 
@@ -365,7 +362,7 @@ def edition():
         hoverColour=(150, 0, 0),  # Couleur du bouton survolé
         pressedColour=(0, 200, 20),  # Couleur du bouton enfoncé
         radius=40,  # Rayon pour arrondir les coins du bouton
-        onClick=rst  # Fonction à appeler lors du clic
+        onClick=reinitialise  # Fonction à appeler lors du clic
     )
 
     #############################Definition des boutons et initialisation des images pour le menu édition#############################
@@ -392,8 +389,8 @@ def edition():
 
     # Création du bouton Canoë
     canoe_btn = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width - 275,  # Coordonnée x du coin supérieur gauche
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 275,  # Coordonnée x du coin supérieur gauche
         50,  # Coordonnée y du coin supérieur gauche
         100,  # Largeur
         100,  # Hauteur
@@ -404,8 +401,8 @@ def edition():
 
     # Création du bouton Croix
     croix_btn = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width - 125,  # Coordonnée x du coin supérieur gauche
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 125,  # Coordonnée x du coin supérieur gauche
         50,  # Coordonnée y du coin supérieur gauche
         100,  # Largeur
         100,  # Hauteur
@@ -416,8 +413,8 @@ def edition():
 
     # Création du bouton Clignotant
     cligno_btn = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width - 275,  # Coordonnée x du coin supérieur gauche
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 275,  # Coordonnée x du coin supérieur gauche
         200,  # Coordonnée y du coin supérieur gauche
         100,  # Largeur
         100,  # Hauteur
@@ -428,8 +425,8 @@ def edition():
 
     # Création du bouton Hameçon
     hamecon_btn = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width - 125,  # Coordonnée x du coin supérieur gauche
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 125,  # Coordonnée x du coin supérieur gauche
         200,  # Coordonnée y du coin supérieur gauche
         100,  # Largeur
         100,  # Hauteur
@@ -440,8 +437,8 @@ def edition():
 
     # Création du bouton Hameçon 2
     hamecon2_btn = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width - 275,  # Coordonnée x du coin supérieur gauche
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 275,  # Coordonnée x du coin supérieur gauche
         350,  # Coordonnée y du coin supérieur gauche
         100,  # Largeur
         100,  # Hauteur
@@ -452,8 +449,8 @@ def edition():
 
     # Création du bouton Penntadeca
     penntadeca_btn = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width - 125,  # Coordonnée x du coin supérieur gauche
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 125,  # Coordonnée x du coin supérieur gauche
         350,  # Coordonnée y du coin supérieur gauche
         100,  # Largeur
         100,  # Hauteur
@@ -464,8 +461,8 @@ def edition():
 
     # Création du bouton Deux Lapins
     deuxLapins_btn = Button(
-        screen,  # Surface sur laquelle placer le bouton
-        screen_width - 275,  # Coordonnée x du coin supérieur gauche
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 275,  # Coordonnée x du coin supérieur gauche
         500,  # Coordonnée y du coin supérieur gauche
         100,  # Largeur
         100,  # Hauteur
@@ -488,8 +485,8 @@ def edition():
         Elle affiche un texte sur fond coloré complété par celui donné en paramètres.'''
         surface_texte = font.render("Insertion : " + cdc, True, noir,(125, 255, 175))
         rect_texte = surface_texte.get_rect()
-        rect_texte.center = ((screen_width - 300)// 2, 30)
-        screen.blit(surface_texte, rect_texte)                       # Affichage du texte
+        rect_texte.center = ((largeur_ecran - 300)// 2, 30)
+        ecran.blit(surface_texte, rect_texte)                       # Affichage du texte
 
     #Mise en place des modes de dessin : drawing = False tant que le second clic n'a pas été fait.
     #Quand on clique sur le Canva après avoir cliqué sur une image de forme prédéfinie, drawing = True :
@@ -505,26 +502,26 @@ def edition():
 
 
     if state == "menu":
-        play.draw()
+        jouer.draw()
         quitter.draw()
-        reg.draw()
+        regle.draw()
     # tant qu'on est dans l'état édition :
     while state == "edition":
         for event in pygame.event.get():
-            back_to_menu_2.listen(pygame.event.get())               #On met à jour régulièrement l'état du bouton back_to_menu_2
+            retour_menu_2.listen(pygame.event.get())               #On met à jour régulièrement l'état du bouton retour_menu_2
             jeuB.listen(pygame.event.get())
             reini.listen(pygame.event.get())
             if event.type == pygame.QUIT:
                 pygame.quit()                                       #La fenêtre se ferme et le programme s'arrête si le bouton quitter est cliqué
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                back_to_menu_2.draw()                               #On place le bouton back_to_menu_2
+                retour_menu_2.draw()                               #On place le bouton retour_menu_2
                 x, y = event.pos                                    #on relève les coordonnées de la souris
 
                 '''On met en place les conditions pour savoir quelle image afficher lorsque l'on clique sur une image
                 représentant une forme prédéfinie.'''
                 #Si on appuie dans la zone correspondant au bouton Canoe :
-                if (screen_width-275 <= x <= screen_width-175) and (50 <= y <= 150) :
+                if (largeur_ecran-275 <= x <= largeur_ecran-175) and (50 <= y <= 150) :
                     if event.button == 1 :
                         if not drawing:                             # Ce premier clic prépare le placement du rectangle
                             drawing_canoe = True
@@ -532,14 +529,14 @@ def edition():
 
 
                 # Si on appuie dans la zone correspondant au bouton Croix :
-                elif (screen_width-125 <= x <= screen_width-25) and (50 <= y <= 150) :
+                elif (largeur_ecran-125 <= x <= largeur_ecran-25) and (50 <= y <= 150) :
                     if event.button == 1 :
                         if not drawing:
                             drawing_croix = True
                             break
 
                 # Si on appuie dans la zone correspondant au bouton Cligno :
-                elif (screen_width-275 <= x <= screen_width-175) and (200 <= y <= 300) :
+                elif (largeur_ecran-275 <= x <= largeur_ecran-175) and (200 <= y <= 300) :
                     if event.button == 1 :
                         if not drawing:
                             # Premier clic pour préparer le placement de l'image
@@ -547,7 +544,7 @@ def edition():
                             break
 
                 # Si on appuie dans la zone correspondant au bouton Hameçon :
-                elif (screen_width-125 <= x <= screen_width-25) and (200 <= y <= 300) :
+                elif (largeur_ecran-125 <= x <= largeur_ecran-25) and (200 <= y <= 300) :
                     if event.button == 1 :
                         if not drawing:
                             # Premier clic pour préparer le placement de l'image
@@ -555,7 +552,7 @@ def edition():
                             break
 
                 # Si on appuie dans la zone correspondant au bouton Hameçon 2 :
-                elif (screen_width-275 <= x <= screen_width-175) and (350 <= y <= 450) :
+                elif (largeur_ecran-275 <= x <= largeur_ecran-175) and (350 <= y <= 450) :
                     if event.button == 1 :
                         if not drawing:
                             # Premier clic pour préparer le placement de l'image
@@ -563,7 +560,7 @@ def edition():
                             break
 
                 # Si on appuie dans la zone correspondant au bouton Penta décathlon:
-                elif (screen_width-125 <= x <= screen_width-25) and (350 <= y <= 450) :
+                elif (largeur_ecran-125 <= x <= largeur_ecran-25) and (350 <= y <= 450) :
                     if event.button == 1 :
                         if not drawing:
                             # Premier clic pour préparer le placement de l'image
@@ -571,7 +568,7 @@ def edition():
                             break
 
                 # Si on appuie dans la zone correspondant au bouton Deux Lapins :
-                elif (screen_width-275 <= x <= screen_width-175) and (500 <= y <= 600) :
+                elif (largeur_ecran-275 <= x <= largeur_ecran-175) and (500 <= y <= 600) :
                     if event.button == 1 :
                         if not drawing:
                             drawing_deuxLapins = True
@@ -636,10 +633,10 @@ def edition():
 
 
             facteur_zoom = zoom(event, facteur_zoom)
-        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,MAP_HEIGHT)
-        screen.fill((255, 255, 255))
-        screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
-        dessiner_grille(map_surface, matrice, facteur_zoom)
+        camera_x, camera_y = deplacement(camera_x, camera_y, vitesse_camera, largeur_ecran, hauteur_ecran, largeur_map,hauteur_map)
+        ecran.fill((255, 255, 255))
+        ecran.blit(surface_map, (0, 0), (camera_x, camera_y, largeur_ecran, hauteur_ecran))
+        dessiner_grille(surface_map, matrice, facteur_zoom)
 
 
         #### Fonctions d'affichage du mode en cours : un texte avec fond coloré s'affiche tant qu'une image est sélectionnée ####
@@ -659,7 +656,7 @@ def edition():
             mode_actif("Deux Lapins")
 
         #Ce rectangle gris est le fond de la fenêtre d'affichage des images des formes prédéfinies
-        pygame.draw.rect(screen, (170, 170, 170), [screen_width - 300, 0, 300, screen_height])
+        pygame.draw.rect(ecran, (170, 170, 170), [largeur_ecran - 300, 0, 300, hauteur_ecran])
 
         #On affiche tous les boutons
         canoe_btn.draw()
@@ -672,7 +669,7 @@ def edition():
 
         #On affiche les boutons de déplacement entre les menus / de sortie de la fenêtre
         jeuB.draw()
-        back_to_menu_2.draw()
+        retour_menu_2.draw()
         reini.draw()
         pygame.display.flip()
 
@@ -704,21 +701,21 @@ def main():
 
         # Calculer les coordonnées pour centrer la vidéo
         video_width, video_height = frame_surface.get_size()
-        x = (screen_width - video_width) // 2 - 80
-        y = (screen_height - video_height) // 2
+        x = (largeur_ecran - video_width) // 2 - 80
+        y = (hauteur_ecran - video_height) // 2
 
         # Afficher l'image
-        screen.blit(frame_surface, (x, y))
-        screen.blit(rect_surface, (0, 0))
+        ecran.blit(frame_surface, (x, y))
+        ecran.blit(rect_surface, (0, 0))
 
         titre = "Le Jeu de la Vie"
         titre_police = font_titre.render(titre, True, noir)
-        screen.blit(titre_police, (340, 30))
+        ecran.blit(titre_police, (340, 30))
 
         if state == "menu":         # Condition pour revenir au menu
-            play.draw()
+            jouer.draw()
             quitter.draw()
-            reg.draw()
+            regle.draw()
         elif state == "rules":      # Ou aller aux règles
             # Afficher le texte des règles
             rules_text = [
@@ -735,11 +732,11 @@ def main():
             y_offset = 8
             for line in rules_text:
                 text_surface = font.render(line, True, noir)
-                screen.blit(text_surface, (70, y_offset))
+                ecran.blit(text_surface, (70, y_offset))
                 y_offset += 40
 
             # Dessiner le bouton pour revenir au menu
-            back_to_menu.draw()
+            retour_menu.draw()
         elif state == "edition":
             edition()
 
