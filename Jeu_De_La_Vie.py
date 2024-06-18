@@ -334,9 +334,9 @@ def edition():
     # Création du bouton Commencer le Jeu
     jeuB = Button(
         screen,  # Surface sur laquelle placer le bouton
-        screen_width - 650,  # Coordonnée x du coin supérieur gauche
+        screen_width - 665,  # Coordonnée x du coin supérieur gauche
         screen_height - 90,  # Coordonnée y du coin supérieur gauche
-        175,  # Largeur
+        190,  # Largeur
         50,  # Hauteur
 
         # Paramètres du bouton
@@ -346,13 +346,13 @@ def edition():
         inactiveColour=(200, 50, 0),  # Couleur du bouton inactif
         hoverColour=(150, 0, 0),  # Couleur du bouton survolé
         pressedColour=(0, 200, 20),  # Couleur du bouton enfoncé
-        radius=20,  # Rayon pour arrondir les coins du bouton
+        radius=40,  # Rayon pour arrondir les coins du bouton
         onClick=jeu  # Fonction à appeler lors du clic
     )
 
     reini = Button(
         screen,  # Surface sur laquelle placer le bouton
-        screen_width - 860,  # Coordonnée x du coin supérieur gauche
+        screen_width - 875,  # Coordonnée x du coin supérieur gauche
         screen_height - 90,  # Coordonnée y du coin supérieur gauche
         200,  # Largeur
         50,  # Hauteur
@@ -488,7 +488,7 @@ def edition():
         Elle affiche un texte sur fond coloré complété par celui donné en paramètres.'''
         surface_texte = font.render("Insertion : " + cdc, True, noir,(125, 255, 175))
         rect_texte = surface_texte.get_rect()
-        rect_texte.center = ((screen_width - 300)// 2, 50)
+        rect_texte.center = ((screen_width - 300)// 2, 30)
         # Affichage du texte
         screen.blit(surface_texte, rect_texte)
 
