@@ -1,6 +1,5 @@
 # --- Le jeu de la vie re-créé par le groupe de TP avec Cuvelier Line, Villeret Baptiste et Besse Fabien  --- #
 
-from tkinter import *
 import sys
 import pygame
 
@@ -151,7 +150,7 @@ def jeu():
         hoverColour=(150, 0, 0),  # Colour of button when being hovered over
         pressedColour=(0, 200, 20),  # Colour of button when being clicked
         radius=40,  # Radius of border corners (leave empty for not curved)
-        onClick=show_menu  # Function to call when clicked on
+        onClick=main  # Function to call when clicked on
     )
 
     # Mise à jour de l'état du jeu et création de la matrice temporaire pour la modification
@@ -294,6 +293,13 @@ rect_width, rect_height = 980, 860
 rect_surface = pygame.Surface((screen_width,screen_height), pygame.SRCALPHA)
 rect_surface.fill(rect_color)
 
+def rst():
+    global matrice
+    for i in range(len(matrice)):  # la liste de listes fera une largeur de la variable largeur
+        for j in range(len(matrice[0])):  # la liste de listes fera une longueur de la variable longueur
+            matrice[i][j] = 0
+    return matrice
+
 """
 Cette fonction est la fonction d'édition:
 Celle-ci permet au joueur de dessiner a sa guise ou bien, a partir des formes préfaites,
@@ -335,13 +341,31 @@ def edition():
 
         # Paramètres du bouton
         text='COMMENCER',  # Texte à afficher
-        fontSize=29,  # Taille de la police
+        fontSize=30,  # Taille de la police
         margin=20,  # Marge pour centrer le texte
         inactiveColour=(200, 50, 0),  # Couleur du bouton inactif
         hoverColour=(150, 0, 0),  # Couleur du bouton survolé
         pressedColour=(0, 200, 20),  # Couleur du bouton enfoncé
         radius=20,  # Rayon pour arrondir les coins du bouton
         onClick=jeu  # Fonction à appeler lors du clic
+    )
+
+    reini = Button(
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width - 860,  # Coordonnée x du coin supérieur gauche
+        screen_height - 90,  # Coordonnée y du coin supérieur gauche
+        200,  # Largeur
+        50,  # Hauteur
+
+        # Paramètres du bouton
+        text='RÉINITIALISER',  # Texte à afficher
+        fontSize=30,  # Taille de la police
+        margin=20,  # Marge pour centrer le texte
+        inactiveColour=(200, 50, 0),  # Couleur du bouton inactif
+        hoverColour=(150, 0, 0),  # Couleur du bouton survolé
+        pressedColour=(0, 200, 20),  # Couleur du bouton enfoncé
+        radius=40,  # Rayon pour arrondir les coins du bouton
+        onClick=rst  # Fonction à appeler lors du clic
     )
 
     #############################Definition des boutons et initialisation des images pour le menu édition#############################
@@ -489,6 +513,7 @@ def edition():
         for event in pygame.event.get():
             back_to_menu_2.listen(pygame.event.get())               #On met à jour régulièrement l'état du bouton back_to_menu_2
             jeuB.listen(pygame.event.get())
+            reini.listen(pygame.event.get())
             if event.type == pygame.QUIT:
                 pygame.quit()                                       #La fenêtre se ferme et le programme s'arrête si le bouton quitter est cliqué
                 sys.exit()
@@ -648,6 +673,7 @@ def edition():
         #On affiche les boutons de déplacement entre les menus / de sortie de la fenêtre
         jeuB.draw()
         back_to_menu_2.draw()
+        reini.draw()
         pygame.display.flip()
 
     state = "menu"
