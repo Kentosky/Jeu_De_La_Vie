@@ -139,6 +139,22 @@ def jeu():
         radius=40,  # Radius of border corners (leave empty for not curved)
         onClick=lambda: pygame.quit() or sys.exit()  # Function to call when clicked on
     )
+    menu_2= Button(
+        screen,  # Surface to place button on
+        screen_width - 230,  # X-coordinate of top left corner
+        screen_height - 60,  # Y-coordinate of top left corner
+        100,  # Width
+        40,  # Height
+        # Optional Parameters
+        text='MENU',  # Text to display
+        fontSize=25,  # Size of font
+        margin=20,  # Minimum distance between text/image and edge of button
+        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
+        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
+        pressedColour=(0, 200, 20),  # Colour of button when being clicked
+        radius=40,  # Radius of border corners (leave empty for not curved)
+        onClick=show_menu  # Function to call when clicked on
+    )
 
     # Mise à jour de l'état du jeu et création de la matrice temporaire pour la modification
     matrice_temp = [row[:] for row in matrice]
@@ -155,6 +171,7 @@ def jeu():
             facteur_zoom = zoom(event, facteur_zoom)
         #bouton quitter
         quitter_2.listen(events)
+        menu_2.listen(events)
 
         # Gestion du déplacement avec appel de la fonction
         camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,MAP_HEIGHT)
@@ -174,6 +191,8 @@ def jeu():
         dessiner_grille(map_surface, matrice, facteur_zoom)
         # Dessin du bouton quitter
         quitter_2.draw()
+        menu_2.draw()
+
         # Mise à jour de la fenetre
         pygame.display.flip()
         clock.tick(10)  # Limite le jeu à 10 images par seconde
