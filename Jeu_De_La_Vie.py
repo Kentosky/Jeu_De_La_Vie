@@ -685,6 +685,9 @@ def edition():
 # Modification de la fonction main pour inclure l'état edition
 def main():
     global state
+    pygame.mixer.init()  # Initialisation du mixer pour la musique in game
+    pygame.mixer.music.load("son_jdv.mp3")  # Load du son trop cool
+    pygame.mixer.music.play(10, 0.0)  # Lancement de la musique (elle se répetera 10 fois
     show_menu()  # Afficher le menu principal
 
     state = "menu"
@@ -755,11 +758,6 @@ def main():
 """ ~~~ PARTIE EXECUTIVE : ~~~ """
 
 # Nous commençons ici le main, avec l'appel du main, le reste se fait dans le main (il n'y a pas grand chose ici du coup).
-
-pygame.mixer.init()                             # Initialisation du mixer pour la musique in game
-pygame.mixer.music.load("son_jdv.mp3")          # Load du son trop cool
-pygame.mixer.music.play(10, 0.0)     # Lancement de la musique (elle se répetera 10 fois
-
 # Appeler la fonction principale main
 if __name__ == "__main__":
     main()
