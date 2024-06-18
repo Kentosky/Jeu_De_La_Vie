@@ -100,14 +100,6 @@ def jeu():
     pygame.mixer.music.play(10, 0.0)
     clock = pygame.time.Clock()
 
-    # Dimensions de l'écran
-    screen_width = 800
-    screen_height = 600
-    screen = pygame.display.set_mode((screen_width, screen_height))
-
-    # Création de la surface pour la carte
-    map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
-
     # Implémentation d'un bouton :
     quitter_2 = Button(
         screen,  # Surface to place button on
