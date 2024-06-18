@@ -107,98 +107,6 @@ def deplacement(camera_x, camera_y, vitesse_camera, largeur_ecran, hauteur_ecran
         camera_y = min(camera_y + vitesse_camera, hauteur_map - hauteur_ecran)
     return camera_x, camera_y
 
-"""
-Cette fonction est la fonction de jeu:
-Celle-ci reprend le schéma dessiner par le joueur dans la partie édition et 
-effectue les regles de survie établie par le jeu
-Le joueur pourra zoomer,dézoomer, se déplacer et surtout contempler les cellules se développer
-"""
-def jeu():
-    global matrice, camera_x, camera_y, facteur_zoom
-    # On gère la musique du jeu
-    pygame.init()
-    pygame.mixer.init()
-    pygame.mixer.music.load("son_jdv2.mp3")
-    pygame.mixer.music.play(10, 0.0)
-    clock = pygame.time.Clock()
-
-    # Implémentation d'un bouton quitter :
-    quitter_2 = Button(
-        ecran,  # Surface to place button on
-        largeur_ecran - 120,  # X-coordinate of top left corner
-        hauteur_ecran - 60,  # Y-coordinate of top left corner
-        100,  # Width
-        40,  # Height
-        # Optional Parameters
-        text='QUITTER',  # Text to display
-        fontSize=25,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
-        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=40,  # Radius of border corners (leave empty for not curved)
-        onClick=lambda: pygame.quit() or sys.exit()  # Function to call when clicked on
-    )
-    retour_menu_3= Button(
-        ecran,  # Surface to place button on
-        largeur_ecran - 230,  # X-coordinate of top left corner
-        hauteur_ecran - 60,  # Y-coordinate of top left corner
-        100,  # Width
-        40,  # Height
-        # Optional Parameters
-        text='MENU',  # Text to display
-        fontSize=25,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
-        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=40,  # Radius of border corners (leave empty for not curved)
-        onClick=main  # Function to call when clicked on
-    )
-
-    # Mise à jour de l'état du jeu et création de la matrice temporaire pour la modification
-    matrice_temp = [row[:] for row in matrice]
-    running = True
-    while running:
-        ecran.fill((255, 255, 255))
-
-        # Gestion des événements
-        events = pygame.event.get()
-        for event in events:
-            if event.type == pygame.QUIT:
-                running = False
-            # Gestion du zoom avec appel de la fonction
-            facteur_zoom = zoom(event, facteur_zoom)
-        #bouton quitter
-        quitter_2.listen(events)
-        retour_menu_3.listen(events)
-
-        # Gestion du déplacement avec appel de la fonction
-        camera_x, camera_y = deplacement(camera_x, camera_y, vitesse_camera, largeur_ecran, hauteur_ecran, largeur_map,hauteur_map)
-        # Dessin de la partie visible de la carte sur la fenêtre
-        ecran.blit(surface_map, (0, 0), (camera_x, camera_y, largeur_ecran, hauteur_ecran))
-
-        # Applications de la fonction règle qui modifie l'état des cellules
-        for y in range(len(matrice) - 1):
-            for x in range(len(matrice[y]) - 1):
-                # Création de toutes les cellules présentes sur la map et application des règles
-                ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
-                ma_cell.regle()
-
-        # Copie de la matrice
-        matrice = [row[:] for row in matrice_temp]
-        # Dessin de la grille
-        dessiner_grille(surface_map, matrice, facteur_zoom)
-        # Dessin du bouton quitter
-        quitter_2.draw()
-        retour_menu_3.draw()
-
-        # Mise à jour de la fenetre
-        pygame.display.flip()
-        clock.tick(10)  # Limite le jeu à 10 images par seconde
-
-    pygame.quit()
-    sys.exit()
 
 """
 Cette fonction est la fonction de menu:
@@ -675,6 +583,98 @@ def edition():
 
     state = "menu"
 
+"""
+Cette fonction est la fonction de jeu:
+Celle-ci reprend le schéma dessiner par le joueur dans la partie édition et 
+effectue les regles de survie établie par le jeu
+Le joueur pourra zoomer,dézoomer, se déplacer et surtout contempler les cellules se développer
+"""
+def jeu():
+    global matrice, camera_x, camera_y, facteur_zoom
+    # On gère la musique du jeu
+    pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load("son_jdv2.mp3")
+    pygame.mixer.music.play(10, 0.0)
+    clock = pygame.time.Clock()
+
+    # Implémentation d'un bouton quitter :
+    quitter_2 = Button(
+        ecran,  # Surface to place button on
+        largeur_ecran - 120,  # X-coordinate of top left corner
+        hauteur_ecran - 60,  # Y-coordinate of top left corner
+        100,  # Width
+        40,  # Height
+        # Optional Parameters
+        text='QUITTER',  # Text to display
+        fontSize=25,  # Size of font
+        margin=20,  # Minimum distance between text/image and edge of button
+        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
+        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
+        pressedColour=(0, 200, 20),  # Colour of button when being clicked
+        radius=40,  # Radius of border corners (leave empty for not curved)
+        onClick=lambda: pygame.quit() or sys.exit()  # Function to call when clicked on
+    )
+    retour_menu_3= Button(
+        ecran,  # Surface to place button on
+        largeur_ecran - 230,  # X-coordinate of top left corner
+        hauteur_ecran - 60,  # Y-coordinate of top left corner
+        100,  # Width
+        40,  # Height
+        # Optional Parameters
+        text='MENU',  # Text to display
+        fontSize=25,  # Size of font
+        margin=20,  # Minimum distance between text/image and edge of button
+        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
+        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
+        pressedColour=(0, 200, 20),  # Colour of button when being clicked
+        radius=40,  # Radius of border corners (leave empty for not curved)
+        onClick=main  # Function to call when clicked on
+    )
+
+    # Mise à jour de l'état du jeu et création de la matrice temporaire pour la modification
+    matrice_temp = [row[:] for row in matrice]
+    running = True
+    while running:
+        ecran.fill((255, 255, 255))
+
+        # Gestion des événements
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                running = False
+            # Gestion du zoom avec appel de la fonction
+            facteur_zoom = zoom(event, facteur_zoom)
+        #bouton quitter
+        quitter_2.listen(events)
+        retour_menu_3.listen(events)
+
+        # Gestion du déplacement avec appel de la fonction
+        camera_x, camera_y = deplacement(camera_x, camera_y, vitesse_camera, largeur_ecran, hauteur_ecran, largeur_map,hauteur_map)
+        # Dessin de la partie visible de la carte sur la fenêtre
+        ecran.blit(surface_map, (0, 0), (camera_x, camera_y, largeur_ecran, hauteur_ecran))
+
+        # Applications de la fonction règle qui modifie l'état des cellules
+        for y in range(len(matrice) - 1):
+            for x in range(len(matrice[y]) - 1):
+                # Création de toutes les cellules présentes sur la map et application des règles
+                ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
+                ma_cell.regle()
+
+        # Copie de la matrice
+        matrice = [row[:] for row in matrice_temp]
+        # Dessin de la grille
+        dessiner_grille(surface_map, matrice, facteur_zoom)
+        # Dessin du bouton quitter
+        quitter_2.draw()
+        retour_menu_3.draw()
+
+        # Mise à jour de la fenetre
+        pygame.display.flip()
+        clock.tick(10)  # Limite le jeu à 10 images par seconde
+
+    pygame.quit()
+    sys.exit()
 
 # Modification de la fonction main pour inclure l'état edition
 def main():
