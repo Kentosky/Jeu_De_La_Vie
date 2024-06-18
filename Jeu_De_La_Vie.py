@@ -293,6 +293,13 @@ rect_width, rect_height = 980, 860
 rect_surface = pygame.Surface((screen_width,screen_height), pygame.SRCALPHA)
 rect_surface.fill(rect_color)
 
+def rst():
+    global matrice
+    for i in range(len(matrice)):  # la liste de listes fera une largeur de la variable largeur
+        for j in range(len(matrice[0])):  # la liste de listes fera une longueur de la variable longueur
+            matrice[i][j] = 0
+    return matrice
+
 """
 Cette fonction est la fonction d'édition:
 Celle-ci permet au joueur de dessiner a sa guise ou bien, a partir des formes préfaites,
@@ -358,7 +365,7 @@ def edition():
         hoverColour=(150, 0, 0),  # Couleur du bouton survolé
         pressedColour=(0, 200, 20),  # Couleur du bouton enfoncé
         radius=40,  # Rayon pour arrondir les coins du bouton
-        onClick=show_menu  # Fonction à appeler lors du clic
+        onClick=rst  # Fonction à appeler lors du clic
     )
 
     #############################Definition des boutons et initialisation des images pour le menu édition#############################
