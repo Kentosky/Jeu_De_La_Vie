@@ -230,44 +230,78 @@ rect_surface.fill(rect_color)
 
 
 def edition():
-    global state, matrice, camera_x, camera_y, facteur_zoom
+    global state, matrice, camera_x, camera_y, facteur_zoom, back_to_menu
     state = "edition"
     pygame.init()
-    ecran_edition = pygame.display.set_mode((screen_width, screen_height))
+    screen = pygame.display.set_mode((screen_width, screen_height))
 
     # Définition des polices d'écriture et des textes :
     smallfont = pygame.font.SysFont('Corbel', 20)
 
     # Variables pour les boutons
-    confirmer_rect = pygame.Rect(screen_width / 2 - 100, screen_height - 80, 200, 50)
-    quitter_rect = pygame.Rect(screen_width / 2 - 100, screen_height - 150, 200, 50)
+    back_to_menu_2 = Button(
+        screen,  # Surface to place button on
+        screen_width - 165,  # X-coordinate of top left corner
+        screen_height - 90,  # Y-coordinate of top left corner
+        150,  # Width
+        50,  # Height
 
+        # Optional Parameters
+        text='MENU',  # Text to display
+        fontSize=30,  # Size of font
+        margin=20,  # Minimum distance between text/image and edge of button
+        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
+        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
+        pressedColour=(0, 200, 20),  # Colour of button when being clicked
+        radius=40,  # Radius of border corners (leave empty for not curved)
+        onClick=show_menu  # Function to call when clicked on
+    )
+    jeuB = Button(
+        screen,  # Surface to place button on
+        screen_width - 350,  # X-coordinate of top left corner
+        screen_height - 90,  # Y-coordinate of top left corner
+        170,  # Width
+        50,  # Height
+
+        # Optional Parameters
+        text='COMMENCER',  # Text to display
+        fontSize=30,  # Size of font
+        margin=20,  # Minimum distance between text/image and edge of button
+        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
+        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
+        pressedColour=(0, 200, 20),  # Colour of button when being clicked
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=jeu  # Function to call when clicked on
+    )
+    if state == "menu":
+        play.draw()
+        quitter.draw()
+        reg.draw()
     while state == "edition":
         for event in pygame.event.get():
             mouse = pygame.mouse.get_pos()
+            back_to_menu_2.listen(event)
+            jeuB.listen(event)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if confirmer_rect.collidepoint(mouse):
-                    show_menu()
-                    break
-                if quitter_rect.collidepoint(mouse):
-                    pygame.quit()
-                    sys.exit()
+                back_to_menu_2.draw()
                 x, y = event.pos
                 x = (x + camera_x) // (taille_cellule * facteur_zoom)
                 y = (y + camera_y) // (taille_cellule * facteur_zoom)
                 inverser_couleur_pixel(x, y)
 
             facteur_zoom = zoom(event, facteur_zoom, izoom, zoom_min, zoom_max)
-
         camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,
                                          MAP_HEIGHT)
-        ecran_edition.fill((255, 255, 255))
-        ecran_edition.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
+        screen.fill((255, 255, 255))
+        screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
         dessiner_grille(map_surface, matrice, facteur_zoom)
+        jeuB.draw()
+        back_to_menu_2.draw()
         pygame.display.flip()
+
 
     state = "menu"
 
