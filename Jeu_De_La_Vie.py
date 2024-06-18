@@ -3,8 +3,6 @@
 from tkinter import *
 import sys
 import pygame
-from pygame import time
-import time
 
 import Structures
 import Cellule as Cell
