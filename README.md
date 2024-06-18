@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu de la Vie</title>
 </head>
 <body>
 
 <h1>Jeu de la Vie</h1>
 
-<p>Le Jeu de la Vie est une simulation informatique inventée par le mathématicien John Horton Conway en 1970. C'est un automate cellulaire basé sur une grille de cellules qui peuvent être vivantes ou mortes, avec des règles simples déterminant l'évolution de la grille à chaque étape. 3 étudiants à Polytech Dijon ont pris le temps de recoder cette simulation au dimensions infinies et offrir à l'utilisateur une expérience unique</p>
+<p>Le Jeu de la Vie est une simulation informatique inventée par le mathématicien John Horton Conway en 1970. C'est un automate cellulaire basé sur une grille de cellules qui peuvent être vivantes ou mortes, avec des règles simples déterminant l'évolution de la grille à chaque étape. 3 étudiants à Polytech Dijon ont pris le temps de recoder cette simulation aux dimensions infinies et offrir à l'utilisateur une expérience unique.</p>
 
 <h2>Sommaire</h2>
 <ul>
