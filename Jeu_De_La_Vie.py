@@ -453,6 +453,15 @@ def edition():
         y1 = (y + camera_y) // (taille_cellule * facteur_zoom)
         return x1, y1
 
+    def mode_actif(cdc):
+        surface_texte = text_surface = font.render("Insertion : " + cdc, True, noir,
+                                   (125, 255, 175))
+        rect_texte = surface_texte.get_rect()
+        rect_texte.center = ((screen_width - 300)// 2, 50)
+        # Affichage du texte
+        screen.blit(surface_texte, rect_texte)
+
+
     drawing = False
     drawing_canoe=False
     drawing_croix=False
@@ -478,14 +487,12 @@ def edition():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu_2.draw()
                 x, y = event.pos
-                print("pos = ", x, y)
-                print(screen_width)
                 if (screen_width-275 <= x <= screen_width-175) and (50 <= y <= 150) :
-                    print("canoe")
                     if event.button == 1 :
                         if not drawing:
                             # Premier clic pour préparer le placement du rectangle
                             drawing_canoe = True
+                            break
 
 
                 elif (screen_width-125 <= x <= screen_width-25) and (50 <= y <= 150) :
@@ -497,7 +504,6 @@ def edition():
 
                 elif (screen_width-275 <= x <= screen_width-175) and (200 <= y <= 300) :
                     if event.button == 1 :
-                        print("cligno")
                         if not drawing:
                             # Premier clic pour préparer le placement du rectangle
                             drawing_cligno = True
@@ -581,12 +587,27 @@ def edition():
                 # Dessiner le rectangle
                 pygame.display.flip()
 
+
             facteur_zoom = zoom(event, facteur_zoom)
         camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,MAP_HEIGHT)
         screen.fill((255, 255, 255))
         screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
         dessiner_grille(map_surface, matrice, facteur_zoom)
 
+        if drawing_canoe:
+            mode_actif("Canoe")
+        if drawing_croix:
+            mode_actif("Croix")
+        if drawing_cligno:
+            mode_actif("Cligno")
+        if drawing_hamecon:
+            mode_actif("Hameçon")
+        if drawing_hamecon2:
+            mode_actif("Hameçon 2")
+        if drawing_penntadeca:
+            mode_actif("Pentadecathlon")
+        if drawing_deuxLapins:
+            mode_actif("Deux Lapins")
 
         pygame.draw.rect(screen, (170, 170, 170), [screen_width - 300, 0, 300, screen_height])
 
@@ -660,7 +681,6 @@ def main():
                 "Si une case vide est entourée de exactement 3 cases, alors elle sera vivante le tour", " d’après."
             ]
             y_offset = 8
-            # Afficher le texte sur le canva
             for line in rules_text:
                 text_surface = font.render(line, True, noir)
                 screen.blit(text_surface, (70, y_offset))
