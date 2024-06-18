@@ -460,7 +460,6 @@ def edition():
         rect_texte.center = ((screen_width - 300)// 2, 50)
         # Affichage du texte
         screen.blit(surface_texte, rect_texte)
-        pygame.display.update()
 
 
     drawing = False
