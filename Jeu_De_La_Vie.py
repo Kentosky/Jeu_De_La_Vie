@@ -273,6 +273,96 @@ def edition():
         radius=20,  # Radius of border corners (leave empty for not curved)
         onClick=jeu  # Function to call when clicked on
     )
+    #############################Definition des boutons et initialisation des images pour le menu édition#############################
+    croix = pygame.image.load("croix.png")
+    canoe = pygame.image.load("canoe.png")
+    cligno = pygame.image.load("cligno.png")
+    hamecon = pygame.image.load("hamecon.png")
+    hamecon2 = pygame.image.load("hamecon2.png")
+    penntadeca = pygame.image.load("pentadeca.png")
+    deuxLapins = pygame.image.load("deux_lapins.png")
+
+    # On définit la nouvelle taille :
+    largeur_hauteur_image = (150, 50)
+    croix_redim = pygame.transform.scale(croix, largeur_hauteur_image)
+    canoe_redim = pygame.transform.scale(canoe, largeur_hauteur_image)
+    cligno_redim = pygame.transform.scale(cligno, largeur_hauteur_image)
+    hamecon_redim = pygame.transform.scale(hamecon, largeur_hauteur_image)
+    hamecon2_redim = pygame.transform.scale(hamecon2, largeur_hauteur_image)
+    penntadeca_redim = pygame.transform.scale(penntadeca, largeur_hauteur_image)
+    deuxLapins_redim = pygame.transform.scale(deuxLapins, largeur_hauteur_image)
+
+    canoe_btn = Button(
+        screen,  # Surface to place button on
+        0,  # X-coordinate of top left corner
+        0,  # Y-coordinate of top left corner
+        150,  # Width
+        50,  # Height
+        image=canoe_redim,
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=None  # Function to call when clicked on
+    )
+    croix_btn = Button(
+        screen,  # Surface to place button on
+        0,  # X-coordinate of top left corner
+        0,  # Y-coordinate of top left corner
+        150,  # Width
+        50,  # Height
+        image=croix_redim,
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=None  # Function to call when clicked on
+    )
+    cligno_btn = Button(
+        screen,  # Surface to place button on
+        0,  # X-coordinate of top left corner
+        0,  # Y-coordinate of top left corner
+        150,  # Width
+        50,  # Height
+        image=cligno_redim,
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=None  # Function to call when clicked on
+    )
+    hamecon_btn = Button(
+        screen,  # Surface to place button on
+        0,  # X-coordinate of top left corner
+        0,  # Y-coordinate of top left corner
+        150,  # Width
+        50,  # Height
+        image=hamecon_redim,
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=None  # Function to call when clicked on
+    )
+    hamecon2_btn = Button(
+        screen,  # Surface to place button on
+        0,  # X-coordinate of top left corner
+        0,  # Y-coordinate of top left corner
+        150,  # Width
+        50,  # Height
+        image=hamecon2_redim,
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=None  # Function to call when clicked on
+    )
+    penntadeca_btn = Button(
+        screen,  # Surface to place button on
+        0,  # X-coordinate of top left corner
+        0,  # Y-coordinate of top left corner
+        150,  # Width
+        50,  # Height
+        image=penntadeca_redim,
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=None  # Function to call when clicked on
+    )
+    deuxLapins_btn = Button(
+        screen,  # Surface to place button on
+        0,  # X-coordinate of top left corner
+        0,  # Y-coordinate of top left corner
+        150,  # Width
+        50,  # Height
+        image=deuxLapins_redim,
+        radius=20,  # Radius of border corners (leave empty for not curved)
+        onClick=None  # Function to call when clicked on
+    )
+
     if state == "menu":
         play.draw()
         quitter.draw()
@@ -298,6 +388,16 @@ def edition():
         screen.fill((255, 255, 255))
         screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
         dessiner_grille(map_surface, matrice, facteur_zoom)
+
+        canoe_btn.draw()
+        croix_btn.draw()
+        cligno_btn.draw()
+        hamecon_btn.draw()
+        hamecon2_btn.draw()
+        penntadeca_btn.draw()
+        deuxLapins_btn.draw()
+
+        pygame.draw.rect(screen, (170, 170, 170), [screen_height-50, 0, 400, screen_width])
         jeuB.draw()
         back_to_menu_2.draw()
         pygame.display.flip()
