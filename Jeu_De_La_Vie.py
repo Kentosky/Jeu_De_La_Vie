@@ -345,6 +345,7 @@ def edition():
     )
 
     #############################Definition des boutons et initialisation des images pour le menu édition#############################
+    #Importation des images au format png
     croix = pygame.image.load("croix.png")
     canoe = pygame.image.load("canoe.png")
     cligno = pygame.image.load("cligno.png")
@@ -353,8 +354,10 @@ def edition():
     penntadeca = pygame.image.load("pentadeca.png")
     deuxLapins = pygame.image.load("deux_lapins.png")
 
-    # On définit la nouvelle taille :
+    # On définit la nouvelle taille de l'image afin que toutes aient la même taille :
     largeur_hauteur_image = (100, 100)
+
+    # On redimensionne chaque image
     croix_redim = pygame.transform.scale(croix, largeur_hauteur_image)
     canoe_redim = pygame.transform.scale(canoe, largeur_hauteur_image)
     cligno_redim = pygame.transform.scale(cligno, largeur_hauteur_image)
@@ -449,19 +452,25 @@ def edition():
     # si on est dans l'état menu on affiche les 3 boutons
 
     def convertir_pos_matrice(x, y):
+        '''Cette fonction prend en paramètres x et y qui sont les coordonnées du curseur par rapport au canva.
+        Elle renvoie x1 et y1 qui sont les coordonnées converties pour correspondre aux cellules de la matrice.
+        '''
         x1 = (x + camera_x) // (taille_cellule * facteur_zoom)
         y1 = (y + camera_y) // (taille_cellule * facteur_zoom)
         return x1, y1
 
     def mode_actif(cdc):
-        surface_texte = text_surface = font.render("Insertion : " + cdc, True, noir,
-                                   (125, 255, 175))
+        '''Cette fonction prend en paramètre une chaine de caractères cdc.
+        Elle affiche un texte sur fond coloré complété par celui donné en paramètres.'''
+        surface_texte = font.render("Insertion : " + cdc, True, noir,(125, 255, 175))
         rect_texte = surface_texte.get_rect()
         rect_texte.center = ((screen_width - 300)// 2, 50)
         # Affichage du texte
         screen.blit(surface_texte, rect_texte)
 
-
+    #Mise en place des modes de dessin : drawing = False tant que le second clic n'a pas été fait.
+    #Quand on clique sur le Canva après avoir cliqué sur une image de forme prédéfinie, drawing = True :
+    #On peut maintenant placer la figure aux coordonnées sur lesquelles nous cliquons.
     drawing = False
     drawing_canoe=False
     drawing_croix=False
@@ -476,113 +485,129 @@ def edition():
         play.draw()
         quitter.draw()
         reg.draw()
-    # tant qu'on est dans l'état edition
+    # tant qu'on est dans l'état édition :
     while state == "edition":
         for event in pygame.event.get():
-            back_to_menu_2.listen(pygame.event.get())
+            back_to_menu_2.listen(pygame.event.get())               #On met à jour régulièrement l'état du bouton back_to_menu_2
             jeuB.listen(pygame.event.get())
             if event.type == pygame.QUIT:
-                pygame.quit()
+                pygame.quit()                                       #La fenêtre se ferme et le programme s'arrête si le bouton quitter est cliqué
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                back_to_menu_2.draw()
-                x, y = event.pos
+                back_to_menu_2.draw()                               #On place le bouton back_to_menu_2
+                x, y = event.pos                                    #on relève les coordonnées de la souris
+
+                '''A partir de cette ligne : 
+                On met en place les conditions pour savoir quelle image afficher lorsque l'on clique sur une image
+                représentant une forme prédéfinie.'''
+                #Si on appuie dans la zone correspondant au bouton Canoe :
                 if (screen_width-275 <= x <= screen_width-175) and (50 <= y <= 150) :
                     if event.button == 1 :
-                        if not drawing:
-                            # Premier clic pour préparer le placement du rectangle
+                        if not drawing:                             # Ce premier clic prépare le placement du rectangle
                             drawing_canoe = True
-                            break
+                            break                                   # On arrête la boucle pour ne pas entrer dans les autres conditions if
 
 
+                # Si on appuie dans la zone correspondant au bouton Croix :
                 elif (screen_width-125 <= x <= screen_width-25) and (50 <= y <= 150) :
                     if event.button == 1 :
                         if not drawing:
-                            # Premier clic pour préparer le placement du rectangle
                             drawing_croix = True
                             break
 
+                # Si on appuie dans la zone correspondant au bouton Cligno :
                 elif (screen_width-275 <= x <= screen_width-175) and (200 <= y <= 300) :
                     if event.button == 1 :
                         if not drawing:
-                            # Premier clic pour préparer le placement du rectangle
+                            # Premier clic pour préparer le placement de l'image
                             drawing_cligno = True
                             break
 
+                # Si on appuie dans la zone correspondant au bouton Hameçon :
                 elif (screen_width-125 <= x <= screen_width-25) and (200 <= y <= 300) :
                     if event.button == 1 :
                         if not drawing:
-                            # Premier clic pour préparer le placement du rectangle
+                            # Premier clic pour préparer le placement de l'image
                             drawing_hamecon = True
                             break
 
+                # Si on appuie dans la zone correspondant au bouton Hameçon 2 :
                 elif (screen_width-275 <= x <= screen_width-175) and (350 <= y <= 450) :
                     if event.button == 1 :
                         if not drawing:
-                            # Premier clic pour préparer le placement du rectangle
+                            # Premier clic pour préparer le placement de l'image
                             drawing_hamecon2 = True
                             break
 
+                # Si on appuie dans la zone correspondant au bouton Penta décathlon:
                 elif (screen_width-125 <= x <= screen_width-25) and (350 <= y <= 450) :
                     if event.button == 1 :
                         if not drawing:
-                            # Premier clic pour préparer le placement du rectangle
+                            # Premier clic pour préparer le placement de l'image
                             drawing_penntadeca = True
                             break
 
+                # Si on appuie dans la zone correspondant au bouton Deux Lapins :
                 elif (screen_width-275 <= x <= screen_width-175) and (500 <= y <= 600) :
                     if event.button == 1 :
                         if not drawing:
-                            # Premier clic pour préparer le placement du rectangle
                             drawing_deuxLapins = True
                             break
 
                 else :
+                    '''Conditions pour tracer les images à partir du second Clic (donc après avoir sélectionné l'image)'''
                     if drawing_canoe == True :
-                        x, y = convertir_pos_matrice(x, y)
-                        Structures.canoe(matrice, x, y)
-                        drawing_canoe=False
+                        x, y = convertir_pos_matrice(x, y)                  #On convertit les coordonnées de la souris en coordonnées de la matrice.
+                        Structures.canoe(matrice, x, y)                     #On trace la figure avec la fonction canoe, qui provient du fichier Structures.py
+                        drawing_canoe=False                                 #On réinitialise les variables drawing pour éviter de dessiner plusieurs figures à la suite
                         drawing = False
+                        break
 
-                    if drawing_croix == True :
+                    if drawing_croix == True :                              #On réitère le même procédé avec la figure Croix
                         x, y = convertir_pos_matrice(x, y)
                         Structures.croix(matrice, x, y)
                         drawing_croix=False
                         drawing = False
+                        break
 
                     if drawing_cligno == True :
                         x, y = convertir_pos_matrice(x, y)
                         Structures.cligno(matrice, x, y)
                         drawing_cligno=False
                         drawing = False
+                        break
 
                     if drawing_hamecon == True :
                         x, y = convertir_pos_matrice(x, y)
                         Structures.hamecon(matrice, x, y)
                         drawing_hamecon=False
                         drawing = False
+                        break
 
                     if drawing_hamecon2 == True :
                         x, y = convertir_pos_matrice(x, y)
                         Structures.hamecon2(matrice, x, y)
                         drawing_hamecon2=False
                         drawing = False
+                        break
 
                     if drawing_penntadeca == True :
                         x, y = convertir_pos_matrice(x, y)
                         Structures.penntadeca(matrice, x, y)
                         drawing_penntadeca=False
                         drawing = False
+                        break
 
                     if drawing_deuxLapins == True :
                         x, y = convertir_pos_matrice(x, y)
                         Structures.deuxLapins(matrice, x, y)
                         drawing_deuxLapins=False
                         drawing = False
+                        break
 
 
 
-                x, y = convertir_pos_matrice(x, y)
+                x, y = convertir_pos_matrice(x, y)                          #Si aucun if n'est lan
                 inverser_couleur_pixel(x, y)
                 # Dessiner le rectangle
                 pygame.display.flip()
