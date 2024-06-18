@@ -101,43 +101,41 @@ def deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, m
         camera_y = min(camera_y + camera_speed, map_height - screen_height)
     return camera_x, camera_y
 
+import pygame
+import sys
+
 def edition():
-    global matrice,camera_x,camera_y,facteur_zoom
+    global matrice, camera_x, camera_y, facteur_zoom
     pygame.init()
-    ecran_edition = pygame.display.set_mode((largeur_ecran+200, hauteur_ecran))
+    ecran_edition = pygame.display.set_mode((largeur_ecran + 200, hauteur_ecran))
 
+    # Définition des polices d'écriture et des textes :
+    smallfont = pygame.font.SysFont('Corbel', 20)
+    confirmer = smallfont.render('confirmer', True, blanc)
+    quitter = smallfont.render('quitter', True, blanc)
+    suivant = smallfont.render('suivant', True, blanc)
+    precedent = smallfont.render('précédent', True, blanc)
 
-    #définition des polices d'écriture et des textes :
-    smallfont = pygame.font.SysFont('Corbel',20)
-    confirmer = smallfont.render('confirmer' , True , blanc)
-    quitter = smallfont.render('quitter' , True , blanc)
-    suivant = smallfont.render('suivant' , True , blanc)
-    precedent = smallfont.render('précédent' , True , blanc)
-    #fin variables des boutons--------------------------------------------------
+    # Fin variables des boutons--------------------------------------------------
     Mise_en_place_jeu = True
     while Mise_en_place_jeu:
-        '''
-        Cette boucle va servir à la mise en place du jeu : on génère une matrice vide, donc une grille blanche.
-        Ensuite, l'utilisateur survole et clique sur les cases pour les faire changer de couleur. La matrice se met à jour en même temps.
-        Une fois le bouton "confirmer" cliqué : la boucle s'arrête et la fenêtre se ferme.
-        On passe à la fenêtre suivante.
-        '''
         for event in pygame.event.get():
             mouse = pygame.mouse.get_pos()
             if event.type == pygame.QUIT:
                 Mise_en_place_jeu = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = event.pos  # mise à jour de la position de la souris
+                x, y = event.pos  # Mise à jour de la position de la souris
                 x = (x + camera_x) // (taille_cellule * facteur_zoom)
                 y = (y + camera_y) // (taille_cellule * facteur_zoom)
-                inverser_couleur_pixel(x, y)  # utilisation de la fonction inverser_couleur_pixel
+                inverser_couleur_pixel(x, y)  # Utilisation de la fonction inverser_couleur_pixel
 
                 if largeur_ecran / 2 - largeur_ecran / 6 <= mouse[0] <= largeur_ecran / 2 + largeur_ecran / 6 and hauteur_ecran - 40 <= mouse[1] <= hauteur_ecran:
                     Mise_en_place_jeu = False
                     break
             facteur_zoom = zoom(event, facteur_zoom, izoom, zoom_min, zoom_max)
+
         # Gestion des touches pour déplacer la caméra
-        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, largeur_ecran, hauteur_ecran, MAP_WIDTH,MAP_HEIGHT)
+        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, largeur_ecran, hauteur_ecran, MAP_WIDTH, MAP_HEIGHT)
         # Efface l'écran avant de dessiner les nouveaux éléments
         ecran_edition.fill(blanc)
         # Dessin de la partie visible de la carte sur la fenêtre
@@ -158,7 +156,11 @@ def edition():
         ecran_edition.blit(confirmer, (largeur_ecran / 2 - largeur_ecran / 17, hauteur_ecran - 30))
         # Rafraîchissement de la page
         pygame.display.flip()
+
     pygame.quit()
+
+def jeu():
+    global matrice, camera_x, camera_y, facteur_zoom
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.music.load("son_jdv2.mp3")
@@ -178,17 +180,17 @@ def edition():
             facteur_zoom = zoom(event, facteur_zoom, izoom, zoom_min, zoom_max)
 
         # Gestion des touches pour déplacer la caméra
-        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, largeur_ecran, hauteur_ecran, MAP_WIDTH,MAP_HEIGHT)
+        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, largeur_ecran, hauteur_ecran, MAP_WIDTH, MAP_HEIGHT)
 
         # Dessin de la partie visible de la carte sur la fenêtre
         ecran_jeu.blit(map_surface, (0, 0), (camera_x, camera_y, largeur_ecran, hauteur_ecran))
         pygame.display.flip()
-        #applications de la fonctions règle qui modifie l'état des cellules
-        for y in range(len(matrice)-1):
-            for x in range(len(matrice[y])-1):
+        # Applications de la fonction règle qui modifie l'état des cellules
+        for y in range(len(matrice) - 1):
+            for x in range(len(matrice[y]) - 1):
                 ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
                 ma_cell.regle()
-        #copie de la matrice
+        # Copie de la matrice
         matrice = [row[:] for row in matrice_temp]
         # Dessin de la grille
         dessiner_grille(map_surface, matrice, facteur_zoom)
@@ -197,6 +199,7 @@ def edition():
         clock.tick(10)  # Limite le jeu à 10 images par seconde
     pygame.quit()
     sys.exit()
+
 
 def show_menu():
     global state, play, quitter, reg
