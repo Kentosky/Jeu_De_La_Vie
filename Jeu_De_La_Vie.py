@@ -309,7 +309,7 @@ def edition():
     # Création du bouton Retour au Menu 2
     back_to_menu_2 = Button(
         screen,  # Surface sur laquelle placer le bouton
-        screen_width - 590,  # Coordonnée x du coin supérieur gauche
+        screen_width - 465,  # Coordonnée x du coin supérieur gauche
         screen_height - 90,  # Coordonnée y du coin supérieur gauche
         150,  # Largeur
         50,  # Hauteur
@@ -328,14 +328,14 @@ def edition():
     # Création du bouton Commencer le Jeu
     jeuB = Button(
         screen,  # Surface sur laquelle placer le bouton
-        screen_width - 775,  # Coordonnée x du coin supérieur gauche
+        screen_width - 650,  # Coordonnée x du coin supérieur gauche
         screen_height - 90,  # Coordonnée y du coin supérieur gauche
-        170,  # Largeur
+        175,  # Largeur
         50,  # Hauteur
 
         # Paramètres du bouton
         text='COMMENCER',  # Texte à afficher
-        fontSize=30,  # Taille de la police
+        fontSize=29,  # Taille de la police
         margin=20,  # Marge pour centrer le texte
         inactiveColour=(200, 50, 0),  # Couleur du bouton inactif
         hoverColour=(150, 0, 0),  # Couleur du bouton survolé
