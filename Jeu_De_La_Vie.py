@@ -464,9 +464,8 @@ def edition():
         Elle affiche un texte sur fond coloré complété par celui donné en paramètres.'''
         surface_texte = font.render("Insertion : " + cdc, True, noir,(125, 255, 175))
         rect_texte = surface_texte.get_rect()
-        rect_texte.center = ((screen_width - 300)// 2, 50)
-        # Affichage du texte
-        screen.blit(surface_texte, rect_texte)
+        rect_texte.center = ((screen_width - 300)// 2, 30)
+        screen.blit(surface_texte, rect_texte)                       # Affichage du texte
 
     #Mise en place des modes de dessin : drawing = False tant que le second clic n'a pas été fait.
     #Quand on clique sur le Canva après avoir cliqué sur une image de forme prédéfinie, drawing = True :
@@ -497,8 +496,7 @@ def edition():
                 back_to_menu_2.draw()                               #On place le bouton back_to_menu_2
                 x, y = event.pos                                    #on relève les coordonnées de la souris
 
-                '''A partir de cette ligne : 
-                On met en place les conditions pour savoir quelle image afficher lorsque l'on clique sur une image
+                '''On met en place les conditions pour savoir quelle image afficher lorsque l'on clique sur une image
                 représentant une forme prédéfinie.'''
                 #Si on appuie dans la zone correspondant au bouton Canoe :
                 if (screen_width-275 <= x <= screen_width-175) and (50 <= y <= 150) :
@@ -561,7 +559,7 @@ def edition():
                         Structures.canoe(matrice, x, y)                     #On trace la figure avec la fonction canoe, qui provient du fichier Structures.py
                         drawing_canoe=False                                 #On réinitialise les variables drawing pour éviter de dessiner plusieurs figures à la suite
                         drawing = False
-                        break
+                        break                                               #On quitte la boucle pour la recommencer
 
                     if drawing_croix == True :                              #On réitère le même procédé avec la figure Croix
                         x, y = convertir_pos_matrice(x, y)
@@ -607,10 +605,9 @@ def edition():
 
 
 
-                x, y = convertir_pos_matrice(x, y)                          #Si aucun if n'est lan
-                inverser_couleur_pixel(x, y)
-                # Dessiner le rectangle
-                pygame.display.flip()
+                x, y = convertir_pos_matrice(x, y)                          #Si aucune des conditions précédentes n'est satisfaite : on convertit les coordonnées en coordonnées de la matrice
+                inverser_couleur_pixel(x, y)                                # quand une case est cliquée elle change de couleur.
+                pygame.display.flip()                                       #On met à jour le canva
 
 
             facteur_zoom = zoom(event, facteur_zoom)
@@ -619,6 +616,8 @@ def edition():
         screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
         dessiner_grille(map_surface, matrice, facteur_zoom)
 
+
+        #### Fonctions d'affichage du mode en cours : un texte avec fond coloré s'affiche tant qu'une image est sélectionnée ####
         if drawing_canoe:
             mode_actif("Canoe")
         if drawing_croix:
@@ -634,8 +633,10 @@ def edition():
         if drawing_deuxLapins:
             mode_actif("Deux Lapins")
 
+        #Ce rectangle gris est le fond de la fenêtre d'affichage des images des formes prédéfinies
         pygame.draw.rect(screen, (170, 170, 170), [screen_width - 300, 0, 300, screen_height])
 
+        #On affiche tous les boutons
         canoe_btn.draw()
         croix_btn.draw()
         cligno_btn.draw()
@@ -644,10 +645,10 @@ def edition():
         penntadeca_btn.draw()
         deuxLapins_btn.draw()
 
+        #On affiche les boutons de déplacement entre les menus / de sortie de la fenêtre
         jeuB.draw()
         back_to_menu_2.draw()
         pygame.display.flip()
-
 
     state = "menu"
 
