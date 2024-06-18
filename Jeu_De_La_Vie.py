@@ -237,7 +237,7 @@ def edition():
     # Variables pour les boutons
     back_to_menu_2 = Button(
         screen,  # Surface to place button on
-        screen_width - 165,  # X-coordinate of top left corner
+        screen_width - 590,  # X-coordinate of top left corner
         screen_height - 90,  # Y-coordinate of top left corner
         150,  # Width
         50,  # Height
@@ -254,7 +254,7 @@ def edition():
     )
     jeuB = Button(
         screen,  # Surface to place button on
-        screen_width - 350,  # X-coordinate of top left corner
+        screen_width - 775,  # X-coordinate of top left corner
         screen_height - 90,  # Y-coordinate of top left corner
         170,  # Width
         50,  # Height
