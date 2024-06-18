@@ -15,12 +15,19 @@ import Tableau as Tab
 from moviepy.editor import VideoFileClip
 import pygame_widgets
 from pygame_widgets.button import Button
+# Initialisation de Pygame
+pygame.init()
 
-largeur_ecran = 800
-hauteur_ecran = 600
+# Définir la taille de l'écran selon la taille de la vidéo
+screen_info = pygame.display.Info()
+screen_width, screen_height = screen_info.current_w, screen_info.current_h
+screen = pygame.display.set_mode((screen_width, screen_height))
+video = VideoFileClip("video.mp4").resize((1600,800))
+pygame.display.set_caption("Video du menu")
+
 taille_cellule = 5
-x_matrice = int(largeur_ecran/taille_cellule)
-y_matrice = int(largeur_ecran/taille_cellule)
+x_matrice = int(screen_width/taille_cellule)
+y_matrice = int(screen_width/taille_cellule)
 #définition des couleurs :
 color_light = (170, 170, 170)
 color_dark = (100, 100, 100)
@@ -40,18 +47,10 @@ curseur_longueur = 50
 MAP_WIDTH, MAP_HEIGHT = 1600, 1200
 map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
 # Position initiale de la caméra centrée
-camera_x = (MAP_WIDTH - largeur_ecran) // 2
-camera_y = (MAP_HEIGHT - hauteur_ecran) // 2
+camera_x = (MAP_WIDTH - screen_width) // 2
+camera_y = (MAP_HEIGHT - screen_height) // 2
 camera_speed = 20
 
-# Initialisation de Pygame
-pygame.init()
-
-# Définir la taille de l'écran selon la taille de la vidéo
-screen_width, screen_height = 1100, 800
-screen = pygame.display.set_mode((screen_width, screen_height))
-video = VideoFileClip("video.mp4").resize((1600,800))
-pygame.display.set_caption("Video du menu")
 
 
 # Définir la police
@@ -109,25 +108,22 @@ def jeu():
     pygame.mixer.init()
     pygame.mixer.music.load("son_jdv2.mp3")
     pygame.mixer.music.play(10, 0.0)
-    # Création de la fenêtre
-    ecran_jeu = pygame.display.set_mode((largeur_ecran, hauteur_ecran))
-    pygame.display.set_caption("Jeu de la Vie")
     clock = pygame.time.Clock()
     # Mise à jour de l'état du jeu
     matrice_temp = [row[:] for row in matrice]
     running = True
     while running:
-        ecran_jeu.fill(blanc)
+        screen.fill(blanc)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             facteur_zoom = zoom(event, facteur_zoom, izoom, zoom_min, zoom_max)
 
         # Gestion des touches pour déplacer la caméra
-        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, largeur_ecran, hauteur_ecran, MAP_WIDTH, MAP_HEIGHT)
+        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH, MAP_HEIGHT)
 
         # Dessin de la partie visible de la carte sur la fenêtre
-        ecran_jeu.blit(map_surface, (0, 0), (camera_x, camera_y, largeur_ecran, hauteur_ecran))
+        screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
         pygame.display.flip()
         # Applications de la fonction règle qui modifie l'état des cellules
         for y in range(len(matrice) - 1):
@@ -150,8 +146,8 @@ def show_menu():
     state = "menu"
     play = Button(
         screen,  # Surface to place button on
-        screen_width / 2 - 150,   # X-coordinate of top left corner
-        screen_height / 2 - 250,  # Y-coordinate of top left corner
+        screen_width // 2 - 150,   # X-coordinate of top left corner
+        screen_height // 2 - 250,  # Y-coordinate of top left corner
         300,  # Width
         100,  # Height
 
@@ -168,8 +164,8 @@ def show_menu():
 
     quitter = Button(
         screen,  # Surface to place button on
-        screen_width / 2 - 150,  # X-coordinate of top left corner
-        screen_height / 2 + 150,  # Y-coordinate of top left corner
+        screen_width // 2 - 150,  # X-coordinate of top left corner
+        screen_height // 2 + 150,  # Y-coordinate of top left corner
         300,  # Width
         100,  # Height
 
@@ -186,8 +182,8 @@ def show_menu():
 
     reg = Button(
         screen,  # Surface to place button on
-        screen_width / 2 - 150,  # X-coordinate of top left corner
-        screen_height / 2 - 50,  # Y-coordinate of top left corner
+        screen_width // 2 - 150,  # X-coordinate of top left corner
+        screen_height // 2 - 50,  # Y-coordinate of top left corner
         300,  # Width
         100,  # Height
 
@@ -280,8 +276,8 @@ def edition():
     while state == "edition":
         for event in pygame.event.get():
             mouse = pygame.mouse.get_pos()
-            back_to_menu_2.listen(event)
-            jeuB.listen(event)
+            back_to_menu_2.listen(pygame.event.get())
+            jeuB.listen(pygame.event.get())
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -293,8 +289,7 @@ def edition():
                 inverser_couleur_pixel(x, y)
 
             facteur_zoom = zoom(event, facteur_zoom, izoom, zoom_min, zoom_max)
-        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,
-                                         MAP_HEIGHT)
+        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,MAP_HEIGHT)
         screen.fill((255, 255, 255))
         screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
         dessiner_grille(map_surface, matrice, facteur_zoom)
