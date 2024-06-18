@@ -279,7 +279,7 @@ def edition():
     deuxLapins = pygame.image.load("deux_lapins.png")
 
     # On définit la nouvelle taille :
-    largeur_hauteur_image = (150, 50)
+    largeur_hauteur_image = (100, 100)
     croix_redim = pygame.transform.scale(croix, largeur_hauteur_image)
     canoe_redim = pygame.transform.scale(canoe, largeur_hauteur_image)
     cligno_redim = pygame.transform.scale(cligno, largeur_hauteur_image)
@@ -290,70 +290,70 @@ def edition():
 
     canoe_btn = Button(
         screen,  # Surface to place button on
-        0,  # X-coordinate of top left corner
-        0,  # Y-coordinate of top left corner
-        150,  # Width
-        50,  # Height
+        screen_width-275,  # X-coordinate of top left corner
+        50,  # Y-coordinate of top left corner
+        100,  # Width
+        100,  # Height
         image=canoe_redim,
         radius=20,  # Radius of border corners (leave empty for not curved)
         onClick=None  # Function to call when clicked on
     )
     croix_btn = Button(
-        screen,  # Surface to place button on
-        0,  # X-coordinate of top left corner
-        0,  # Y-coordinate of top left corner
-        150,  # Width
-        50,  # Height
+        screen,
+        screen_width-125,  # Surface to place button on
+        50,  # Y-coordinate of top left corner
+        100,  # Width
+        100,  # Height
         image=croix_redim,
         radius=20,  # Radius of border corners (leave empty for not curved)
         onClick=None  # Function to call when clicked on
     )
     cligno_btn = Button(
         screen,  # Surface to place button on
-        0,  # X-coordinate of top left corner
-        0,  # Y-coordinate of top left corner
-        150,  # Width
-        50,  # Height
+        screen_width-275,  # X-coordinate of top left corner
+        200,  # Y-coordinate of top left corner
+        100,  # Width
+        100,  # Height
         image=cligno_redim,
         radius=20,  # Radius of border corners (leave empty for not curved)
         onClick=None  # Function to call when clicked on
     )
     hamecon_btn = Button(
         screen,  # Surface to place button on
-        0,  # X-coordinate of top left corner
-        0,  # Y-coordinate of top left corner
-        150,  # Width
-        50,  # Height
+        screen_width-125,  # X-coordinate of top left corner
+        200,  # Y-coordinate of top left corner
+        100,  # Width
+        100,  # Height
         image=hamecon_redim,
         radius=20,  # Radius of border corners (leave empty for not curved)
         onClick=None  # Function to call when clicked on
     )
     hamecon2_btn = Button(
         screen,  # Surface to place button on
-        0,  # X-coordinate of top left corner
-        0,  # Y-coordinate of top left corner
-        150,  # Width
-        50,  # Height
+        screen_width-275,  # X-coordinate of top left corner
+        350,  # Y-coordinate of top left corner
+        100,  # Width
+        100,  # Height
         image=hamecon2_redim,
         radius=20,  # Radius of border corners (leave empty for not curved)
         onClick=None  # Function to call when clicked on
     )
     penntadeca_btn = Button(
         screen,  # Surface to place button on
-        0,  # X-coordinate of top left corner
-        0,  # Y-coordinate of top left corner
-        150,  # Width
-        50,  # Height
+        screen_width-125,  # X-coordinate of top left corner
+        350,  # Y-coordinate of top left corner
+        100,  # Width
+        100,  # Height
         image=penntadeca_redim,
         radius=20,  # Radius of border corners (leave empty for not curved)
         onClick=None  # Function to call when clicked on
     )
     deuxLapins_btn = Button(
         screen,  # Surface to place button on
-        0,  # X-coordinate of top left corner
-        0,  # Y-coordinate of top left corner
-        150,  # Width
-        50,  # Height
+        screen_width-275,  # X-coordinate of top left corner
+        500,  # Y-coordinate of top left corner
+        100,  # Width
+        100,  # Height
         image=deuxLapins_redim,
         radius=20,  # Radius of border corners (leave empty for not curved)
         onClick=None  # Function to call when clicked on
@@ -384,6 +384,9 @@ def edition():
         screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
         dessiner_grille(map_surface, matrice, facteur_zoom)
 
+
+        pygame.draw.rect(screen, (170, 170, 170), [screen_width - 300, 0, 300, screen_height])
+
         canoe_btn.draw()
         croix_btn.draw()
         cligno_btn.draw()
@@ -392,7 +395,8 @@ def edition():
         penntadeca_btn.draw()
         deuxLapins_btn.draw()
 
-        pygame.draw.rect(screen, (170, 170, 170), [screen_height+250, 0, 700, screen_width])
+
+
         jeuB.draw()
         back_to_menu_2.draw()
         pygame.display.flip()
