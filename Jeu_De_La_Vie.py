@@ -9,6 +9,9 @@
 from tkinter import *
 import sys
 import pygame
+from pygame import time
+import time
+
 import Structures
 import Cellule as Cell
 import Tableau as Tab
@@ -19,8 +22,7 @@ from pygame_widgets.button import Button
 pygame.init()
 
 # Définir la taille de l'écran selon la taille de la vidéo
-screen_info = pygame.display.Info()
-screen_width, screen_height = screen_info.current_w, screen_info.current_h
+screen_width, screen_height = 1100, 800
 screen = pygame.display.set_mode((screen_width, screen_height))
 video = VideoFileClip("video.mp4").resize((1600,800))
 pygame.display.set_caption("Video du menu")
@@ -225,6 +227,20 @@ rect_surface = pygame.Surface((screen_width,screen_height), pygame.SRCALPHA)
 rect_surface.fill(rect_color)
 
 
+   # if (screen_width-275 <= x_pos_init <= screen_width-175) and (50 <= y_pos_init <= 150) :
+    #    for event in pygame.event.get():
+     #       if event.type == pygame.MOUSEBUTTONDOWN:
+      #          print("oui")
+       #         mouse_x, mouse_y = pygame.mouse.get_pos()
+        #        x_pos_final = mouse_x // 5 // facteur_zoom - 10
+         #       y_pos_final = mouse_y // 5 // facteur_zoom
+          #     nouvelle_coord_x = mouse_x
+           #     nouvelle_coord_y = mouse_y
+            #    Structures.canoe(matrice, mouse_x, mouse_y)
+
+
+
+
 def edition():
     global state, matrice, camera_x, camera_y, facteur_zoom, back_to_menu
     state = "edition"
@@ -296,7 +312,7 @@ def edition():
         100,  # Height
         image=canoe_redim,
         radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=None  # Function to call when clicked on
+        onClick=None # Function to call when clicked on
     )
     croix_btn = Button(
         screen,
@@ -359,6 +375,21 @@ def edition():
         onClick=None  # Function to call when clicked on
     )
 
+    def convertir_pos_matrice(x, y):
+        x1 = (x + camera_x) // (taille_cellule * facteur_zoom)
+        y1 = (y + camera_y) // (taille_cellule * facteur_zoom)
+        return x1, y1
+
+    drawing = False
+    drawing_canoe=False
+    drawing_croix=False
+    drawing_cligno=False
+    drawing_hamecon=False
+    drawing_hamecon2=False
+    drawing_penntadeca=False
+    drawing_deuxLapins=False
+
+
     if state == "menu":
         play.draw()
         quitter.draw()
@@ -374,9 +405,108 @@ def edition():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu_2.draw()
                 x, y = event.pos
-                x = (x + camera_x) // (taille_cellule * facteur_zoom)
-                y = (y + camera_y) // (taille_cellule * facteur_zoom)
+                print("pos = ", x, y)
+                print(screen_width)
+                if (screen_width-275 <= x <= screen_width-175) and (50 <= y <= 150) :
+                    print("canoe")
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_canoe = True
+
+
+                elif (screen_width-125 <= x <= screen_width-25) and (50 <= y <= 150) :
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_croix = True
+                            break
+
+                elif (screen_width-275 <= x <= screen_width-175) and (200 <= y <= 300) :
+                    if event.button == 1 :
+                        print("cligno")
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_cligno = True
+                            break
+
+                elif (screen_width-125 <= x <= screen_width-25) and (200 <= y <= 300) :
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_hamecon = True
+                            break
+
+                elif (screen_width-275 <= x <= screen_width-175) and (350 <= y <= 450) :
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_hamecon2 = True
+                            break
+
+                elif (screen_width-125 <= x <= screen_width-25) and (350 <= y <= 450) :
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_penntadeca = True
+                            break
+
+                elif (screen_width-275 <= x <= screen_width-175) and (500 <= y <= 600) :
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_deuxLapins = True
+                            break
+
+                else :
+                    if drawing_canoe == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.canoe(matrice, x, y)
+                        drawing_canoe=False
+                        drawing = False
+
+                    if drawing_croix == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.croix(matrice, x, y)
+                        drawing_croix=False
+                        drawing = False
+
+                    if drawing_cligno == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.cligno(matrice, x, y)
+                        drawing_cligno=False
+                        drawing = False
+
+                    if drawing_hamecon == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.hamecon(matrice, x, y)
+                        drawing_hamecon=False
+                        drawing = False
+
+                    if drawing_hamecon2 == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.hamecon2(matrice, x, y)
+                        drawing_hamecon2=False
+                        drawing = False
+
+                    if drawing_penntadeca == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.penntadeca(matrice, x, y)
+                        drawing_penntadeca=False
+                        drawing = False
+
+                    if drawing_deuxLapins == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.deuxLapins(matrice, x, y)
+                        drawing_deuxLapins=False
+                        drawing = False
+
+
+
+                x, y = convertir_pos_matrice(x, y)
                 inverser_couleur_pixel(x, y)
+                # Dessiner le rectangle
+                pygame.display.flip()
 
             facteur_zoom = zoom(event, facteur_zoom, izoom, zoom_min, zoom_max)
         camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,MAP_HEIGHT)
