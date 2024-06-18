@@ -1,15 +1,12 @@
-
-# -*- coding: utf-8 -*-
 # --- Le jeu de la vie re-créé par le groupe de TP avec Cuvelier Line, Villeret Baptiste et Besse Fabien  --- #
-""" ~~~ PARTIE DÉCLARATIVE ~~~ """
-# --- La bibliothèque permettant de faire les graphismes --- #
 
-# In resize.py line 37 : change "ANTIALIAS" by "LANCZOS"
+
+
 
 from tkinter import *
 import sys
 import pygame
-import Structures
+import Structures as St
 import Cellule as Cell
 import Tableau as Tab
 from moviepy.editor import VideoFileClip
@@ -19,53 +16,44 @@ from pygame_widgets.button import Button
 pygame.init()
 
 # Définir la taille de l'écran selon la taille de la vidéo
-screen_info = pygame.display.Info()
-screen_width, screen_height = screen_info.current_w, screen_info.current_h
+screen_width, screen_height = 1100,800
 screen = pygame.display.set_mode((screen_width, screen_height))
+# In resize.py line 37 : change "ANTIALIAS" by "LANCZOS"
 video = VideoFileClip("video.mp4").resize((1600,800))
 pygame.display.set_caption("Video du menu")
 
+# Création de notre tableau a partir de la classe Tableau
 taille_cellule = 5
 x_matrice = int(screen_width/taille_cellule)
 y_matrice = int(screen_width/taille_cellule)
-#définition des couleurs :
-color_light = (170, 170, 170)
-color_dark = (100, 100, 100)
+tab1=Tab.Tableau(x_matrice, y_matrice)
+matrice = tab1.creation_tableau()
+
+#définition des couleurs que nous utiliserons :
 blanc = (255, 255, 255)
 noir = (0, 0, 0)
 couleur_bordure = (224, 224, 224)
 
+#variable de zoom
 facteur_zoom = 5
-izoom = 1
-zoom_max = 10
-zoom_min = 1
 
-couleur_curseur = (150, 150, 150)
-curseur_largeur = 10
-curseur_longueur = 50
 # Création d'une surface pour la carte
 MAP_WIDTH, MAP_HEIGHT = 1600, 1200
 map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
+
 # Position initiale de la caméra centrée
 camera_x = (MAP_WIDTH - screen_width) // 2
 camera_y = (MAP_HEIGHT - screen_height) // 2
-camera_speed = 20
+camera_speed = 20 # vitesse de déplacement de la camera
 
-
-
-# Définir la police
+# Définition la police
 font = pygame.font.Font('Tiny5-regular.ttf', size = 25)
 font_titre = pygame.font.Font('Tiny5-regular.ttf', size = 70)
 
-tab1=Tab.Tableau(x_matrice, y_matrice)
-matrice = tab1.creation_tableau()
-
-""" ~~~ PARTIE  FONCTIONNELLE ~~~ """
-
-""" ~~~     LES BOUTONS :     ~~~ """
-
-""" ~~~  PARTIE MENU D'INTRO  ~~~ """
-
+"""
+Cette fonction permet de dessiner une grille pygame à partir de la matrice que l'on a créé précedemment
+De base, chaque case de la grille est un carré blanc qui est cliquable et qui changera de couleur par la suite
+"""
 def dessiner_grille(ecran, matrice, facteur_zoom):
     for y in range(len(matrice)):
         for x in range(len(matrice[0])):
@@ -74,20 +62,22 @@ def dessiner_grille(ecran, matrice, facteur_zoom):
                                         y * taille_cellule * facteur_zoom,
                                         taille_cellule * facteur_zoom,
                                         taille_cellule * facteur_zoom)
-            pygame.draw.rect(ecran, couleur, rect_cellule)
-            pygame.draw.rect(ecran, couleur_bordure, rect_cellule, 1)
+            pygame.draw.rect(ecran, couleur, rect_cellule) # dessin des cases
+            pygame.draw.rect(ecran, couleur_bordure, rect_cellule, 1) # dessin des bordures de cases
 
-# Fonction pour inverser la couleur d'une cellule de la grille
+"""
+Cette fonction permet d'inverser la couleur d'un pixel 
+"""
 def inverser_couleur_pixel(x, y):
     if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
         matrice[y][x] = 1 - matrice[y][x]
 
-def zoom(event, facteur_zoom, izoom, zoom_min, zoom_max):
+def zoom(event, facteur_zoom):
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_p:
-            facteur_zoom = min(zoom_max, facteur_zoom + izoom)
+            facteur_zoom = min(10, facteur_zoom + 1)
         elif event.key == pygame.K_m:
-            facteur_zoom = max(zoom_min, facteur_zoom - izoom)
+            facteur_zoom = max(1, facteur_zoom - 1)
     return facteur_zoom
 
 def deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, map_width, map_height):
@@ -117,7 +107,7 @@ def jeu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            facteur_zoom = zoom(event, facteur_zoom, izoom, zoom_min, zoom_max)
+            facteur_zoom = zoom(event, facteur_zoom)
 
         # Gestion des touches pour déplacer la caméra
         camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH, MAP_HEIGHT)
@@ -296,7 +286,7 @@ def edition():
         100,  # Height
         image=canoe_redim,
         radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=None  # Function to call when clicked on
+        onClick=None # Function to call when clicked on
     )
     croix_btn = Button(
         screen,
@@ -365,7 +355,6 @@ def edition():
         reg.draw()
     while state == "edition":
         for event in pygame.event.get():
-            mouse = pygame.mouse.get_pos()
             back_to_menu_2.listen(pygame.event.get())
             jeuB.listen(pygame.event.get())
             if event.type == pygame.QUIT:
@@ -378,7 +367,7 @@ def edition():
                 y = (y + camera_y) // (taille_cellule * facteur_zoom)
                 inverser_couleur_pixel(x, y)
 
-            facteur_zoom = zoom(event, facteur_zoom, izoom, zoom_min, zoom_max)
+            facteur_zoom = zoom(event, facteur_zoom)
         camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,MAP_HEIGHT)
         screen.fill((255, 255, 255))
         screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
@@ -394,8 +383,6 @@ def edition():
         hamecon2_btn.draw()
         penntadeca_btn.draw()
         deuxLapins_btn.draw()
-
-
 
         jeuB.draw()
         back_to_menu_2.draw()
