@@ -19,8 +19,7 @@ from pygame_widgets.button import Button
 pygame.init()
 
 # Définir la taille de l'écran selon la taille de la vidéo
-screen_info = pygame.display.Info()
-screen_width, screen_height = screen_info.current_w, screen_info.current_h
+screen_width, screen_height = 1100,800
 screen = pygame.display.set_mode((screen_width, screen_height))
 video = VideoFileClip("video.mp4").resize((1600,800))
 pygame.display.set_caption("Video du menu")
@@ -109,34 +108,73 @@ def jeu():
     pygame.mixer.music.load("son_jdv2.mp3")
     pygame.mixer.music.play(10, 0.0)
     clock = pygame.time.Clock()
+
+    # Dimensions de l'écran
+    screen_width = 800
+    screen_height = 600
+    screen = pygame.display.set_mode((screen_width, screen_height))
+
+    # Création de la surface pour la carte
+    map_surface = pygame.Surface((MAP_WIDTH, MAP_HEIGHT))
+
+    # Implémentation d'un bouton :
+    quitter_2 = Button(
+        screen,  # Surface to place button on
+        screen_width - 120,  # X-coordinate of top left corner
+        screen_height - 60,  # Y-coordinate of top left corner
+        100,  # Width
+        40,  # Height
+        # Optional Parameters
+        text='QUITTER',  # Text to display
+        fontSize=25,  # Size of font
+        margin=20,  # Minimum distance between text/image and edge of button
+        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
+        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
+        pressedColour=(0, 200, 20),  # Colour of button when being clicked
+        radius=40,  # Radius of border corners (leave empty for not curved)
+        onClick=lambda: pygame.quit() or sys.exit()  # Function to call when clicked on
+    )
+
     # Mise à jour de l'état du jeu
     matrice_temp = [row[:] for row in matrice]
     running = True
     while running:
-        screen.fill(blanc)
-        for event in pygame.event.get():
+        screen.fill((255, 255, 255))  # Assurez-vous que 'blanc' est défini comme (255, 255, 255)
+
+        # Gestion des événements
+        events = pygame.event.get()
+        for event in events:
             if event.type == pygame.QUIT:
                 running = False
             facteur_zoom = zoom(event, facteur_zoom, izoom, zoom_min, zoom_max)
 
+        quitter_2.listen(events)
+
         # Gestion des touches pour déplacer la caméra
-        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH, MAP_HEIGHT)
+        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,
+                                         MAP_HEIGHT)
 
         # Dessin de la partie visible de la carte sur la fenêtre
         screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
-        pygame.display.flip()
+
         # Applications de la fonction règle qui modifie l'état des cellules
         for y in range(len(matrice) - 1):
             for x in range(len(matrice[y]) - 1):
                 ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
                 ma_cell.regle()
+
         # Copie de la matrice
         matrice = [row[:] for row in matrice_temp]
+
         # Dessin de la grille
         dessiner_grille(map_surface, matrice, facteur_zoom)
-        pygame.time.delay(1)
+
+        # Dessin du bouton quitter
+        quitter_2.draw()
+
         pygame.display.flip()
         clock.tick(10)  # Limite le jeu à 10 images par seconde
+
     pygame.quit()
     sys.exit()
 
