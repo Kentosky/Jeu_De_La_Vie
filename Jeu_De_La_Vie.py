@@ -61,7 +61,9 @@ font_titre = pygame.font.Font('Tiny5-regular.ttf', size = 70)
 tab1=Tab.Tableau(x_matrice, y_matrice)
 matrice = tab1.creation_tableau()
 
-""" ~~~ PARTIE FONCTIONNELLE ~~~ """
+""" ~~~ PARTIE  FONCTIONNELLE ~~~ """
+
+""" ~~~     LES BOUTONS :     ~~~ """
 
 """ ~~~  PARTIE MENU D'INTRO  ~~~ """
 
