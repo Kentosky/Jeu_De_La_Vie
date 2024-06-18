@@ -392,7 +392,7 @@ def edition():
         penntadeca_btn.draw()
         deuxLapins_btn.draw()
 
-        pygame.draw.rect(screen, (170, 170, 170), [screen_height-50, 0, 400, screen_width])
+        pygame.draw.rect(screen, (170, 170, 170), [screen_height+250, 0, 700, screen_width])
         jeuB.draw()
         back_to_menu_2.draw()
         pygame.display.flip()
