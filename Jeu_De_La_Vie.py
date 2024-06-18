@@ -3,7 +3,10 @@
 from tkinter import *
 import sys
 import pygame
-import Structures as St
+from pygame import time
+import time
+
+import Structures
 import Cellule as Cell
 import Tableau as Tab
 from moviepy.editor import VideoFileClip
@@ -13,7 +16,7 @@ from pygame_widgets.button import Button
 pygame.init()
 
 # Définir la taille de l'écran selon la taille de la vidéo
-screen_width, screen_height = 1100,800
+screen_width, screen_height = 1100, 800
 screen = pygame.display.set_mode((screen_width, screen_height))
 # In resize.py line 37 : change "ANTIALIAS" by "LANCZOS"
 video = VideoFileClip("video.mp4").resize((1600,800))
@@ -63,41 +66,63 @@ def dessiner_grille(ecran, matrice, facteur_zoom):
             pygame.draw.rect(ecran, couleur_bordure, rect_cellule, 1) # dessin des bordures de cases
 
 """
-Cette fonction permet d'inverser la couleur d'un pixel 
+Cette fonction permet d'inverser la couleur d'un pixel afin de faire naitre 
+et faire mourir des cellules
 """
 def inverser_couleur_pixel(x, y):
     if 0 <= y < len(matrice) and 0 <= x < len(matrice[0]):
         matrice[y][x] = 1 - matrice[y][x]
 
+"""
+Cette fonction permet de zoomer et dezoomer le tableau 
+lorsque l'on est dans la partie édition ou dans le jeu
+"""
 def zoom(event, facteur_zoom):
     if event.type == pygame.KEYDOWN:
+        # zoom
         if event.key == pygame.K_p:
             facteur_zoom = min(10, facteur_zoom + 1)
+        # dezoom
         elif event.key == pygame.K_m:
             facteur_zoom = max(1, facteur_zoom - 1)
     return facteur_zoom
 
+"""
+Cette fonction permet de se déplacer dans le tableau 
+lorsque l'on est dans la partie édition ou dans le jeu
+"""
 def deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, map_width, map_height):
     keys = pygame.key.get_pressed()
+    # deplacement selon la flèche gauche
     if keys[pygame.K_LEFT]:
         camera_x = max(camera_x - camera_speed, 0)
+    # deplacement selon la flèche droite
     if keys[pygame.K_RIGHT]:
         camera_x = min(camera_x + camera_speed, map_width - screen_width)
+    # deplacement selon la flèche haute
     if keys[pygame.K_UP]:
         camera_y = max(camera_y - camera_speed, 0)
+    # deplacement selon la flèche basse
     if keys[pygame.K_DOWN]:
         camera_y = min(camera_y + camera_speed, map_height - screen_height)
     return camera_x, camera_y
 
+"""
+Cette fonction est la fonction de jeu:
+Celle-ci reprend le schéma dessiner par le joueur dans la partie édition et 
+effectue les regles de survie établie par le jeu
+Le joueur pourra zoomer,dézoomer, se déplacer et surtout contempler les cellules se développer
+"""
 def jeu():
     global matrice, camera_x, camera_y, facteur_zoom
+    # On gère la musique du jeu
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.music.load("son_jdv2.mp3")
     pygame.mixer.music.play(10, 0.0)
     clock = pygame.time.Clock()
 
-    # Implémentation d'un bouton :
+    # Implémentation d'un bouton quitter :
     quitter_2 = Button(
         screen,  # Surface to place button on
         screen_width - 120,  # X-coordinate of top left corner
@@ -131,180 +156,196 @@ def jeu():
         onClick=show_menu  # Function to call when clicked on
     )
 
-    # Mise à jour de l'état du jeu
+    # Mise à jour de l'état du jeu et création de la matrice temporaire pour la modification
     matrice_temp = [row[:] for row in matrice]
     running = True
     while running:
-        screen.fill((255, 255, 255))  # Assurez-vous que 'blanc' est défini comme (255, 255, 255)
+        screen.fill((255, 255, 255))
 
         # Gestion des événements
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
                 running = False
+            # Gestion du zoom avec appel de la fonction
             facteur_zoom = zoom(event, facteur_zoom)
-
+        #bouton quitter
         quitter_2.listen(events)
         menu_2.listen(events)
 
-        # Gestion des touches pour déplacer la caméra
-        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,
-                                         MAP_HEIGHT)
-
+        # Gestion du déplacement avec appel de la fonction
+        camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,MAP_HEIGHT)
         # Dessin de la partie visible de la carte sur la fenêtre
         screen.blit(map_surface, (0, 0), (camera_x, camera_y, screen_width, screen_height))
 
         # Applications de la fonction règle qui modifie l'état des cellules
         for y in range(len(matrice) - 1):
             for x in range(len(matrice[y]) - 1):
+                # Création de toutes les cellules présentes sur la map et application des règles
                 ma_cell = Cell.Cellule(matrice, y, x, matrice_temp)
                 ma_cell.regle()
 
         # Copie de la matrice
         matrice = [row[:] for row in matrice_temp]
-
         # Dessin de la grille
         dessiner_grille(map_surface, matrice, facteur_zoom)
-
         # Dessin du bouton quitter
         quitter_2.draw()
         menu_2.draw()
 
+        # Mise à jour de la fenetre
         pygame.display.flip()
         clock.tick(10)  # Limite le jeu à 10 images par seconde
 
     pygame.quit()
     sys.exit()
 
-
+"""
+Cette fonction est la fonction de menu:
+Celle-ci affiche 3 boutons (Jouer, Règles et Quitter)
+"""
 def show_menu():
     global state, play, quitter, reg
     state = "menu"
+    # Création du bouton Jouer
     play = Button(
-        screen,  # Surface to place button on
-        screen_width // 2 - 150,   # X-coordinate of top left corner
-        screen_height // 2 - 250,  # Y-coordinate of top left corner
-        300,  # Width
-        100,  # Height
+        screen,  # ecran choisi
+        screen_width // 2 - 150,   # coordonnes x bouton
+        screen_height // 2 - 250,  # coordonnes y bouton
+        300,  # largeur
+        100,  # hauteur
 
-        # Optional Parameters
-        text='JOUER',  # Text to display
-        fontSize=69,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(0, 100, 60),  # Colour of button when not being interacted with
-        hoverColour=(50, 150, 112),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=edition  # Function to call when clicked on
+        # Paramètres bouton
+        text='JOUER',  # Text
+        fontSize=69,  # taille police
+        margin=20,  # centrer le texte
+        inactiveColour=(0, 100, 60),  # couleur bouton inactif
+        hoverColour=(50, 150, 112),  # couleur bouton souris dessus
+        pressedColour=(0, 200, 20),  # couleur bouton cliqué
+        radius=20,  # arrondissement des angles du bouton
+        onClick=edition  # appel fonction edition
     )
 
+    # Création du bouton Quitter
     quitter = Button(
-        screen,  # Surface to place button on
-        screen_width // 2 - 150,  # X-coordinate of top left corner
-        screen_height // 2 + 150,  # Y-coordinate of top left corner
-        300,  # Width
-        100,  # Height
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width // 2 - 150,  # Coordonnée x du coin supérieur gauche
+        screen_height // 2 + 150,  # Coordonnée y du coin supérieur gauche
+        300,  # Largeur
+        100,  # Hauteur
 
-        # Optional Parameters
-        text='QUITTER',  # Text to display
-        fontSize=69,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
-        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=lambda: quit()  # Function to call when clicked on
+        # Paramètres du bouton
+        text='QUITTER',  # Texte à afficher
+        fontSize=69,  # Taille de la police
+        margin=20,  # Marge pour centrer le texte
+        inactiveColour=(200, 50, 0),  # Couleur du bouton inactif
+        hoverColour=(150, 0, 0),  # Couleur du bouton survolé
+        pressedColour=(0, 200, 20),  # Couleur du bouton enfoncé
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=lambda: quit()  # Fonction à appeler lors du clic
     )
 
+    # Création du bouton Règles
     reg = Button(
-        screen,  # Surface to place button on
-        screen_width // 2 - 150,  # X-coordinate of top left corner
-        screen_height // 2 - 50,  # Y-coordinate of top left corner
-        300,  # Width
-        100,  # Height
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width // 2 - 150,  # Coordonnée x du coin supérieur gauche
+        screen_height // 2 - 50,  # Coordonnée y du coin supérieur gauche
+        300,  # Largeur
+        100,  # Hauteur
 
-        # Optional Parameters
-        text='RÈGLES',  # Text to display
-        fontSize=69,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
-        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=show_rules  # Function to call when clicked on
+        # Paramètres du bouton
+        text='RÈGLES',  # Texte à afficher
+        fontSize=69,  # Taille de la police
+        margin=20,  # Marge pour centrer le texte
+        inactiveColour=(200, 50, 0),  # Couleur du bouton inactif
+        hoverColour=(150, 0, 0),  # Couleur du bouton survolé
+        pressedColour=(0, 200, 20),  # Couleur du bouton enfoncé
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=show_rules  # Fonction à appeler lors du clic
     )
 
+"""
+Cette fonction est la fonction de règles:
+Celle-ci affiche les règles du jeu pour le joueur 
+"""
 def show_rules():
     global state, back_to_menu
     state = "rules"
+    # Création du bouton Retour au Menu
     back_to_menu = Button(
-        screen,  # Surface to place button on
-        screen_width - 170,  # X-coordinate of top left corner
-        screen_height - 70,  # Y-coordinate of top left corner
-        150,  # Width
-        50,  # Height
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width - 170,  # Coordonnée x du coin supérieur gauche
+        screen_height - 70,  # Coordonnée y du coin supérieur gauche
+        150,  # Largeur
+        50,  # Hauteur
 
-        # Optional Parameters
-        text='MENU',  # Text to display
-        fontSize=30,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
-        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=show_menu  # Function to call when clicked on
+        # Paramètres optionnels
+        text='MENU',  # Texte à afficher
+        fontSize=30,  # Taille de la police
+        margin=20,  # Marge pour centrer le texte
+        inactiveColour=(200, 50, 0),  # Couleur du bouton inactif
+        hoverColour=(150, 0, 0),  # Couleur du bouton survolé
+        pressedColour=(0, 200, 20),  # Couleur du bouton enfoncé
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=show_menu  # Fonction à appeler lors du clic
     )
+
 
 rect_color = (255, 255, 255, 180)  # Blanc avec 50% de transparence
 rect_width, rect_height = 980, 860
 rect_surface = pygame.Surface((screen_width,screen_height), pygame.SRCALPHA)
 rect_surface.fill(rect_color)
 
-
+"""
+Cette fonction est la fonction d'édition:
+Celle-ci permet au joueur de dessiner a sa guise ou bien, a partir des formes préfaites,
+de découvrir comment fonctionne les cellules entre elles dans le jeu.
+Il peut se déplacer, zoomer et dézoomer afin d'avoir une surface de dessin plus grande
+"""
 def edition():
     global state, matrice, camera_x, camera_y, facteur_zoom, back_to_menu
     state = "edition"
     pygame.init()
-    screen = pygame.display.set_mode((screen_width, screen_height))
-
-    # Définition des polices d'écriture et des textes :
-    smallfont = pygame.font.SysFont('Corbel', 20)
 
     # Variables pour les boutons
+    # Création du bouton Retour au Menu 2
     back_to_menu_2 = Button(
-        screen,  # Surface to place button on
-        screen_width - 590,  # X-coordinate of top left corner
-        screen_height - 90,  # Y-coordinate of top left corner
-        150,  # Width
-        50,  # Height
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width - 590,  # Coordonnée x du coin supérieur gauche
+        screen_height - 90,  # Coordonnée y du coin supérieur gauche
+        150,  # Largeur
+        50,  # Hauteur
 
-        # Optional Parameters
-        text='MENU',  # Text to display
-        fontSize=30,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
-        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=40,  # Radius of border corners (leave empty for not curved)
-        onClick=show_menu  # Function to call when clicked on
+        # Paramètres du bouton
+        text='MENU',  # Texte à afficher
+        fontSize=30,  # Taille de la police
+        margin=20,  # Marge pour centrer le texte
+        inactiveColour=(200, 50, 0),  # Couleur du bouton inactif
+        hoverColour=(150, 0, 0),  # Couleur du bouton survolé
+        pressedColour=(0, 200, 20),  # Couleur du bouton enfoncé
+        radius=40,  # Rayon pour arrondir les coins du bouton
+        onClick=show_menu  # Fonction à appeler lors du clic
     )
+
+    # Création du bouton Commencer le Jeu
     jeuB = Button(
-        screen,  # Surface to place button on
-        screen_width - 775,  # X-coordinate of top left corner
-        screen_height - 90,  # Y-coordinate of top left corner
-        170,  # Width
-        50,  # Height
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width - 775,  # Coordonnée x du coin supérieur gauche
+        screen_height - 90,  # Coordonnée y du coin supérieur gauche
+        170,  # Largeur
+        50,  # Hauteur
 
-        # Optional Parameters
-        text='COMMENCER',  # Text to display
-        fontSize=30,  # Size of font
-        margin=20,  # Minimum distance between text/image and edge of button
-        inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
-        hoverColour=(150, 0, 0),  # Colour of button when being hovered over
-        pressedColour=(0, 200, 20),  # Colour of button when being clicked
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=jeu  # Function to call when clicked on
+        # Paramètres du bouton
+        text='COMMENCER',  # Texte à afficher
+        fontSize=30,  # Taille de la police
+        margin=20,  # Marge pour centrer le texte
+        inactiveColour=(200, 50, 0),  # Couleur du bouton inactif
+        hoverColour=(150, 0, 0),  # Couleur du bouton survolé
+        pressedColour=(0, 200, 20),  # Couleur du bouton enfoncé
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=jeu  # Fonction à appeler lors du clic
     )
+
     #############################Definition des boutons et initialisation des images pour le menu édition#############################
     croix = pygame.image.load("croix.png")
     canoe = pygame.image.load("canoe.png")
@@ -324,81 +365,111 @@ def edition():
     penntadeca_redim = pygame.transform.scale(penntadeca, largeur_hauteur_image)
     deuxLapins_redim = pygame.transform.scale(deuxLapins, largeur_hauteur_image)
 
+    # Création du bouton Canoë
     canoe_btn = Button(
-        screen,  # Surface to place button on
-        screen_width-275,  # X-coordinate of top left corner
-        50,  # Y-coordinate of top left corner
-        100,  # Width
-        100,  # Height
-        image=canoe_redim,
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=None # Function to call when clicked on
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width - 275,  # Coordonnée x du coin supérieur gauche
+        50,  # Coordonnée y du coin supérieur gauche
+        100,  # Largeur
+        100,  # Hauteur
+        image=canoe_redim,  # Image du bouton
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=None  # Fonction à appeler lors du clic
     )
+
+    # Création du bouton Croix
     croix_btn = Button(
-        screen,
-        screen_width-125,  # Surface to place button on
-        50,  # Y-coordinate of top left corner
-        100,  # Width
-        100,  # Height
-        image=croix_redim,
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=None  # Function to call when clicked on
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width - 125,  # Coordonnée x du coin supérieur gauche
+        50,  # Coordonnée y du coin supérieur gauche
+        100,  # Largeur
+        100,  # Hauteur
+        image=croix_redim,  # Image du bouton
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=None  # Fonction à appeler lors du clic
     )
+
+    # Création du bouton Clignotant
     cligno_btn = Button(
-        screen,  # Surface to place button on
-        screen_width-275,  # X-coordinate of top left corner
-        200,  # Y-coordinate of top left corner
-        100,  # Width
-        100,  # Height
-        image=cligno_redim,
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=None  # Function to call when clicked on
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width - 275,  # Coordonnée x du coin supérieur gauche
+        200,  # Coordonnée y du coin supérieur gauche
+        100,  # Largeur
+        100,  # Hauteur
+        image=cligno_redim,  # Image du bouton
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=None  # Fonction à appeler lors du clic
     )
+
+    # Création du bouton Hameçon
     hamecon_btn = Button(
-        screen,  # Surface to place button on
-        screen_width-125,  # X-coordinate of top left corner
-        200,  # Y-coordinate of top left corner
-        100,  # Width
-        100,  # Height
-        image=hamecon_redim,
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=None  # Function to call when clicked on
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width - 125,  # Coordonnée x du coin supérieur gauche
+        200,  # Coordonnée y du coin supérieur gauche
+        100,  # Largeur
+        100,  # Hauteur
+        image=hamecon_redim,  # Image du bouton
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=None  # Fonction à appeler lors du clic
     )
+
+    # Création du bouton Hameçon 2
     hamecon2_btn = Button(
-        screen,  # Surface to place button on
-        screen_width-275,  # X-coordinate of top left corner
-        350,  # Y-coordinate of top left corner
-        100,  # Width
-        100,  # Height
-        image=hamecon2_redim,
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=None  # Function to call when clicked on
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width - 275,  # Coordonnée x du coin supérieur gauche
+        350,  # Coordonnée y du coin supérieur gauche
+        100,  # Largeur
+        100,  # Hauteur
+        image=hamecon2_redim,  # Image du bouton
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=None  # Fonction à appeler lors du clic
     )
+
+    # Création du bouton Penntadeca
     penntadeca_btn = Button(
-        screen,  # Surface to place button on
-        screen_width-125,  # X-coordinate of top left corner
-        350,  # Y-coordinate of top left corner
-        100,  # Width
-        100,  # Height
-        image=penntadeca_redim,
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=None  # Function to call when clicked on
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width - 125,  # Coordonnée x du coin supérieur gauche
+        350,  # Coordonnée y du coin supérieur gauche
+        100,  # Largeur
+        100,  # Hauteur
+        image=penntadeca_redim,  # Image du bouton
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=None  # Fonction à appeler lors du clic
     )
+
+    # Création du bouton Deux Lapins
     deuxLapins_btn = Button(
-        screen,  # Surface to place button on
-        screen_width-275,  # X-coordinate of top left corner
-        500,  # Y-coordinate of top left corner
-        100,  # Width
-        100,  # Height
-        image=deuxLapins_redim,
-        radius=20,  # Radius of border corners (leave empty for not curved)
-        onClick=None  # Function to call when clicked on
+        screen,  # Surface sur laquelle placer le bouton
+        screen_width - 275,  # Coordonnée x du coin supérieur gauche
+        500,  # Coordonnée y du coin supérieur gauche
+        100,  # Largeur
+        100,  # Hauteur
+        image=deuxLapins_redim,  # Image du bouton
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=None  # Fonction à appeler lors du clic
     )
+    # si on est dans l'état menu on affiche les 3 boutons
+
+    def convertir_pos_matrice(x, y):
+        x1 = (x + camera_x) // (taille_cellule * facteur_zoom)
+        y1 = (y + camera_y) // (taille_cellule * facteur_zoom)
+        return x1, y1
+
+    drawing = False
+    drawing_canoe=False
+    drawing_croix=False
+    drawing_cligno=False
+    drawing_hamecon=False
+    drawing_hamecon2=False
+    drawing_penntadeca=False
+    drawing_deuxLapins=False
+
 
     if state == "menu":
         play.draw()
         quitter.draw()
         reg.draw()
+    # tant qu'on est dans l'état edition
     while state == "edition":
         for event in pygame.event.get():
             back_to_menu_2.listen(pygame.event.get())
@@ -409,9 +480,108 @@ def edition():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 back_to_menu_2.draw()
                 x, y = event.pos
-                x = (x + camera_x) // (taille_cellule * facteur_zoom)
-                y = (y + camera_y) // (taille_cellule * facteur_zoom)
+                print("pos = ", x, y)
+                print(screen_width)
+                if (screen_width-275 <= x <= screen_width-175) and (50 <= y <= 150) :
+                    print("canoe")
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_canoe = True
+
+
+                elif (screen_width-125 <= x <= screen_width-25) and (50 <= y <= 150) :
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_croix = True
+                            break
+
+                elif (screen_width-275 <= x <= screen_width-175) and (200 <= y <= 300) :
+                    if event.button == 1 :
+                        print("cligno")
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_cligno = True
+                            break
+
+                elif (screen_width-125 <= x <= screen_width-25) and (200 <= y <= 300) :
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_hamecon = True
+                            break
+
+                elif (screen_width-275 <= x <= screen_width-175) and (350 <= y <= 450) :
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_hamecon2 = True
+                            break
+
+                elif (screen_width-125 <= x <= screen_width-25) and (350 <= y <= 450) :
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_penntadeca = True
+                            break
+
+                elif (screen_width-275 <= x <= screen_width-175) and (500 <= y <= 600) :
+                    if event.button == 1 :
+                        if not drawing:
+                            # Premier clic pour préparer le placement du rectangle
+                            drawing_deuxLapins = True
+                            break
+
+                else :
+                    if drawing_canoe == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.canoe(matrice, x, y)
+                        drawing_canoe=False
+                        drawing = False
+
+                    if drawing_croix == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.croix(matrice, x, y)
+                        drawing_croix=False
+                        drawing = False
+
+                    if drawing_cligno == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.cligno(matrice, x, y)
+                        drawing_cligno=False
+                        drawing = False
+
+                    if drawing_hamecon == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.hamecon(matrice, x, y)
+                        drawing_hamecon=False
+                        drawing = False
+
+                    if drawing_hamecon2 == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.hamecon2(matrice, x, y)
+                        drawing_hamecon2=False
+                        drawing = False
+
+                    if drawing_penntadeca == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.penntadeca(matrice, x, y)
+                        drawing_penntadeca=False
+                        drawing = False
+
+                    if drawing_deuxLapins == True :
+                        x, y = convertir_pos_matrice(x, y)
+                        Structures.deuxLapins(matrice, x, y)
+                        drawing_deuxLapins=False
+                        drawing = False
+
+
+
+                x, y = convertir_pos_matrice(x, y)
                 inverser_couleur_pixel(x, y)
+                # Dessiner le rectangle
+                pygame.display.flip()
 
             facteur_zoom = zoom(event, facteur_zoom)
         camera_x, camera_y = deplacement(camera_x, camera_y, camera_speed, screen_width, screen_height, MAP_WIDTH,MAP_HEIGHT)
