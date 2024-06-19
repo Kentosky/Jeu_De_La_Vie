@@ -31,8 +31,15 @@ matrice = tableau.creation_tableau()
 
 #définition des couleurs que nous utiliserons :
 blanc = (255, 255, 255)
-noir = (0, 0, 0)
 couleur_bordure = (224, 224, 224)
+colors = [
+    (0, 0, 0),         # Noir
+    (255, 0, 0),       # Rouge
+    (255, 192, 203),   # Rose
+    (0, 255, 255),     # Bleu clair
+    (255, 165, 0),     # Orange
+    (0, 128, 0)        # Vert
+]
 
 #variable de zoom
 facteur_zoom = 5
@@ -51,13 +58,21 @@ font = pygame.font.Font('Tiny5-regular.ttf', size = 25)
 font_titre = pygame.font.Font('Tiny5-regular.ttf', size = 70)
 
 """
+Cette fonction permet de récupérer la couleur que le joueur a choisi pour les cellules vivantes
+"""
+def choix_couleur(couleur):
+    global couleur_choisie
+    couleur_choisie = couleur
+    return couleur
+
+"""
 Cette fonction permet de dessiner une grille pygame à partir de la matrice que l'on a créé précedemment
 De base, chaque case de la grille est un carré blanc qui est cliquable et qui changera de couleur par la suite
 """
-def dessiner_grille(ecran, matrice, facteur_zoom):
+def dessiner_grille(ecran, matrice, facteur_zoom, couleur_choisie):
     for y in range(len(matrice)):
         for x in range(len(matrice[0])):
-            couleur = blanc if matrice[y][x] == 0 else noir
+            couleur = blanc if matrice[y][x] == 0 else couleur_choisie
             rect_cellule = pygame.Rect(x * taille_cellule * facteur_zoom,
                                         y * taille_cellule * facteur_zoom,
                                         taille_cellule * facteur_zoom,
@@ -107,14 +122,16 @@ def deplacement(camera_x, camera_y, vitesse_camera, largeur_ecran, hauteur_ecran
         camera_y = min(camera_y + vitesse_camera, hauteur_map - hauteur_ecran)
     return camera_x, camera_y
 
-
 """
 Cette fonction est la fonction de menu:
 Celle-ci affiche 3 boutons (Jouer, Règles et Quitter)
 """
 def show_menu():
-    global state, jouer, quitter, regle
+    global state, jouer, quitter, regle, parametre
     state = "menu"
+    # telechargement et redimmension de l'image parametre
+    img_parametre = pygame.image.load("parametre.png")
+    parametre_redim = pygame.transform.scale(img_parametre, (20,20))
     # Création du bouton Jouer
     jouer = Button(
         ecran,  # ecran choisi
@@ -171,6 +188,100 @@ def show_menu():
         radius=20,  # Rayon pour arrondir les coins du bouton
         onClick=show_rules  # Fonction à appeler lors du clic
     )
+    #Creation du bouton parametre
+    parametre = Button(
+        ecran,  # Surface sur laquelle placer le bouton
+        10,  # Coordonnée x du coin supérieur gauche
+        10,  # Coordonnée y du coin supérieur gauche
+        20,  # Largeur
+        20,  # Hauteur
+
+        # Paramètres du bouton
+        image=parametre_redim,
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=show_parametre  # Fonction à appeler lors du clic
+    )
+def show_parametre():
+    global state, retour_menu,btn_rouge,btn_noir,btn_rose,btn_vert,btn_bleu,btn_orange
+    state = "parametre"
+
+    # Création du bouton Retour au Menu
+    retour_menu = Button(
+        ecran,  # Surface sur laquelle placer le bouton
+        largeur_ecran - 170,  # Coordonnée x du coin supérieur gauche
+        hauteur_ecran - 70,  # Coordonnée y du coin supérieur gauche
+        150,  # Largeur
+        50,  # Hauteur
+
+        # Paramètres optionnels
+        text='MENU',  # Texte à afficher
+        fontSize=30,  # Taille de la police
+        margin=20,  # Marge pour centrer le texte
+        inactiveColour=(200, 50, 0),  # Couleur du bouton inactif
+        hoverColour=(150, 0, 0),  # Couleur du bouton survolé
+        pressedColour=(0, 200, 20),  # Couleur du bouton enfoncé
+        radius=20,  # Rayon pour arrondir les coins du bouton
+        onClick=show_menu  # Fonction à appeler lors du clic
+    )
+    # Creation des differents boutons
+    btn_noir = Button(
+        ecran,  # Surface sur laquelle placer le bouton
+        460,  # Coordonnée x du coin supérieur gauche
+        270,  # Coordonnée y du coin supérieur gauche
+        30,  # Largeur
+        30,  # Hauteur
+        inactiveColour=colors[0],  # Couleur du bouton inactif
+        # appel de la fonction choix_couleur
+        onClick=lambda: choix_couleur(colors[0])
+    )
+    btn_rouge = Button(
+        ecran,  # Surface sur laquelle placer le bouton
+        490,  # Coordonnée x du coin supérieur gauche
+        270,  # Coordonnée y du coin supérieur gauche
+        30,  # Largeur
+        30,  # Hauteur
+        inactiveColour=colors[1],  # Couleur du bouton inactif
+        onClick=lambda: choix_couleur(colors[1])  # Fonction à appeler lors du clic
+    )
+    btn_rose = Button(
+        ecran,  # Surface sur laquelle placer le bouton
+        520,  # Coordonnée x du coin supérieur gauche
+        270,  # Coordonnée y du coin supérieur gauche
+        30,  # Largeur
+        30,  # Hauteur
+        inactiveColour=colors[2],  # Couleur du bouton inactif
+        onClick=lambda: choix_couleur(colors[2])  # Fonction à appeler lors du clic
+    )
+    btn_bleu = Button(
+        ecran,  # Surface sur laquelle placer le bouton
+        550,  # Coordonnée x du coin supérieur gauche
+        270,  # Coordonnée y du coin supérieur gauche
+        30,  # Largeur
+        30,  # Hauteur
+        inactiveColour=colors[3],  # Couleur du bouton inactif
+        onClick=lambda: choix_couleur(colors[3])  # Fonction à appeler lors du clic
+    )
+    btn_orange = Button(
+        ecran,  # Surface sur laquelle placer le bouton
+        580,  # Coordonnée x du coin supérieur gauche
+        270,  # Coordonnée y du coin supérieur gauche
+        30,  # Largeur
+        30,  # Hauteur
+        inactiveColour=colors[4],  # Couleur du bouton inactif
+        onClick=lambda: choix_couleur(colors[4])  # Fonction à appeler lors du clic
+    )
+    btn_vert = Button(
+        ecran,  # Surface sur laquelle placer le bouton
+        610,  # Coordonnée x du coin supérieur gauche
+        270,  # Coordonnée y du coin supérieur gauche
+        30,  # Largeur
+        30,  # Hauteur
+        inactiveColour=colors[5],  # Couleur du bouton inactif
+        onClick=lambda: choix_couleur(colors[5])  # Fonction à appeler lors du clic
+    )
+
+    pygame.display.flip()
+
 
 """
 Cette fonction est la fonction de règles:
@@ -391,7 +502,7 @@ def edition():
     def mode_actif(cdc):
         '''Cette fonction prend en paramètre une chaine de caractères cdc.
         Elle affiche un texte sur fond coloré complété par celui donné en paramètres.'''
-        surface_texte = font.render("Insertion : " + cdc, True, noir,(125, 255, 175))
+        surface_texte = font.render("Insertion : " + cdc, True, colors[0],(125, 255, 175))
         rect_texte = surface_texte.get_rect()
         rect_texte.center = ((largeur_ecran - 300)// 2, 30)
         ecran.blit(surface_texte, rect_texte)                       # Affichage du texte
@@ -544,7 +655,7 @@ def edition():
         camera_x, camera_y = deplacement(camera_x, camera_y, vitesse_camera, largeur_ecran, hauteur_ecran, largeur_map,hauteur_map)
         ecran.fill((255, 255, 255))
         ecran.blit(surface_map, (0, 0), (camera_x, camera_y, largeur_ecran, hauteur_ecran))
-        dessiner_grille(surface_map, matrice, facteur_zoom)
+        dessiner_grille(surface_map, matrice, facteur_zoom,couleur_choisie)
 
 
         #### Fonctions d'affichage du mode en cours : un texte avec fond coloré s'affiche tant qu'une image est sélectionnée ####
@@ -664,7 +775,7 @@ def jeu():
         # Copie de la matrice
         matrice = [row[:] for row in matrice_temp]
         # Dessin de la grille
-        dessiner_grille(surface_map, matrice, facteur_zoom)
+        dessiner_grille(surface_map, matrice, facteur_zoom,couleur_choisie)
         # Dessin du bouton quitter
         quitter_2.draw()
         retour_menu_3.draw()
@@ -714,13 +825,14 @@ def main():
         ecran.blit(rect_surface, (0, 0))
 
         titre = "Le Jeu de la Vie"
-        titre_police = font_titre.render(titre, True, noir)
+        titre_police = font_titre.render(titre, True, colors[0])
         ecran.blit(titre_police, (340, 30))
 
         if state == "menu":         # Condition pour revenir au menu
             jouer.draw()
             quitter.draw()
             regle.draw()
+            parametre.draw()
         elif state == "rules":      # Ou aller aux règles
             # Afficher le texte des règles
             rules_text = [
@@ -736,12 +848,21 @@ def main():
             ]
             y_offset = 8
             for line in rules_text:
-                text_surface = font.render(line, True, noir)
+                text_surface = font.render(line, True, colors[0])
                 ecran.blit(text_surface, (70, y_offset))
                 y_offset += 40
 
             # Dessiner le bouton pour revenir au menu
             retour_menu.draw()
+        elif state == "parametre":
+            show_parametre()
+            retour_menu.draw()
+            btn_noir.draw()
+            btn_rouge.draw()
+            btn_rose.draw()
+            btn_bleu.draw()
+            btn_vert.draw()
+            btn_orange.draw()
         elif state == "edition":
             edition()
 
