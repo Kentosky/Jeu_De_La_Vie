@@ -6,6 +6,7 @@ import pygame
 import Structures
 import Cellule as Cell
 import Tableau as Tab
+import time
 from moviepy.editor import VideoFileClip
 import pygame_widgets
 from pygame_widgets.button import Button
@@ -64,6 +65,26 @@ Cette fonction permet de récupérer la couleur que le joueur a choisi pour les 
 def choix_couleur(couleur):
     global couleur_choisie
     couleur_choisie = couleur
+    couleur_texte = colors[0]
+    if couleur == colors[0]:
+        cdc_couleur = "Noir"
+        couleur_texte = (255, 255, 255)
+    if couleur == colors[1]:
+        cdc_couleur = "Rouge"
+    if couleur == colors[2]:
+        cdc_couleur = "Rose"
+    if couleur == colors[3]:
+        cdc_couleur = "Bleu Clair"
+    if couleur == colors[4]:
+        cdc_couleur = "Orange"
+    if couleur == colors[5]:
+        cdc_couleur = "Vert"
+    surface_texte_couleur = font.render("Couleur choisie : " + cdc_couleur, True, couleur_texte, couleur)
+    rect_texte = surface_texte_couleur.get_rect()
+    rect_texte.center = (largeur_ecran // 2, 200)
+    ecran.blit(surface_texte_couleur, rect_texte)
+    pygame.display.update()
+    time.sleep(1)
     return couleur
 
 """
@@ -281,7 +302,7 @@ def show_parametre():
         onClick=lambda: choix_couleur(colors[5])  # Fonction à appeler lors du clic
     )
 
-    pygame.display.flip()
+
 
 
 """
