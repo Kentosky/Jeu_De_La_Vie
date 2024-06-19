@@ -169,7 +169,7 @@ def BgPlane(matrice, cox, coy):
     for i in range(2):
         matrice[coy + 3][cox + 3 + i] = 1
         matrice[coy + 5][cox + 11 + i] = 1
-        matrice[coy + 6 + 2 * i][cox + 15] = 1
+        matrice[coy + 6 + 2 * i][cox + 14] = 1
         matrice[coy + 16][cox + 3 + i] = 1
     matrice[coy + 6][cox + 1] = 1
     matrice[coy + 2][cox + 4] = 0
