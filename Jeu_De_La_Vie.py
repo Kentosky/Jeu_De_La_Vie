@@ -153,7 +153,7 @@ def show_menu():
     state = "menu"
     # telechargement et redimmension de l'image parametre
     img_parametre = pygame.image.load("parametre.png")
-    parametre_redim = pygame.transform.scale(img_parametre, (20,20))
+    parametre_redim = pygame.transform.scale(img_parametre, (40,40))
     # Création du bouton Jouer
     jouer = Button(
         ecran,  # ecran choisi
@@ -215,8 +215,8 @@ def show_menu():
         ecran,  # Surface sur laquelle placer le bouton
         10,  # Coordonnée x du coin supérieur gauche
         10,  # Coordonnée y du coin supérieur gauche
-        20,  # Largeur
-        20,  # Hauteur
+        40,  # Largeur
+        40,  # Hauteur
 
         # Paramètres du bouton
         image=parametre_redim,
