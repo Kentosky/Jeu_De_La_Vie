@@ -154,22 +154,22 @@ def  deuxLapins(matrice, cox, coy):
 
 def BgPlane(matrice, cox, coy):
     for i in range(14):
-        matrice[coy + 10][cox + 4 + i] = 1
+        matrice[coy + 9][cox + i] = 1
     for i in range(7):
         matrice[coy + 2][cox + 2 + i] = 1
         matrice[coy + 15][cox + 2 + i] = 1
     for i in range(6):
         matrice[coy + 1][cox + 3 + i] = 1
-        matrice[coy + 14][cox + 4 + i] = 1
+        matrice[coy + 14][cox + 3 + i] = 1
     for i in range(4):
-        matrice[coy][cox + 5 + i] = 1
+        matrice[coy][cox + 4 + i] = 1
         matrice[coy + 13][cox + 4 + i] = 1
     for i in range(3):
         matrice[coy + i + 7][cox] = 1
     for i in range(2):
         matrice[coy + 3][cox + 3 + i] = 1
         matrice[coy + 5][cox + 11 + i] = 1
-        matrice[coy + 6 + 2 * i][cox + 14 + i] = 1
+        matrice[coy + 6 + 2 * i][cox + 15] = 1
         matrice[coy + 16][cox + 3 + i] = 1
     matrice[coy + 6][cox + 1] = 1
     matrice[coy + 2][cox + 4] = 0
