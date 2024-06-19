@@ -1,4 +1,4 @@
-def cligno(matrice, cox, coy):
+def spacefighter(matrice, cox, coy):
     for i in range(18):
         matrice[coy + 9 + i][cox + 7] = 1
         matrice[coy + 28 - (9 + i)][cox + 26 - 7] = 1
