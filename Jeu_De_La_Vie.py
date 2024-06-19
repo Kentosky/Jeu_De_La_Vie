@@ -66,6 +66,7 @@ def choix_couleur(couleur):
     global couleur_choisie
     couleur_choisie = couleur
     couleur_texte = colors[0]
+    cdc_couleur = "Noir"
     if couleur == colors[0]:
         cdc_couleur = "Noir"
         couleur_texte = (255, 255, 255)
