@@ -389,7 +389,7 @@ def edition():
     #Importation des images au format png
     croix = pygame.image.load("croix.png")
     canoe = pygame.image.load("canoe.png")
-    cligno = pygame.image.load("cligno.png")
+    spacefighter = pygame.image.load("spacefighter.png")
     hamecon = pygame.image.load("hamecon.png")
     hamecon2 = pygame.image.load("hamecon2.png")
     penntadeca = pygame.image.load("pentadeca.png")
@@ -401,7 +401,7 @@ def edition():
     # On redimensionne chaque image
     croix_redim = pygame.transform.scale(croix, largeur_hauteur_image)
     canoe_redim = pygame.transform.scale(canoe, largeur_hauteur_image)
-    cligno_redim = pygame.transform.scale(cligno, largeur_hauteur_image)
+    spacefighter_redim = pygame.transform.scale(spacefighter, largeur_hauteur_image)
     hamecon_redim = pygame.transform.scale(hamecon, largeur_hauteur_image)
     hamecon2_redim = pygame.transform.scale(hamecon2, largeur_hauteur_image)
     penntadeca_redim = pygame.transform.scale(penntadeca, largeur_hauteur_image)
@@ -431,14 +431,14 @@ def edition():
         onClick=None  # Fonction à appeler lors du clic
     )
 
-    # Création du bouton Clignotant
-    cligno_btn = Button(
+    # Création du bouton spacefighter
+    spacefighter_btn = Button(
         ecran,  # Surface sur laquelle placer le bouton
         largeur_ecran - 275,  # Coordonnée x du coin supérieur gauche
         200,  # Coordonnée y du coin supérieur gauche
         100,  # Largeur
         100,  # Hauteur
-        image=cligno_redim,  # Image du bouton
+        image=spacefighter_redim,  # Image du bouton
         radius=20,  # Rayon pour arrondir les coins du bouton
         onClick=None  # Fonction à appeler lors du clic
     )
@@ -514,7 +514,7 @@ def edition():
     drawing = False
     drawing_canoe=False
     drawing_croix=False
-    drawing_cligno=False
+    drawing_spacefighter=False
     drawing_hamecon=False
     drawing_hamecon2=False
     drawing_penntadeca=False
@@ -555,12 +555,12 @@ def edition():
                             drawing_croix = True
                             break
 
-                # Si on appuie dans la zone correspondant au bouton Cligno :
+                # Si on appuie dans la zone correspondant au bouton spacefighter :
                 elif (largeur_ecran-275 <= x <= largeur_ecran-175) and (200 <= y <= 300) :
                     if event.button == 1 :
                         if not drawing:
                             # Premier clic pour préparer le placement de l'image
-                            drawing_cligno = True
+                            drawing_spacefighter = True
                             break
 
                 # Si on appuie dans la zone correspondant au bouton Hameçon :
@@ -610,10 +610,10 @@ def edition():
                         drawing = False
                         break
 
-                    if drawing_cligno == True :
+                    if drawing_spacefighter == True :
                         x, y = convertir_pos_matrice(x, y)
-                        Structures.cligno(matrice, x, y)
-                        drawing_cligno=False
+                        Structures.spacefighter(matrice, x, y)
+                        drawing_spacefighter=False
                         drawing = False
                         break
 
@@ -664,8 +664,8 @@ def edition():
             mode_actif("Canoe")
         if drawing_croix:
             mode_actif("Croix")
-        if drawing_cligno:
-            mode_actif("Cligno")
+        if drawing_spacefighter:
+            mode_actif("Spacefighter")
         if drawing_hamecon:
             mode_actif("Hameçon")
         if drawing_hamecon2:
@@ -681,7 +681,7 @@ def edition():
         #On affiche tous les boutons
         canoe_btn.draw()
         croix_btn.draw()
-        cligno_btn.draw()
+        spacefighter_btn.draw()
         hamecon_btn.draw()
         hamecon2_btn.draw()
         penntadeca_btn.draw()
