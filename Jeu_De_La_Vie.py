@@ -464,6 +464,7 @@ def edition():
         onClick=None  # Fonction à appeler lors du clic
     )
 
+
     # Création du bouton Hameçon
     hamecon_btn = Button(
         ecran,  # Surface sur laquelle placer le bouton
