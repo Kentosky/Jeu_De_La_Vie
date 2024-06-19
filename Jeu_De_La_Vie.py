@@ -40,6 +40,7 @@ colors = [
     (255, 165, 0),     # Orange
     (0, 128, 0)        # Vert
 ]
+couleur_choisie=colors[0]
 
 #variable de zoom
 facteur_zoom = 5
